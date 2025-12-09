@@ -2,7 +2,17 @@ import api from "@/lib/axios";
 import type { ResumeEntry, ResumeAnalysis } from "@/types";
 
 // Analyze resume (preview only, not saved)
-export async function analyzeResume(file: File, jobDescription: string): Promise<ResumeAnalysis> {
+export async function analyzeResume({
+  file,
+  jobDescription,
+}: {
+  file: File
+  jobDescription: string
+}): Promise<{
+  resumeFile: string
+  jobDescription: string
+  analysis: ResumeAnalysis
+}> {
   const formData = new FormData();
   formData.append("resumeFile", file);
   formData.append("jobDescription", jobDescription);
@@ -20,3 +30,19 @@ export async function createResume(entry: Omit<ResumeEntry, "_id" | "createdAt" 
   return data // full ResumeEntry with _id, timestamps
 }
 
+// Fetch all resumes
+export async function getResumes(): Promise<ResumeEntry[]> {
+  const { data } = await api.get("/resumes")
+  return data
+}
+
+// Fetch single resume by id
+export async function getResume(id: string): Promise<ResumeEntry> {
+  const { data } = await api.get(`/resumes/${id}`)
+  return data
+}
+
+// Delete resume
+export async function deleteResume(id: string): Promise<void> {
+  await api.delete(`/resumes/${id}`)
+}
