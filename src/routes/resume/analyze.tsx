@@ -91,17 +91,16 @@ function ResumeAnalyze() {
             </ul>
           </div>
 
-          { analysisResult.jobFitPercentage ?
-          <div className="mt-2">
-            <strong className="text-sm text-gray-800">Job Fit Suggestions:</strong>
-            <ul className="list-disc list-inside text-sm text-gray-700">
-              {analysisResult.jobFitSuggestions.map((s, i) => (
-                <li key={i}>{s}</li>
-              ))}
-            </ul>
-          </div>
-            : null
-          }
+          {analysisResult.jobFitSuggestions && analysisResult.jobFitSuggestions.length > 0 && (
+            <div className="mt-2">
+              <strong className="text-sm text-gray-800">Job Fit Suggestions:</strong>
+              <ul className="list-disc list-inside text-sm text-gray-700">
+                {analysisResult.jobFitSuggestions.map((s, i) => (
+                  <li key={i}>{s}</li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </div>
