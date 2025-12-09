@@ -10,33 +10,84 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ResumeIndexRouteImport } from './routes/resume/index'
+import { Route as CoverLetterIndexRouteImport } from './routes/cover-letter/index'
+import { Route as ApplicationsIndexRouteImport } from './routes/applications/index'
+import { Route as ResumeAnalyzeRouteImport } from './routes/resume/analyze'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResumeIndexRoute = ResumeIndexRouteImport.update({
+  id: '/resume/',
+  path: '/resume/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CoverLetterIndexRoute = CoverLetterIndexRouteImport.update({
+  id: '/cover-letter/',
+  path: '/cover-letter/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplicationsIndexRoute = ApplicationsIndexRouteImport.update({
+  id: '/applications/',
+  path: '/applications/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResumeAnalyzeRoute = ResumeAnalyzeRouteImport.update({
+  id: '/resume/analyze',
+  path: '/resume/analyze',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/resume/analyze': typeof ResumeAnalyzeRoute
+  '/applications': typeof ApplicationsIndexRoute
+  '/cover-letter': typeof CoverLetterIndexRoute
+  '/resume': typeof ResumeIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/resume/analyze': typeof ResumeAnalyzeRoute
+  '/applications': typeof ApplicationsIndexRoute
+  '/cover-letter': typeof CoverLetterIndexRoute
+  '/resume': typeof ResumeIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/resume/analyze': typeof ResumeAnalyzeRoute
+  '/applications/': typeof ApplicationsIndexRoute
+  '/cover-letter/': typeof CoverLetterIndexRoute
+  '/resume/': typeof ResumeIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/resume/analyze'
+    | '/applications'
+    | '/cover-letter'
+    | '/resume'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/resume/analyze' | '/applications' | '/cover-letter' | '/resume'
+  id:
+    | '__root__'
+    | '/'
+    | '/resume/analyze'
+    | '/applications/'
+    | '/cover-letter/'
+    | '/resume/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ResumeAnalyzeRoute: typeof ResumeAnalyzeRoute
+  ApplicationsIndexRoute: typeof ApplicationsIndexRoute
+  CoverLetterIndexRoute: typeof CoverLetterIndexRoute
+  ResumeIndexRoute: typeof ResumeIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +99,43 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/resume/': {
+      id: '/resume/'
+      path: '/resume'
+      fullPath: '/resume'
+      preLoaderRoute: typeof ResumeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cover-letter/': {
+      id: '/cover-letter/'
+      path: '/cover-letter'
+      fullPath: '/cover-letter'
+      preLoaderRoute: typeof CoverLetterIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/applications/': {
+      id: '/applications/'
+      path: '/applications'
+      fullPath: '/applications'
+      preLoaderRoute: typeof ApplicationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/resume/analyze': {
+      id: '/resume/analyze'
+      path: '/resume/analyze'
+      fullPath: '/resume/analyze'
+      preLoaderRoute: typeof ResumeAnalyzeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ResumeAnalyzeRoute: ResumeAnalyzeRoute,
+  ApplicationsIndexRoute: ApplicationsIndexRoute,
+  CoverLetterIndexRoute: CoverLetterIndexRoute,
+  ResumeIndexRoute: ResumeIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

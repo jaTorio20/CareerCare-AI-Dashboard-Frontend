@@ -31,7 +31,7 @@ function RootLayout () {
     <div className='min-h-screen bg-gray-100 flex flex-col'>
       <HeadContent/>
       <Header/>
-      <main className="flex justify-center p-2 md:p-6">
+      <main className="flex justify-center p-1 md:p-6">
         <div className="w-full max-w-7xl rounded-2xl p-2 md:p-8">
           <Outlet />
         </div>
