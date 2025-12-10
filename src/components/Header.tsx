@@ -14,10 +14,10 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-8">
-          <Link to="/resume/analyze" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+          <Link to="/resumes/analyze" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
             Upload
           </Link>
-          <Link to="/resume" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
+          <Link to="/resumes" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
             Resumes
           </Link>
           <Link to="/cover-letter" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
@@ -55,10 +55,10 @@ const Header = () => {
         }`}
       >
         <nav className="px-6 py-4 space-y-4">
-          <Link to="/resume/analyze" className="block text-gray-700 hover:text-blue-600 transition-colors font-medium" onClick={() => setIsOpen(false)}>
+          <Link to="/resumes/analyze" className="block text-gray-700 hover:text-blue-600 transition-colors font-medium" onClick={() => setIsOpen(false)}>
             Upload
           </Link>
-          <Link to="/resume" className="block text-gray-700 hover:text-blue-600 transition-colors font-medium" onClick={() => setIsOpen(false)}>
+          <Link to="/resumes" className="block text-gray-700 hover:text-blue-600 transition-colors font-medium" onClick={() => setIsOpen(false)}>
             Resumes
           </Link>
           <Link to="/cover-letter" className="block text-gray-700 hover:text-blue-600 transition-colors font-medium" onClick={() => setIsOpen(false)}>

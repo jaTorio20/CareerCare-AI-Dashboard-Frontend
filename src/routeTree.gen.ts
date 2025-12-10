@@ -10,19 +10,19 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as ResumeIndexRouteImport } from './routes/resume/index'
+import { Route as ResumesIndexRouteImport } from './routes/resumes/index'
 import { Route as CoverLetterIndexRouteImport } from './routes/cover-letter/index'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications/index'
-import { Route as ResumeAnalyzeRouteImport } from './routes/resume/analyze'
+import { Route as ResumesAnalyzeRouteImport } from './routes/resumes/analyze'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ResumeIndexRoute = ResumeIndexRouteImport.update({
-  id: '/resume/',
-  path: '/resume/',
+const ResumesIndexRoute = ResumesIndexRouteImport.update({
+  id: '/resumes/',
+  path: '/resumes/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoverLetterIndexRoute = CoverLetterIndexRouteImport.update({
@@ -35,59 +35,59 @@ const ApplicationsIndexRoute = ApplicationsIndexRouteImport.update({
   path: '/applications/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ResumeAnalyzeRoute = ResumeAnalyzeRouteImport.update({
-  id: '/resume/analyze',
-  path: '/resume/analyze',
+const ResumesAnalyzeRoute = ResumesAnalyzeRouteImport.update({
+  id: '/resumes/analyze',
+  path: '/resumes/analyze',
   getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/resume/analyze': typeof ResumeAnalyzeRoute
+  '/resumes/analyze': typeof ResumesAnalyzeRoute
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
-  '/resume': typeof ResumeIndexRoute
+  '/resumes': typeof ResumesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/resume/analyze': typeof ResumeAnalyzeRoute
+  '/resumes/analyze': typeof ResumesAnalyzeRoute
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
-  '/resume': typeof ResumeIndexRoute
+  '/resumes': typeof ResumesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/resume/analyze': typeof ResumeAnalyzeRoute
+  '/resumes/analyze': typeof ResumesAnalyzeRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/cover-letter/': typeof CoverLetterIndexRoute
-  '/resume/': typeof ResumeIndexRoute
+  '/resumes/': typeof ResumesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/resume/analyze'
+    | '/resumes/analyze'
     | '/applications'
     | '/cover-letter'
-    | '/resume'
+    | '/resumes'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/resume/analyze' | '/applications' | '/cover-letter' | '/resume'
+  to: '/' | '/resumes/analyze' | '/applications' | '/cover-letter' | '/resumes'
   id:
     | '__root__'
     | '/'
-    | '/resume/analyze'
+    | '/resumes/analyze'
     | '/applications/'
     | '/cover-letter/'
-    | '/resume/'
+    | '/resumes/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  ResumeAnalyzeRoute: typeof ResumeAnalyzeRoute
+  ResumesAnalyzeRoute: typeof ResumesAnalyzeRoute
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CoverLetterIndexRoute: typeof CoverLetterIndexRoute
-  ResumeIndexRoute: typeof ResumeIndexRoute
+  ResumesIndexRoute: typeof ResumesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,11 +99,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/resume/': {
-      id: '/resume/'
-      path: '/resume'
-      fullPath: '/resume'
-      preLoaderRoute: typeof ResumeIndexRouteImport
+    '/resumes/': {
+      id: '/resumes/'
+      path: '/resumes'
+      fullPath: '/resumes'
+      preLoaderRoute: typeof ResumesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cover-letter/': {
@@ -120,11 +120,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplicationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/resume/analyze': {
-      id: '/resume/analyze'
-      path: '/resume/analyze'
-      fullPath: '/resume/analyze'
-      preLoaderRoute: typeof ResumeAnalyzeRouteImport
+    '/resumes/analyze': {
+      id: '/resumes/analyze'
+      path: '/resumes/analyze'
+      fullPath: '/resumes/analyze'
+      preLoaderRoute: typeof ResumesAnalyzeRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -132,10 +132,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  ResumeAnalyzeRoute: ResumeAnalyzeRoute,
+  ResumesAnalyzeRoute: ResumesAnalyzeRoute,
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CoverLetterIndexRoute: CoverLetterIndexRoute,
-  ResumeIndexRoute: ResumeIndexRoute,
+  ResumesIndexRoute: ResumesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

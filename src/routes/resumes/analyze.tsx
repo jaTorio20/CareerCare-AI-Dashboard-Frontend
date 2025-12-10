@@ -1,24 +1,44 @@
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { analyzeResume } from '@/api/resumes';
-import type { ResumeAnalysis } from '@/types';
+import { analyzeResume, createResume } from '@/api/resumes';
+import type { ResumeAnalysis, ResumeEntry } from '@/types';
 
-export const Route = createFileRoute('/resume/analyze')({
+export const Route = createFileRoute('/resumes/analyze')({
   component: ResumeAnalyze,
 });
 
+type AnalysisResponse = {
+  resumeFile: string
+  jobDescription: string
+  analysis: ResumeAnalysis
+};
+
 function ResumeAnalyze() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [file, setFile] = useState<File | null>(null);
   const [jobDescription, setJobDescription] = useState('');
-  const [analysisResult, setAnalysisResult] = useState<ResumeAnalysis | null>(null);
+  const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null);
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: analyzeResume,
     onSuccess: (data) => {
-      setAnalysisResult(data.analysis);
+      //  has data of shape { resumeFile, jobDescription, analysis }
+      setAnalysisResult(data);
     }
+  });
+
+  const { mutateAsync: saveMutation, isPending: isSaving} = useMutation({
+    mutationFn: createResume,
+    onSuccess: (saved) => {
+      console.log("Saved resume:", saved);
+      setAnalysisResult(null);
+      navigate({ to: "/resumes" }); // Back to resumes list after save
+    },
+    onError: (err) => {
+      console.error("Failed to save resume:", err);
+      alert("Failed to save resume");
+    },
   });
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,6 +48,23 @@ function ResumeAnalyze() {
     if (file) {
       await mutateAsync({ file, jobDescription });
     }
+  };
+
+  const handleSave = async () => {
+    if (!analysisResult) return;
+      const entry: Omit<ResumeEntry, "_id" | "createdAt" | "updatedAt"> = {
+        // userId: "123", // later from auth
+        resumeFile: analysisResult.resumeFile, // Cloudinary URL from backend
+        jobDescription: analysisResult.jobDescription,
+        analysis: analysisResult.analysis,
+      };
+      await saveMutation(entry);
+  };
+
+  const handleCancel = () => {
+    setAnalysisResult(null);
+    setFile(null);
+    setJobDescription('');
   };
 
  return (
@@ -69,38 +106,56 @@ function ResumeAnalyze() {
       </form>
 
       {/* Analysis Result */}
-      {analysisResult && (
+      {analysisResult?.analysis && (
         <div className="mt-6 border-t pt-4">
           <h3 className="text-lg font-semibold text-gray-800 mb-2">Analysis Result</h3>
           <p className="text-sm text-gray-700">
-            <strong>ATS Friendly:</strong> {analysisResult.atsFriendly ? "Yes " : "No "}
+            <strong>ATS Friendly:</strong> {analysisResult?.analysis.atsFriendly ? "Yes " : "No "}
           </p>
-        { analysisResult.jobFitPercentage ?
-          <p className="text-sm text-gray-700">
-            <strong>Job Fit Percentage:</strong> {analysisResult.jobFitPercentage}%
-          </p>
-          : null
-        }
+          { analysisResult?.analysis.jobFitPercentage ?
+            <p className="text-sm text-gray-700">
+              <strong>Job Fit Percentage:</strong> {analysisResult?.analysis.jobFitPercentage}%
+            </p>
+            : null
+          }
 
           <div className="mt-2">
             <strong className="text-sm text-gray-800">ATS Suggestions:</strong>
             <ul className="list-disc list-inside text-sm text-gray-700">
-              {analysisResult.atsSuggestions.map((s, i) => (
+              {analysisResult?.analysis.atsSuggestions.map((s, i) => (
                 <li key={i}>{s}</li>
               ))}
             </ul>
           </div>
 
-          {analysisResult.jobFitSuggestions && analysisResult.jobFitSuggestions.length > 0 && (
+          {analysisResult?.analysis.jobFitSuggestions && analysisResult?.analysis.jobFitSuggestions.length > 0 && (
             <div className="mt-2">
               <strong className="text-sm text-gray-800">Job Fit Suggestions:</strong>
               <ul className="list-disc list-inside text-sm text-gray-700">
-                {analysisResult.jobFitSuggestions.map((s, i) => (
+                {analysisResult?.analysis.jobFitSuggestions.map((s, i) => (
                   <li key={i}>{s}</li>
                 ))}
               </ul>
             </div>
           )}
+
+          {/* Save / Cancel buttons */}
+          <div className="flex gap-4 mt-4">
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 disabled:opacity-50"
+            >
+              {isSaving ? "Saving..." : "Save Resume"}
+            </button>
+            <button
+              onClick={handleCancel}
+              className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400"
+            >
+              Cancel
+            </button>
+          </div>
+
         </div>
       )}
     </div>
