@@ -10,6 +10,7 @@ export const Route = createFileRoute('/resumes/analyze')({
 
 type AnalysisResponse = {
   resumeFile: string
+  publicId: string
   jobDescription: string
   analysis: ResumeAnalysis
 };
@@ -55,6 +56,7 @@ function ResumeAnalyze() {
     
     const entry: Omit<ResumeEntry, "_id" | "createdAt" | "updatedAt"> = {
       // userId: "123", // later from auth
+      publicId: analysisResult.publicId,
       resumeFile: analysisResult.resumeFile, // Cloudinary URL from backend
       jobDescription: analysisResult.jobDescription,
       analysis: analysisResult.analysis,

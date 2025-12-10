@@ -10,6 +10,7 @@ export async function analyzeResume({
   jobDescription: string
 }): Promise<{
   resumeFile: string
+  publicId: string 
   jobDescription: string
   analysis: ResumeAnalysis
 }> {

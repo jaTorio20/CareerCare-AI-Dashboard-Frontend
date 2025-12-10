@@ -10,6 +10,7 @@ export type ResumeAnalysis = {
 export type ResumeEntry = {
   _id: string;
   userId?: string;
+  publicId: string;
   resumeFile: string;
   jobDescription?: string;
   analysis: ResumeAnalysis;
