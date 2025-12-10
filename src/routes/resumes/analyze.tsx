@@ -52,13 +52,14 @@ function ResumeAnalyze() {
 
   const handleSave = async () => {
     if (!analysisResult) return;
-      const entry: Omit<ResumeEntry, "_id" | "createdAt" | "updatedAt"> = {
-        // userId: "123", // later from auth
-        resumeFile: analysisResult.resumeFile, // Cloudinary URL from backend
-        jobDescription: analysisResult.jobDescription,
-        analysis: analysisResult.analysis,
-      };
-      await saveMutation(entry);
+    
+    const entry: Omit<ResumeEntry, "_id" | "createdAt" | "updatedAt"> = {
+      // userId: "123", // later from auth
+      resumeFile: analysisResult.resumeFile, // Cloudinary URL from backend
+      jobDescription: analysisResult.jobDescription,
+      analysis: analysisResult.analysis,
+    };
+    await saveMutation(entry);
   };
 
   const handleCancel = () => {

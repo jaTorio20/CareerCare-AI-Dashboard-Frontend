@@ -14,6 +14,7 @@ import { Route as ResumesIndexRouteImport } from './routes/resumes/index'
 import { Route as CoverLetterIndexRouteImport } from './routes/cover-letter/index'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications/index'
 import { Route as ResumesAnalyzeRouteImport } from './routes/resumes/analyze'
+import { Route as ResumesResumeIdIndexRouteImport } from './routes/resumes/$resumeId/index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -40,6 +41,11 @@ const ResumesAnalyzeRoute = ResumesAnalyzeRouteImport.update({
   path: '/resumes/analyze',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResumesResumeIdIndexRoute = ResumesResumeIdIndexRouteImport.update({
+  id: '/resumes/$resumeId/',
+  path: '/resumes/$resumeId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -47,6 +53,7 @@ export interface FileRoutesByFullPath {
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
   '/resumes': typeof ResumesIndexRoute
+  '/resumes/$resumeId': typeof ResumesResumeIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -54,6 +61,7 @@ export interface FileRoutesByTo {
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
   '/resumes': typeof ResumesIndexRoute
+  '/resumes/$resumeId': typeof ResumesResumeIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -62,6 +70,7 @@ export interface FileRoutesById {
   '/applications/': typeof ApplicationsIndexRoute
   '/cover-letter/': typeof CoverLetterIndexRoute
   '/resumes/': typeof ResumesIndexRoute
+  '/resumes/$resumeId/': typeof ResumesResumeIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -71,8 +80,15 @@ export interface FileRouteTypes {
     | '/applications'
     | '/cover-letter'
     | '/resumes'
+    | '/resumes/$resumeId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/resumes/analyze' | '/applications' | '/cover-letter' | '/resumes'
+  to:
+    | '/'
+    | '/resumes/analyze'
+    | '/applications'
+    | '/cover-letter'
+    | '/resumes'
+    | '/resumes/$resumeId'
   id:
     | '__root__'
     | '/'
@@ -80,6 +96,7 @@ export interface FileRouteTypes {
     | '/applications/'
     | '/cover-letter/'
     | '/resumes/'
+    | '/resumes/$resumeId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -88,6 +105,7 @@ export interface RootRouteChildren {
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CoverLetterIndexRoute: typeof CoverLetterIndexRoute
   ResumesIndexRoute: typeof ResumesIndexRoute
+  ResumesResumeIdIndexRoute: typeof ResumesResumeIdIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -127,6 +145,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResumesAnalyzeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/resumes/$resumeId/': {
+      id: '/resumes/$resumeId/'
+      path: '/resumes/$resumeId'
+      fullPath: '/resumes/$resumeId'
+      preLoaderRoute: typeof ResumesResumeIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -136,6 +161,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CoverLetterIndexRoute: CoverLetterIndexRoute,
   ResumesIndexRoute: ResumesIndexRoute,
+  ResumesResumeIdIndexRoute: ResumesResumeIdIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
