@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { queryOptions, useSuspenseQuery, useMutation } from '@tanstack/react-query'
 import { getResume, deleteResume } from '@/api/resumes'
 

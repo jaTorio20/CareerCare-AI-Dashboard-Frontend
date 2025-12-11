@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { analyzeResume, createResume } from '@/api/resumes';
 import type { ResumeAnalysis, ResumeEntry } from '@/types';
+import api from '@/lib/axios';
 
 export const Route = createFileRoute('/resumes/analyze')({
   component: ResumeAnalyze,
@@ -64,7 +65,14 @@ function ResumeAnalyze() {
     await saveMutation(entry);
   };
 
-  const handleCancel = () => {
+  const handleCancel = async () => {
+    if (analysisResult?.publicId) {
+      try {
+        await api.delete(`/resumes/temp/${analysisResult.publicId}`);
+      } catch (err) {
+        console.error("Failed to delete temp file:", err);
+    }
+  }
     setAnalysisResult(null);
     setFile(null);
     setJobDescription('');
