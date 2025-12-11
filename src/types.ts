@@ -17,3 +17,14 @@ export type ResumeEntry = {
   createdAt: string;
   updatedAt: string;
 }
+
+export type CoverLetterEntry = {
+  _id: string;
+  userId?: string;
+  jobDescription: string;
+  userDetails?: string;
+  generatedLetter: string;
+  editedLetter: string;
+  createdAt: string;
+  updatedAt: string;
+} 

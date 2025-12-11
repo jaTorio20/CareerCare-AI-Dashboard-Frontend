@@ -14,7 +14,10 @@ import { Route as ResumesIndexRouteImport } from './routes/resumes/index'
 import { Route as CoverLetterIndexRouteImport } from './routes/cover-letter/index'
 import { Route as ApplicationsIndexRouteImport } from './routes/applications/index'
 import { Route as ResumesAnalyzeRouteImport } from './routes/resumes/analyze'
+import { Route as CoverLetterGenerateRouteImport } from './routes/cover-letter/generate'
 import { Route as ResumesResumeIdIndexRouteImport } from './routes/resumes/$resumeId/index'
+import { Route as CoverLetterCoverLetterIdIndexRouteImport } from './routes/cover-letter/$coverLetterId/index'
+import { Route as CoverLetterCoverLetterIdEditRouteImport } from './routes/cover-letter/$coverLetterId/edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -41,70 +44,108 @@ const ResumesAnalyzeRoute = ResumesAnalyzeRouteImport.update({
   path: '/resumes/analyze',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoverLetterGenerateRoute = CoverLetterGenerateRouteImport.update({
+  id: '/cover-letter/generate',
+  path: '/cover-letter/generate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResumesResumeIdIndexRoute = ResumesResumeIdIndexRouteImport.update({
   id: '/resumes/$resumeId/',
   path: '/resumes/$resumeId/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CoverLetterCoverLetterIdIndexRoute =
+  CoverLetterCoverLetterIdIndexRouteImport.update({
+    id: '/cover-letter/$coverLetterId/',
+    path: '/cover-letter/$coverLetterId/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const CoverLetterCoverLetterIdEditRoute =
+  CoverLetterCoverLetterIdEditRouteImport.update({
+    id: '/cover-letter/$coverLetterId/edit',
+    path: '/cover-letter/$coverLetterId/edit',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cover-letter/generate': typeof CoverLetterGenerateRoute
   '/resumes/analyze': typeof ResumesAnalyzeRoute
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
   '/resumes': typeof ResumesIndexRoute
+  '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/cover-letter/$coverLetterId': typeof CoverLetterCoverLetterIdIndexRoute
   '/resumes/$resumeId': typeof ResumesResumeIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cover-letter/generate': typeof CoverLetterGenerateRoute
   '/resumes/analyze': typeof ResumesAnalyzeRoute
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
   '/resumes': typeof ResumesIndexRoute
+  '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/cover-letter/$coverLetterId': typeof CoverLetterCoverLetterIdIndexRoute
   '/resumes/$resumeId': typeof ResumesResumeIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cover-letter/generate': typeof CoverLetterGenerateRoute
   '/resumes/analyze': typeof ResumesAnalyzeRoute
   '/applications/': typeof ApplicationsIndexRoute
   '/cover-letter/': typeof CoverLetterIndexRoute
   '/resumes/': typeof ResumesIndexRoute
+  '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/cover-letter/$coverLetterId/': typeof CoverLetterCoverLetterIdIndexRoute
   '/resumes/$resumeId/': typeof ResumesResumeIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/cover-letter/generate'
     | '/resumes/analyze'
     | '/applications'
     | '/cover-letter'
     | '/resumes'
+    | '/cover-letter/$coverLetterId/edit'
+    | '/cover-letter/$coverLetterId'
     | '/resumes/$resumeId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/cover-letter/generate'
     | '/resumes/analyze'
     | '/applications'
     | '/cover-letter'
     | '/resumes'
+    | '/cover-letter/$coverLetterId/edit'
+    | '/cover-letter/$coverLetterId'
     | '/resumes/$resumeId'
   id:
     | '__root__'
     | '/'
+    | '/cover-letter/generate'
     | '/resumes/analyze'
     | '/applications/'
     | '/cover-letter/'
     | '/resumes/'
+    | '/cover-letter/$coverLetterId/edit'
+    | '/cover-letter/$coverLetterId/'
     | '/resumes/$resumeId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CoverLetterGenerateRoute: typeof CoverLetterGenerateRoute
   ResumesAnalyzeRoute: typeof ResumesAnalyzeRoute
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CoverLetterIndexRoute: typeof CoverLetterIndexRoute
   ResumesIndexRoute: typeof ResumesIndexRoute
+  CoverLetterCoverLetterIdEditRoute: typeof CoverLetterCoverLetterIdEditRoute
+  CoverLetterCoverLetterIdIndexRoute: typeof CoverLetterCoverLetterIdIndexRoute
   ResumesResumeIdIndexRoute: typeof ResumesResumeIdIndexRoute
 }
 
@@ -145,6 +186,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResumesAnalyzeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cover-letter/generate': {
+      id: '/cover-letter/generate'
+      path: '/cover-letter/generate'
+      fullPath: '/cover-letter/generate'
+      preLoaderRoute: typeof CoverLetterGenerateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/resumes/$resumeId/': {
       id: '/resumes/$resumeId/'
       path: '/resumes/$resumeId'
@@ -152,15 +200,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ResumesResumeIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cover-letter/$coverLetterId/': {
+      id: '/cover-letter/$coverLetterId/'
+      path: '/cover-letter/$coverLetterId'
+      fullPath: '/cover-letter/$coverLetterId'
+      preLoaderRoute: typeof CoverLetterCoverLetterIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cover-letter/$coverLetterId/edit': {
+      id: '/cover-letter/$coverLetterId/edit'
+      path: '/cover-letter/$coverLetterId/edit'
+      fullPath: '/cover-letter/$coverLetterId/edit'
+      preLoaderRoute: typeof CoverLetterCoverLetterIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CoverLetterGenerateRoute: CoverLetterGenerateRoute,
   ResumesAnalyzeRoute: ResumesAnalyzeRoute,
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CoverLetterIndexRoute: CoverLetterIndexRoute,
   ResumesIndexRoute: ResumesIndexRoute,
+  CoverLetterCoverLetterIdEditRoute: CoverLetterCoverLetterIdEditRoute,
+  CoverLetterCoverLetterIdIndexRoute: CoverLetterCoverLetterIdIndexRoute,
   ResumesResumeIdIndexRoute: ResumesResumeIdIndexRoute,
 }
 export const routeTree = rootRouteImport
