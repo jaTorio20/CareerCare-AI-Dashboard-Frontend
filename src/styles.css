@@ -13,3 +13,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.ProseMirror p {
+  margin: 0 0 1em; /* adds spacing between paragraphs */
+}
+
+.ProseMirror {
+  max-width: 800px;          /* page-like width */
+  width: 100%;               /* shrink on smaller screens */
+  min-height: 70vh;          /* fill most of the screen */
+  max-height: 90vh;          /* cap so it doesn’t overflow */
+  margin: 20px auto;         /* center it */
+  padding: 40px;             /* page margins */
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  overflow-y: auto;       
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
