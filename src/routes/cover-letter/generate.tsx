@@ -1,31 +1,39 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { generateCoverLetter, createCoverLetter } from '@/api/coverLetter';
 import type { CoverLetterEntry } from '@/types';
 import CoverLetterEditor from '@/components/CoverLetterEditor';
 
-
 export const Route = createFileRoute('/cover-letter/generate')({
   component: CoverLetterGenerate,
 });
 
-// type GenerateResponse = {
-//   jobDescription: string,
-//   userDetails: string,
-//   generatedLetter: string,
-// }
-
-
 function CoverLetterGenerate() {
   const [jobDescription, setJobDescription] = useState('');
   const [userDetails, setUserDetails] = useState('');
-  // const [generatedLetter, setGeneratedLetter] = useState<GenerateResponse | null>(null);
   const [generatedLetter, setGeneratedLetter] = useState(''); // AI draft
   const [editedLetter, setEditedLetter] = useState('');       // user edits
   const navigate = useNavigate();
 
-  function convertToParagraphs(text: string) {
+  useEffect(() => {
+    if (jobDescription) localStorage.setItem("jobDescription", jobDescription)
+  }, [jobDescription])
+
+  useEffect(() => {
+    if (userDetails) localStorage.setItem("userDetails", userDetails)
+  }, [userDetails])
+
+  useEffect(() => {
+    if (generatedLetter) localStorage.setItem("generatedLetter", generatedLetter)
+  }, [generatedLetter])
+
+  useEffect(() => {
+    if (editedLetter) localStorage.setItem("coverLetter", editedLetter)
+  }, [editedLetter])
+
+
+  const convertToParagraphs = (text: string) => {
     return text
       .split(/\n\s*\n/) // split on blank lines
       .map(p => `<p>${p.trim()}</p>`)
@@ -46,8 +54,7 @@ function CoverLetterGenerate() {
     mutationFn: createCoverLetter,
     onSuccess: (saved) => {
       console.log("Saved cover letter:", saved);
-      setGeneratedLetter('');
-      setEditedLetter('');
+      handleCancel();
       navigate({ to: "/cover-letter" }); // Back to cover letters list after save
     },
     onError: (err) => {
@@ -55,6 +62,18 @@ function CoverLetterGenerate() {
       alert("Failed to save cover letter");
     },
   })
+
+  useEffect(() => {
+    const savedLetter = localStorage.getItem("coverLetter")
+    const savedJob = localStorage.getItem("jobDescription")
+    const savedDetails = localStorage.getItem("userDetails")
+    const savedGenerated = localStorage.getItem("generatedLetter")
+
+    if (savedLetter) setEditedLetter(savedLetter)
+    if (savedJob) setJobDescription(savedJob)
+    if (savedDetails) setUserDetails(savedDetails)
+    if (savedGenerated) setGeneratedLetter(savedGenerated)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +95,17 @@ function CoverLetterGenerate() {
       editedLetter, // current edited content
     };
     await saveMutation(entry);
+  }
+
+  const handleCancel = () => {
+    setEditedLetter("")
+    setJobDescription("")
+    setGeneratedLetter("")
+    setUserDetails("")
+    localStorage.removeItem("coverLetter")
+    localStorage.removeItem("generatedLetter")
+    localStorage.removeItem("jobDescription")
+    localStorage.removeItem("userDetails")
   }
 
   return (
@@ -120,6 +150,12 @@ function CoverLetterGenerate() {
           style={{ marginTop: 12 }}
         >
           {isSaving ? 'Saving...' : 'Save'}
+        </button>
+
+        <button           
+          onClick={handleCancel}
+        >
+          Cancel
         </button>
       </div>
     )}

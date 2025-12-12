@@ -8,9 +8,9 @@ const Header = () => {
     <header className="bg-white shadow-md">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo / Branding */}
-        <div className="text-xl font-semibold text-gray-800">
+        <Link to={"/"} className="text-xl font-semibold text-gray-800">
           Resume Analyzer
-        </div>
+        </Link>
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-8">
