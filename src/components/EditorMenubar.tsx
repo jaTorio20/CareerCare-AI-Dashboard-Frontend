@@ -13,18 +13,21 @@ export default function EditorMenuBar({ editor }: Props) {
     <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
       {/* inline formatting */}
       <button
+        type="button"
         onClick={() => editor.chain().toggleBold().run()}
         disabled={!editor.can().chain().toggleBold().run()}
       >
         Bold
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().toggleItalic().run()}
         disabled={!editor.can().chain().toggleItalic().run()}
       >
         Italic
       </button>
       <button
+        type="button"
         onClick={() => editor.chain().toggleUnderline().run()}
         disabled={!editor.can().chain().toggleUnderline().run()}
       >

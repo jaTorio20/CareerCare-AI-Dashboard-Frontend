@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { getDetailLetter, deleteCoverLetter } from '@/api/coverLetter'
 import { queryOptions, useSuspenseQuery, useMutation} from '@tanstack/react-query'
 import { exportDocx } from '@/utils/exporterDocument'
@@ -38,6 +38,7 @@ function CoverLetterDetailsPage() {
 
 
   return (
+    <>
     <div>
       <p>{letter.jobTitle}</p>
       <p>{letter.companyName}</p>
@@ -45,16 +46,22 @@ function CoverLetterDetailsPage() {
         className="prose max-w-none"
         dangerouslySetInnerHTML={{ __html: letter.editedLetter }}
       />
+      
       <button disabled={isPending}
         onClick={handleDelete}>
         {isPending ? 'Deleting...' : 'Delete Cover Letter'}
       </button>
+      
       <button 
         onClick={() => exportDocx(letter.editedLetter)} 
         style={{ marginTop: 12 }}
       >
         Export as DOCX
       </button>
+
     </div>
+
+    <Link to='/cover-letter/$coverLetterId/edit' params={{coverLetterId: letter._id.toString()}}>Edit</Link>
+    </>
   )
 }

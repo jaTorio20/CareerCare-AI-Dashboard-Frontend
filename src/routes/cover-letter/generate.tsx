@@ -148,7 +148,7 @@ function CoverLetterGenerate() {
         </div>
         <div>
           <label>Job Title:</label>
-          <input type="text" 
+          <input type="text" required
           value={jobTitle}
           onChange={(e) => setJobTitle(e.target.value)}
           />
@@ -156,6 +156,7 @@ function CoverLetterGenerate() {
         <div>
           <label>Company Name:</label>
           <input type="text" 
+          required
           value={companyName}
           onChange={(e) => setCompanyName(e.target.value)}
           />

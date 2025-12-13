@@ -30,14 +30,25 @@ export const getCoverLetter = async (): Promise<CoverLetterEntry[]> => {
 }
 
 //GET detail cover letter
-export const getDetailLetter = async (id: string): Promise<CoverLetterEntry> => {
-  const {data} = await api.get(`/cover-letter/${id}`)
+export const getDetailLetter = async (coverLetterId: string): Promise<CoverLetterEntry> => {
+  const {data} = await api.get(`/cover-letter/${coverLetterId}`)
   return data;
 }
 
 // Delete cover letter
-export async function deleteCoverLetter(id: string): Promise<void> {
-  await api.delete(`/cover-letter/${id}`)
+export const deleteCoverLetter = async (coverLetterId: string): Promise<void> => {
+  await api.delete(`/cover-letter/${coverLetterId}`)
+}
+
+// UPDATE cover letter
+export const updateCoverLetter = async (coverLetterId: string, updatedLetter: {
+  jobTitle: string,
+  companyName: string,
+  jobDescription: string,
+  editedLetter: string,
+}): Promise<CoverLetterEntry> => {
+  const { data } = await api.put(`/cover-letter/${coverLetterId}`, updatedLetter);
+  return data;
 }
 
 
