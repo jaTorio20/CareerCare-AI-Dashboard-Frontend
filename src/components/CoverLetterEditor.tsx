@@ -5,6 +5,8 @@ import StarterKit from '@tiptap/starter-kit'
 import {TextStyle} from '@tiptap/extension-text-style'
 import FontSize from '@/tiptap/extensions/FontSize'
 import EditorMenuBar from './EditorMenubar'
+import { LineHeight, ParagraphSpacing } from '@/tiptap/extensions/SpacingExtension'
+import TextAlign from '@tiptap/extension-text-align'
 
 type Props = {
   initialHTML: string
@@ -22,6 +24,11 @@ export default function CoverLetterEditor({ initialHTML, onChange, editable }: P
         horizontalRule: false,
         heading: false,
       }),
+      TextAlign.configure({
+      types: ['heading', 'paragraph'], // apply to these node types
+      }),
+      ParagraphSpacing,
+      LineHeight,
 
       TextStyle,   // required for font size
       FontSize,    // custom font size extension

@@ -19,7 +19,7 @@ code {
 }
 
 .ProseMirror {
-  max-width: 800px;          /* page-like width */
+  max-width: 900px;          /* page-like width */
   width: 100%;               /* shrink on smaller screens */
   min-height: 70vh;          /* fill most of the screen */
   max-height: 90vh;          /* cap so it doesn’t overflow */

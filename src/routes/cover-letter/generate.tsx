@@ -4,6 +4,8 @@ import { useMutation } from '@tanstack/react-query';
 import { generateCoverLetter, createCoverLetter } from '@/api/coverLetter';
 import type { CoverLetterEntry } from '@/types';
 import CoverLetterEditor from '@/components/CoverLetterEditor';
+import { exportDocx } from '@/utils/exporterDocument';
+
 
 export const Route = createFileRoute('/cover-letter/generate')({
   component: CoverLetterGenerate,
@@ -35,7 +37,7 @@ function CoverLetterGenerate() {
 
   const convertToParagraphs = (text: string) => {
     return text
-      .split(/\n\s*\n/) // split on blank lines
+      .split(/\n+/) // split on newlines
       .map(p => `<p>${p.trim()}</p>`)
       .join('');
   }
@@ -83,6 +85,8 @@ function CoverLetterGenerate() {
       await mutateAsync({ jobDescription, userDetails });
     }
   };
+
+
 
   const handleSave = async () => {
     if (!generatedLetter) return;
@@ -157,6 +161,13 @@ function CoverLetterGenerate() {
         >
           Cancel
         </button>
+        <button 
+          onClick={() => exportDocx(editedLetter)} 
+          style={{ marginTop: 12 }}
+        >
+          Export as DOCX
+        </button>
+
       </div>
     )}
 
