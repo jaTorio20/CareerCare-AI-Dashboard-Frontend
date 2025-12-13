@@ -22,6 +22,8 @@ export type CoverLetterEntry = {
   _id: string;
   userId?: string;
   jobDescription: string;
+  jobTitle: string;
+  companyName: string;
   userDetails?: string;
   generatedLetter: string;
   editedLetter: string;

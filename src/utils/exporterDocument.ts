@@ -7,4 +7,3 @@ export async function exportDocx(html: string, filename = 'cover-letter.docx') {
   saveAs(blob, filename);
 }
 
-

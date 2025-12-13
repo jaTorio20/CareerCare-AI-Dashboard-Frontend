@@ -1,13 +1,10 @@
 import { Editor } from '@tiptap/react'
-import { useState } from 'react'
-import { exportDocx } from '@/utils/exporterDocument'
 
 type Props = {
   editor: Editor | null
 }
 
 export default function EditorMenuBar({ editor }: Props) {
-  const [pageSize, setPageSize] = useState<'A4' | 'Letter'>('A4')
   if (!editor) return null
 
   const sizes = ['10pt', '11pt', '12pt', '14pt', '16pt', '18pt', '20pt', '24pt']

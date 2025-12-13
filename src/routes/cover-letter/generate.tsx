@@ -13,6 +13,8 @@ export const Route = createFileRoute('/cover-letter/generate')({
 
 function CoverLetterGenerate() {
   const [jobDescription, setJobDescription] = useState('');
+  const [jobTitle, setJobTitle] = useState('');
+  const [companyName, setCompanyName] = useState('');
   const [userDetails, setUserDetails] = useState('');
   const [generatedLetter, setGeneratedLetter] = useState(''); // AI draft
   const [editedLetter, setEditedLetter] = useState('');       // user edits
@@ -21,6 +23,14 @@ function CoverLetterGenerate() {
   useEffect(() => {
     if (jobDescription) localStorage.setItem("jobDescription", jobDescription)
   }, [jobDescription])
+
+  useEffect(() => {
+    if (jobTitle) localStorage.setItem("jobTitle", jobTitle)
+  }, [jobTitle])
+
+  useEffect(() => {
+    if (companyName) localStorage.setItem("companyName", companyName)
+  }, [companyName])
 
   useEffect(() => {
     if (userDetails) localStorage.setItem("userDetails", userDetails)
@@ -68,11 +78,15 @@ function CoverLetterGenerate() {
   useEffect(() => {
     const savedLetter = localStorage.getItem("coverLetter")
     const savedJob = localStorage.getItem("jobDescription")
+    const savedTitle = localStorage.getItem("jobTitle")
+    const savedCompany = localStorage.getItem("companyName")
     const savedDetails = localStorage.getItem("userDetails")
     const savedGenerated = localStorage.getItem("generatedLetter")
 
     if (savedLetter) setEditedLetter(savedLetter)
     if (savedJob) setJobDescription(savedJob)
+    if (savedTitle) setJobTitle(savedTitle)
+    if (savedCompany) setJobTitle(savedCompany)
     if (savedDetails) setUserDetails(savedDetails)
     if (savedGenerated) setGeneratedLetter(savedGenerated)
   }, [])
@@ -82,7 +96,7 @@ function CoverLetterGenerate() {
     if (!jobDescription) return;
     
     if(jobDescription) {
-      await mutateAsync({ jobDescription, userDetails });
+      await mutateAsync({ jobDescription, jobTitle, companyName, userDetails });
     }
   };
 
@@ -94,6 +108,8 @@ function CoverLetterGenerate() {
     const entry: Omit<CoverLetterEntry, "_id" | "createdAt" | "updatedAt"> = {
       // userId: "123", // later from auth
       jobDescription,
+      jobTitle,
+      companyName,
       userDetails,
       generatedLetter,
       editedLetter, // current edited content
@@ -104,10 +120,14 @@ function CoverLetterGenerate() {
   const handleCancel = () => {
     setEditedLetter("")
     setJobDescription("")
+    setJobTitle("")
+    setCompanyName("")
     setGeneratedLetter("")
     setUserDetails("")
     localStorage.removeItem("coverLetter")
     localStorage.removeItem("generatedLetter")
+    localStorage.removeItem("jobTitle")
+    localStorage.removeItem("companyName")
     localStorage.removeItem("jobDescription")
     localStorage.removeItem("userDetails")
   }
@@ -124,6 +144,20 @@ function CoverLetterGenerate() {
             rows={10}
             cols={50}
             required
+          />
+        </div>
+        <div>
+          <label>Job Title:</label>
+          <input type="text" 
+          value={jobTitle}
+          onChange={(e) => setJobTitle(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Company Name:</label>
+          <input type="text" 
+          value={companyName}
+          onChange={(e) => setCompanyName(e.target.value)}
           />
         </div>
         <div>

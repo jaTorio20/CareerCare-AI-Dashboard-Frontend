@@ -3,7 +3,7 @@ import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { getResumes } from '@/api/resumes'
 import { Link } from '@tanstack/react-router'
 
-const resumeQueryOptions = () =>{
+const resumeQueryOptions = () => {
   return queryOptions({
     queryKey: ['resumes'],
     queryFn: () => getResumes(),
