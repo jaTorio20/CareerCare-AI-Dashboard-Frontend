@@ -10,10 +10,11 @@ export const Route = createFileRoute('/resumes/analyze')({
 });
 
 type AnalysisResponse = {
-  resumeFile: string
-  publicId: string
-  jobDescription: string
-  analysis: ResumeAnalysis
+  resumeFile: string,
+  publicId: string,
+  originalName: string,
+  jobDescription: string,
+  analysis: ResumeAnalysis,
 };
 
 function ResumeAnalyze() {
@@ -50,17 +51,20 @@ function ResumeAnalyze() {
     if (file) {
       await mutateAsync({ file, jobDescription });
     }
+    
   };
 
   const handleSave = async () => {
     if (!analysisResult) return;
     
-    const entry: Omit<ResumeEntry, "_id" | "createdAt" | "updatedAt"> = {
+    const entry = {
       // userId: "123", // later from auth
       publicId: analysisResult.publicId,
       resumeFile: analysisResult.resumeFile, // Cloudinary URL from backend
       jobDescription: analysisResult.jobDescription,
+      originalName: analysisResult.originalName,
       analysis: analysisResult.analysis,
+      isTemp: false,
     };
     await saveMutation(entry);
   };

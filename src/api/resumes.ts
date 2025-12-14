@@ -11,8 +11,10 @@ export async function analyzeResume({
 }): Promise<{
   resumeFile: string
   publicId: string 
+  originalName: string
   jobDescription: string
   analysis: ResumeAnalysis
+
 }> {
   const formData = new FormData();
   formData.append("resumeFile", file);

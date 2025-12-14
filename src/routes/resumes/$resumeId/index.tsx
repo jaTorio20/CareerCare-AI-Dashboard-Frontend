@@ -34,6 +34,28 @@ function ResumeDetailsPage() {
       await deleteMutate();
     }
   }
+
+  const handleDownload = async () => {
+    try {
+      const res = await fetch(resume.resumeFile, { mode: "cors" });
+      if (!res.ok) throw new Error("Failed to fetch file");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = resume.originalName; // "roast-resume.pdf"
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      alert("Could not download file. Please try again.");
+    }
+  };
+
+
   return (
     <>
       <div className="max-w-3xl mx-auto px-6 py-8">
@@ -43,6 +65,8 @@ function ResumeDetailsPage() {
           <p className="text-gray-600 mb-2">Uploaded At: {new Date(resume.createdAt).toLocaleString()}</p>
           <p className="mb-4">{resume.resumeFile}</p>
           <p>{resume.jobDescription}</p>
+      <button onClick={handleDownload}>Download {resume.originalName}</button>
+
 
           <div> {resume.analysis && (
             <div className="mt-4">

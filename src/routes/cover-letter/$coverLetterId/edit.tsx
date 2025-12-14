@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react' 
 import { useMutation, useSuspenseQuery, queryOptions} from '@tanstack/react-query'
 import { getDetailLetter, updateCoverLetter} from '@/api/coverLetter'

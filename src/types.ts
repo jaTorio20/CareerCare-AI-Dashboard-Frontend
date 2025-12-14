@@ -13,6 +13,8 @@ export type ResumeEntry = {
   publicId: string;
   resumeFile: string;
   jobDescription?: string;
+  originalName: string;
+  isTemp: boolean;
   analysis: ResumeAnalysis;
   createdAt: string;
   updatedAt: string;
