@@ -41,12 +41,13 @@ export const deleteCoverLetter = async (coverLetterId: string): Promise<void> =>
 }
 
 // UPDATE cover letter
-export const updateCoverLetter = async (coverLetterId: string, updatedLetter: {
+export const updateCoverLetter = async (coverLetterId: string, updatedLetter: Partial<{
   jobTitle: string,
   companyName: string,
   jobDescription: string,
   editedLetter: string,
-}): Promise<CoverLetterEntry> => {
+}>
+): Promise<CoverLetterEntry> => {
   const { data } = await api.put(`/cover-letter/${coverLetterId}`, updatedLetter);
   return data;
 }

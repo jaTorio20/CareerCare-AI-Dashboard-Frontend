@@ -46,5 +46,42 @@ export async function createJobApplication({
   return data;
 }
 
+//GET all the job application
+export const getJobApplication = async (): Promise<JobApplicationEntry[]> => {
+  const {data} = await api.get(`/job-application`);
+  return data;
+}
 
+//GET detail job application
+export const getDetailApplication = async (applicationId: string): Promise<JobApplicationEntry> => {
+  const {data} = await api.get(`/job-application/${applicationId}`);
+  return data;
+}
+
+// Delete job application
+export const deleteJobApplication = async (applicationId: string): Promise<void> => {
+  await api.delete(`/job-application/${applicationId}`)
+}
+
+// UPDATE job application
+export const updateJobApplication = async (
+  applicationId: string,
+  updatedApplication: Partial<{
+    jobTitle: string;
+    companyName: string;
+    jobLink: string;
+    status: JobApplicationEntry["status"];
+    location: JobApplicationEntry["location"];
+    notes: string;
+    salaryRange: string;
+    resumeFile: string;   // Cloudinary secure_url
+    publicId: string;     // Cloudinary public_id
+  }>
+): Promise<JobApplicationEntry> => {
+  const { data } = await api.put<JobApplicationEntry>(
+    `/job-application/${applicationId}`,
+    updatedApplication
+  );
+  return data;
+};
 
