@@ -17,7 +17,11 @@ import { Route as ResumesAnalyzeRouteImport } from './routes/resumes/analyze'
 import { Route as CoverLetterGenerateRouteImport } from './routes/cover-letter/generate'
 import { Route as ResumesResumeIdIndexRouteImport } from './routes/resumes/$resumeId/index'
 import { Route as CoverLetterCoverLetterIdIndexRouteImport } from './routes/cover-letter/$coverLetterId/index'
+import { Route as ApplicationsNewIndexRouteImport } from './routes/applications/new/index'
+import { Route as ApplicationsApplicationIdIndexRouteImport } from './routes/applications/$applicationId/index'
 import { Route as CoverLetterCoverLetterIdEditRouteImport } from './routes/cover-letter/$coverLetterId/edit'
+import { Route as ApplicationsApplicationIdEditRouteImport } from './routes/applications/$applicationId/edit'
+import { Route as ApplicationsApplicationIdAnotherRouteImport } from './routes/applications/$applicationId/another'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -60,10 +64,33 @@ const CoverLetterCoverLetterIdIndexRoute =
     path: '/cover-letter/$coverLetterId/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApplicationsNewIndexRoute = ApplicationsNewIndexRouteImport.update({
+  id: '/applications/new/',
+  path: '/applications/new/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApplicationsApplicationIdIndexRoute =
+  ApplicationsApplicationIdIndexRouteImport.update({
+    id: '/applications/$applicationId/',
+    path: '/applications/$applicationId/',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CoverLetterCoverLetterIdEditRoute =
   CoverLetterCoverLetterIdEditRouteImport.update({
     id: '/cover-letter/$coverLetterId/edit',
     path: '/cover-letter/$coverLetterId/edit',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApplicationsApplicationIdEditRoute =
+  ApplicationsApplicationIdEditRouteImport.update({
+    id: '/applications/$applicationId/edit',
+    path: '/applications/$applicationId/edit',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApplicationsApplicationIdAnotherRoute =
+  ApplicationsApplicationIdAnotherRouteImport.update({
+    id: '/applications/$applicationId/another',
+    path: '/applications/$applicationId/another',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -74,7 +101,11 @@ export interface FileRoutesByFullPath {
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
   '/resumes': typeof ResumesIndexRoute
+  '/applications/$applicationId/another': typeof ApplicationsApplicationIdAnotherRoute
+  '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/applications/$applicationId': typeof ApplicationsApplicationIdIndexRoute
+  '/applications/new': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId': typeof CoverLetterCoverLetterIdIndexRoute
   '/resumes/$resumeId': typeof ResumesResumeIdIndexRoute
 }
@@ -85,7 +116,11 @@ export interface FileRoutesByTo {
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
   '/resumes': typeof ResumesIndexRoute
+  '/applications/$applicationId/another': typeof ApplicationsApplicationIdAnotherRoute
+  '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/applications/$applicationId': typeof ApplicationsApplicationIdIndexRoute
+  '/applications/new': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId': typeof CoverLetterCoverLetterIdIndexRoute
   '/resumes/$resumeId': typeof ResumesResumeIdIndexRoute
 }
@@ -97,7 +132,11 @@ export interface FileRoutesById {
   '/applications/': typeof ApplicationsIndexRoute
   '/cover-letter/': typeof CoverLetterIndexRoute
   '/resumes/': typeof ResumesIndexRoute
+  '/applications/$applicationId/another': typeof ApplicationsApplicationIdAnotherRoute
+  '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/applications/$applicationId/': typeof ApplicationsApplicationIdIndexRoute
+  '/applications/new/': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId/': typeof CoverLetterCoverLetterIdIndexRoute
   '/resumes/$resumeId/': typeof ResumesResumeIdIndexRoute
 }
@@ -110,7 +149,11 @@ export interface FileRouteTypes {
     | '/applications'
     | '/cover-letter'
     | '/resumes'
+    | '/applications/$applicationId/another'
+    | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
+    | '/applications/$applicationId'
+    | '/applications/new'
     | '/cover-letter/$coverLetterId'
     | '/resumes/$resumeId'
   fileRoutesByTo: FileRoutesByTo
@@ -121,7 +164,11 @@ export interface FileRouteTypes {
     | '/applications'
     | '/cover-letter'
     | '/resumes'
+    | '/applications/$applicationId/another'
+    | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
+    | '/applications/$applicationId'
+    | '/applications/new'
     | '/cover-letter/$coverLetterId'
     | '/resumes/$resumeId'
   id:
@@ -132,7 +179,11 @@ export interface FileRouteTypes {
     | '/applications/'
     | '/cover-letter/'
     | '/resumes/'
+    | '/applications/$applicationId/another'
+    | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
+    | '/applications/$applicationId/'
+    | '/applications/new/'
     | '/cover-letter/$coverLetterId/'
     | '/resumes/$resumeId/'
   fileRoutesById: FileRoutesById
@@ -144,7 +195,11 @@ export interface RootRouteChildren {
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CoverLetterIndexRoute: typeof CoverLetterIndexRoute
   ResumesIndexRoute: typeof ResumesIndexRoute
+  ApplicationsApplicationIdAnotherRoute: typeof ApplicationsApplicationIdAnotherRoute
+  ApplicationsApplicationIdEditRoute: typeof ApplicationsApplicationIdEditRoute
   CoverLetterCoverLetterIdEditRoute: typeof CoverLetterCoverLetterIdEditRoute
+  ApplicationsApplicationIdIndexRoute: typeof ApplicationsApplicationIdIndexRoute
+  ApplicationsNewIndexRoute: typeof ApplicationsNewIndexRoute
   CoverLetterCoverLetterIdIndexRoute: typeof CoverLetterCoverLetterIdIndexRoute
   ResumesResumeIdIndexRoute: typeof ResumesResumeIdIndexRoute
 }
@@ -207,11 +262,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CoverLetterCoverLetterIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/applications/new/': {
+      id: '/applications/new/'
+      path: '/applications/new'
+      fullPath: '/applications/new'
+      preLoaderRoute: typeof ApplicationsNewIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/applications/$applicationId/': {
+      id: '/applications/$applicationId/'
+      path: '/applications/$applicationId'
+      fullPath: '/applications/$applicationId'
+      preLoaderRoute: typeof ApplicationsApplicationIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cover-letter/$coverLetterId/edit': {
       id: '/cover-letter/$coverLetterId/edit'
       path: '/cover-letter/$coverLetterId/edit'
       fullPath: '/cover-letter/$coverLetterId/edit'
       preLoaderRoute: typeof CoverLetterCoverLetterIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/applications/$applicationId/edit': {
+      id: '/applications/$applicationId/edit'
+      path: '/applications/$applicationId/edit'
+      fullPath: '/applications/$applicationId/edit'
+      preLoaderRoute: typeof ApplicationsApplicationIdEditRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/applications/$applicationId/another': {
+      id: '/applications/$applicationId/another'
+      path: '/applications/$applicationId/another'
+      fullPath: '/applications/$applicationId/another'
+      preLoaderRoute: typeof ApplicationsApplicationIdAnotherRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -224,7 +307,11 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CoverLetterIndexRoute: CoverLetterIndexRoute,
   ResumesIndexRoute: ResumesIndexRoute,
+  ApplicationsApplicationIdAnotherRoute: ApplicationsApplicationIdAnotherRoute,
+  ApplicationsApplicationIdEditRoute: ApplicationsApplicationIdEditRoute,
   CoverLetterCoverLetterIdEditRoute: CoverLetterCoverLetterIdEditRoute,
+  ApplicationsApplicationIdIndexRoute: ApplicationsApplicationIdIndexRoute,
+  ApplicationsNewIndexRoute: ApplicationsNewIndexRoute,
   CoverLetterCoverLetterIdIndexRoute: CoverLetterCoverLetterIdIndexRoute,
   ResumesResumeIdIndexRoute: ResumesResumeIdIndexRoute,
 }

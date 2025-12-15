@@ -1,5 +1,7 @@
 Welcome to your new TanStack app! 
 
+npx @tanstack/router-cli generate // to regenerate routing
+
 # Getting Started
 
 To run this application:

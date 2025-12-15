@@ -49,3 +49,32 @@ export async function getResume(id: string): Promise<ResumeEntry> {
 export async function deleteResume(id: string): Promise<void> {
   await api.delete(`/resumes/${id}`)
 }
+
+export async function getDownloadFile(id: string): Promise<void> {
+  const res = await api.get(`/resumes/${id}/download`, {
+    responseType: "blob", //expect binary data instead of JSON
+  });
+
+  // Create a blob URL
+  const url = window.URL.createObjectURL(new Blob([res.data]));
+
+  // Extract filename from Content-Disposition header (set by backend)
+  const contentDisposition = res.headers["content-disposition"];
+  let fileName = "resume.pdf"; // fallback
+  if (contentDisposition) {
+    const match = contentDisposition.match(/filename="(.+)"/);
+    if (match?.[1]) {
+      fileName = match[1];
+    }
+  }
+
+  // Trigger download
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  window.URL.revokeObjectURL(url);
+}

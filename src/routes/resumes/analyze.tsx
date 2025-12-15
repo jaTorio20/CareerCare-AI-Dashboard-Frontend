@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { analyzeResume, createResume } from '@/api/resumes';
-import type { ResumeAnalysis, ResumeEntry } from '@/types';
+import type { ResumeAnalysis } from '@/types';
 import api from '@/lib/axios';
 
 export const Route = createFileRoute('/resumes/analyze')({
@@ -127,12 +127,12 @@ function ResumeAnalyze() {
           <p className="text-sm text-gray-700">
             <strong>ATS Friendly:</strong> {analysisResult?.analysis.atsFriendly ? "Yes " : "No "}
           </p>
-          { analysisResult?.analysis.jobFitPercentage ?
+          {/* { analysisResult?.analysis.jobFitPercentage ? */}
             <p className="text-sm text-gray-700">
               <strong>Job Fit Percentage:</strong> {analysisResult?.analysis.jobFitPercentage}%
             </p>
-            : null
-          }
+            {/* : null
+          } */}
 
           <div className="mt-2">
             <strong className="text-sm text-gray-800">ATS Suggestions:</strong>

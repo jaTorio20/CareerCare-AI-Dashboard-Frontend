@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { queryOptions, useSuspenseQuery, useMutation } from '@tanstack/react-query'
-import { getResume, deleteResume } from '@/api/resumes'
+import { getResume, deleteResume, getDownloadFile} from '@/api/resumes'
 
 const resumeQueryOptions = (resumeId: string) =>{
   return queryOptions({
@@ -37,22 +37,10 @@ function ResumeDetailsPage() {
 
   const handleDownload = async () => {
     try {
-      const res = await fetch(resume.resumeFile, { mode: "cors" });
-      if (!res.ok) throw new Error("Failed to fetch file");
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = resume.originalName; // "roast-resume.pdf"
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      alert("Could not download file. Please try again.");
-    }
+    await getDownloadFile(resumeId);
+  } catch (e) {
+    alert("Could not download file. Please try again.");
+  }
   };
 
 

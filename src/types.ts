@@ -32,3 +32,19 @@ export type CoverLetterEntry = {
   createdAt: string;
   updatedAt: string;
 } 
+
+export type JobApplicationEntry = {
+  _id: string;
+  userId?: string;
+  companyName: string;
+  jobTitle: string;
+  jobLink: string;
+  status: string[];
+  location: string[];
+  notes: string;
+  salaryRange: string;
+  resumeFile?: string;
+  publicId?: string;
+  createdAt: string;
+  updatedAt: string;
+}
