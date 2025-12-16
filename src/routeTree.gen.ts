@@ -21,7 +21,6 @@ import { Route as ApplicationsNewIndexRouteImport } from './routes/applications/
 import { Route as ApplicationsApplicationIdIndexRouteImport } from './routes/applications/$applicationId/index'
 import { Route as CoverLetterCoverLetterIdEditRouteImport } from './routes/cover-letter/$coverLetterId/edit'
 import { Route as ApplicationsApplicationIdEditRouteImport } from './routes/applications/$applicationId/edit'
-import { Route as ApplicationsApplicationIdAnotherRouteImport } from './routes/applications/$applicationId/another'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -87,12 +86,6 @@ const ApplicationsApplicationIdEditRoute =
     path: '/applications/$applicationId/edit',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApplicationsApplicationIdAnotherRoute =
-  ApplicationsApplicationIdAnotherRouteImport.update({
-    id: '/applications/$applicationId/another',
-    path: '/applications/$applicationId/another',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -101,7 +94,6 @@ export interface FileRoutesByFullPath {
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
   '/resumes': typeof ResumesIndexRoute
-  '/applications/$applicationId/another': typeof ApplicationsApplicationIdAnotherRoute
   '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdIndexRoute
@@ -116,7 +108,6 @@ export interface FileRoutesByTo {
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
   '/resumes': typeof ResumesIndexRoute
-  '/applications/$applicationId/another': typeof ApplicationsApplicationIdAnotherRoute
   '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdIndexRoute
@@ -132,7 +123,6 @@ export interface FileRoutesById {
   '/applications/': typeof ApplicationsIndexRoute
   '/cover-letter/': typeof CoverLetterIndexRoute
   '/resumes/': typeof ResumesIndexRoute
-  '/applications/$applicationId/another': typeof ApplicationsApplicationIdAnotherRoute
   '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
   '/applications/$applicationId/': typeof ApplicationsApplicationIdIndexRoute
@@ -149,7 +139,6 @@ export interface FileRouteTypes {
     | '/applications'
     | '/cover-letter'
     | '/resumes'
-    | '/applications/$applicationId/another'
     | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
     | '/applications/$applicationId'
@@ -164,7 +153,6 @@ export interface FileRouteTypes {
     | '/applications'
     | '/cover-letter'
     | '/resumes'
-    | '/applications/$applicationId/another'
     | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
     | '/applications/$applicationId'
@@ -179,7 +167,6 @@ export interface FileRouteTypes {
     | '/applications/'
     | '/cover-letter/'
     | '/resumes/'
-    | '/applications/$applicationId/another'
     | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
     | '/applications/$applicationId/'
@@ -195,7 +182,6 @@ export interface RootRouteChildren {
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CoverLetterIndexRoute: typeof CoverLetterIndexRoute
   ResumesIndexRoute: typeof ResumesIndexRoute
-  ApplicationsApplicationIdAnotherRoute: typeof ApplicationsApplicationIdAnotherRoute
   ApplicationsApplicationIdEditRoute: typeof ApplicationsApplicationIdEditRoute
   CoverLetterCoverLetterIdEditRoute: typeof CoverLetterCoverLetterIdEditRoute
   ApplicationsApplicationIdIndexRoute: typeof ApplicationsApplicationIdIndexRoute
@@ -290,13 +276,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplicationsApplicationIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/applications/$applicationId/another': {
-      id: '/applications/$applicationId/another'
-      path: '/applications/$applicationId/another'
-      fullPath: '/applications/$applicationId/another'
-      preLoaderRoute: typeof ApplicationsApplicationIdAnotherRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -307,7 +286,6 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CoverLetterIndexRoute: CoverLetterIndexRoute,
   ResumesIndexRoute: ResumesIndexRoute,
-  ApplicationsApplicationIdAnotherRoute: ApplicationsApplicationIdAnotherRoute,
   ApplicationsApplicationIdEditRoute: ApplicationsApplicationIdEditRoute,
   CoverLetterCoverLetterIdEditRoute: CoverLetterCoverLetterIdEditRoute,
   ApplicationsApplicationIdIndexRoute: ApplicationsApplicationIdIndexRoute,
