@@ -14,7 +14,7 @@ export async function createJobApplication({
   salaryRange,
   userId,
 }: {
-  file: File;
+  file?: File;
   companyName: string;
   jobTitle: string;
   jobLink?: string;
@@ -27,11 +27,11 @@ export async function createJobApplication({
   const formData = new FormData();
 
   // Required fields
-  formData.append("resumeFile", file);
   formData.append("companyName", companyName);
   formData.append("jobTitle", jobTitle);
 
   // Optional fields
+  if(file) formData.append("resumeFile", file);
   if (jobLink) formData.append("jobLink", jobLink);
   if (status) formData.append("status", status);
   if (location) formData.append("location", location);
@@ -39,11 +39,16 @@ export async function createJobApplication({
   if (salaryRange) formData.append("salaryRange", salaryRange);
   if (userId) formData.append("userId", userId);
 
-  const { data } = await api.post<JobApplicationEntry>("/job-application", formData, {
-    headers: { "Content-Type": "multipart/form-data" },
-  });
+  try {
+    const { data } = await api.post<JobApplicationEntry>("/job-application", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return data;
+  } catch (err){
+    console.error("Failed to create job application:", err);
+    throw err;
+  }
 
-  return data;
 }
 
 //GET all the job application
