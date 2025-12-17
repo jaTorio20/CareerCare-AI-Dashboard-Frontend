@@ -48,35 +48,7 @@ function CoverLetterEditPage() {
     e.preventDefault();
     await mutateAsync();
   }
-
-  return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Job Description:</label><br />
-          <textarea
-            value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
-            rows={10}
-            cols={50}
-            required
-          />
-        </div>
-        <div>
-          <label>Job Title:</label>
-          <input type="text" 
-          value={jobTitle}
-          onChange={(e) => setJobTitle(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Company Name:</label>
-          <input type="text" 
-          value={companyName}
-          onChange={(e) => setCompanyName(e.target.value)}
-          />
-        </div>
-        {/* <div>
+          {/* <div>
           <label>Your Details (optional):</label><br />
           <textarea
             value={userDetails}
@@ -86,26 +58,80 @@ function CoverLetterEditPage() {
           />
         </div> */}
 
+  return (
+<div className="max-w-4xl mx-auto px-4 py-10">
+  <h1 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
+    Edit Cover Letter
+  </h1>
 
+  <form
+    onSubmit={handleSubmit}
+    className="bg-white border border-gray-200 rounded-xl shadow-md p-2 md:p-8 space-y-6"
+  >
+    {/* Job Description */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Job Description
+      </label>
+      <textarea
+        value={jobDescription}
+        onChange={(e) => setJobDescription(e.target.value)}
+        rows={8}
+        required
+        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+      />
+    </div>
+
+    {/* Job Title */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Job Title
+      </label>
+      <input
+        type="text"
+        value={jobTitle}
+        onChange={(e) => setJobTitle(e.target.value)}
+        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+      />
+    </div>
+
+    {/* Company Name */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Company Name
+      </label>
+      <input
+        type="text"
+        value={companyName}
+        onChange={(e) => setCompanyName(e.target.value)}
+        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+      />
+    </div>
+
+    {/* Cover Letter Editor */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Cover Letter Content
+      </label>
+      <div className="rounded-md border border-gray-300 bg-gray-50 p-3">
         <CoverLetterEditor
           initialHTML={editedLetter}
           onChange={(html) => setEditedLetter(html)}
         />
+      </div>
+    </div>
 
-        <div className="pt-4">
-          <button
-            disabled={isPending}
-            type="submit"
-            className=" disabled
-            w-full rounded-lg bg-linear-to-r
-            from-blue-600 to-indigo-600 
-            px-6 py-3 text-white font-semibold 
-            shadow-md hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {isPending ? 'Updating...' : 'Update Cover Letter'}
-          </button>
-        </div>
-      </form>    
-    </>
+    {/* Submit Button */}
+    <div className="pt-4">
+      <button
+        disabled={isPending}
+        type="submit"
+        className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-white font-semibold shadow-md hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isPending ? "Updating..." : "Update Cover Letter"}
+      </button>
+    </div>
+  </form>
+</div>
   )
 }

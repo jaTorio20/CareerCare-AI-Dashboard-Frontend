@@ -133,79 +133,124 @@ function CoverLetterGenerate() {
   }
 
   return (
- <>
-      <h1>Generate Cover Letter</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Job Description:</label><br />
-          <textarea
-            value={jobDescription}
-            onChange={(e) => setJobDescription(e.target.value)}
-            rows={10}
-            cols={50}
-            required
-          />
-        </div>
-        <div>
-          <label>Job Title:</label>
-          <input type="text" required
-          value={jobTitle}
-          onChange={(e) => setJobTitle(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Company Name:</label>
-          <input type="text" 
-          required
-          value={companyName}
-          onChange={(e) => setCompanyName(e.target.value)}
-          />
-        </div>
-        <div>
-          <label>Your Details (optional):</label><br />
-          <textarea
-            value={userDetails}
-            onChange={(e) => setUserDetails(e.target.value)}
-            rows={5}
-            cols={50}
-          />
-        </div>
-        <button type="submit" disabled={isPending}>
-          {isPending ? 'Generating...' : 'Generate Cover Letter'}
-        </button>
-      </form>
+<div className="max-w-3xl mx-auto px-6 py-10">
+  {/* Header */}
+  <h1 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
+    Generate Cover Letter
+  </h1>
 
-    {/* Render editor only after generation and not while pending */}
-    {generatedLetter && !isPending && (
-      <div style={{ marginTop: 20 }}>
-        <h2>Edit Your Cover Letter</h2>
+  {/* Form */}
+  <form
+    onSubmit={handleSubmit}
+    className="bg-white border border-gray-200 rounded-xl shadow-md p-8 space-y-6"
+  >
+    {/* Job Description */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Job Description
+      </label>
+      <textarea
+        value={jobDescription}
+        onChange={(e) => setJobDescription(e.target.value)}
+        rows={8}
+        required
+        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+      />
+    </div>
+
+    {/* Job Title */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Job Title
+      </label>
+      <input
+        type="text"
+        required
+        value={jobTitle}
+        onChange={(e) => setJobTitle(e.target.value)}
+        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+      />
+    </div>
+
+    {/* Company Name */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Company Name
+      </label>
+      <input
+        type="text"
+        required
+        value={companyName}
+        onChange={(e) => setCompanyName(e.target.value)}
+        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+      />
+    </div>
+
+    {/* User Details */}
+    <div>
+      <label className="block text-sm font-medium text-gray-700 mb-2">
+        Your Details (optional)
+      </label>
+      <textarea
+        value={userDetails}
+        onChange={(e) => setUserDetails(e.target.value)}
+        rows={5}
+        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+      />
+    </div>
+
+    {/* Submit Button */}
+    <div className="pt-4">
+      <button
+        type="submit"
+        disabled={isPending}
+        className="w-full rounded-lg bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-3 text-white font-semibold shadow-md hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        {isPending ? "Generating..." : "Generate Cover Letter"}
+      </button>
+    </div>
+  </form>
+
+  {/* Editor after generation */}
+  {generatedLetter && !isPending && (
+    <div className="mt-10 bg-white border border-gray-200 rounded-xl shadow-md p-8 space-y-6">
+      <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+        Edit Your Cover Letter
+      </h2>
+      <div className="rounded-md border border-gray-300 bg-gray-50 p-3">
         <CoverLetterEditor
           initialHTML={editedLetter}
           onChange={(html) => setEditedLetter(html)}
         />
+      </div>
+
+      {/* Editor Actions */}
+      <div className="flex flex-col sm:flex-row gap-4 pt-4">
         <button
           onClick={handleSave}
           disabled={isSaving || !editedLetter.trim()}
-          style={{ marginTop: 12 }}
+          className="flex-1 px-5 py-3 text-sm font-medium text-white bg-green-600 rounded-lg shadow hover:bg-green-700 transition disabled:opacity-50"
         >
-          {isSaving ? 'Saving...' : 'Save'}
+          {isSaving ? "Saving..." : "Save"}
         </button>
 
-        <button           
+        <button
           onClick={handleCancel}
+          className="flex-1 px-5 py-3 text-sm font-medium text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
         >
           Cancel
         </button>
-        <button 
-          onClick={() => exportDocx(editedLetter)} 
-          style={{ marginTop: 12 }}
+
+        <button
+          onClick={() => exportDocx(editedLetter)}
+          className="flex-1 px-5 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition"
         >
           Export as DOCX
         </button>
-
       </div>
-    )}
+    </div>
+  )}
+</div>
 
-    </>
   )
 }

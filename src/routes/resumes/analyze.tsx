@@ -135,10 +135,13 @@ function ResumeAnalyze() {
           } */}
 
           <div className="mt-2">
-            <strong className="text-sm text-gray-800">ATS Suggestions:</strong>
+
             <ul className="list-disc list-inside text-sm text-gray-700">
               {analysisResult?.analysis.atsSuggestions.map((s, i) => (
-                <li key={i}>{s}</li>
+                <div>
+                  <strong className="text-sm text-gray-800">ATS Suggestions:</strong>
+                  <li key={i}>{s}</li>
+                </div>
               ))}
             </ul>
           </div>

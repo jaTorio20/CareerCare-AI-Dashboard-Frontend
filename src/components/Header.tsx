@@ -5,7 +5,7 @@ const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <header className="bg-white shadow-md">
+    <header className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo / Branding */}
         <Link to={"/"} className="text-xl font-semibold text-gray-800">
@@ -14,9 +14,7 @@ const Header = () => {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-8">
-          <Link to="/resumes/analyze" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
-            Upload
-          </Link>
+
           <Link to="/resumes" className="text-gray-700 hover:text-blue-600 transition-colors font-medium">
             Resumes
           </Link>
