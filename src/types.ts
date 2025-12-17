@@ -39,6 +39,7 @@ export type JobApplicationEntry = {
   companyName: string;
   jobTitle: string;
   jobLink: string;
+  originalName: string
   status: "applied" | "interview" | "offer" | "rejected" | "accepted";
   location: "remote" | "onsite" | "hybrid";
   notes: string;

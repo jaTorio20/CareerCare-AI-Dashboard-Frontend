@@ -58,41 +58,61 @@ export const getJobApplication = async (): Promise<JobApplicationEntry[]> => {
 }
 
 //GET detail job application
-export const getDetailApplication = async (applicationId: string): Promise<JobApplicationEntry> => {
-  const {data} = await api.get(`/job-application/${applicationId}`);
+export const getDetailApplication = async (id: string): Promise<JobApplicationEntry> => {
+  const {data} = await api.get(`/job-application/${id}`);
   return data;
 }
 
 // Delete job application
-export const deleteJobApplication = async (applicationId: string): Promise<void> => {
-  await api.delete(`/job-application/${applicationId}`)
+export const deleteJobApplication = async (id: string): Promise<void> => {
+  await api.delete(`/job-application/${id}`)
 }
 
 // UPDATE job application
 export const updateJobApplication = async (
-  applicationId: string,
-  updatedApplication: Partial<{
+  id: string,
+  updatedApplication:{
     jobTitle: string;
     companyName: string;
-    jobLink: string;
-    status: JobApplicationEntry["status"];
-    location: JobApplicationEntry["location"];
-    notes: string;
-    salaryRange: string;
-    resumeFile: string;   // Cloudinary secure_url
-    publicId: string;     // Cloudinary public_id
-  }>
+    jobLink?: string;
+    status?: JobApplicationEntry["status"];
+    location?: JobApplicationEntry["location"];
+    notes?: string;
+    salaryRange?: string;
+    file?: File;           // new resume file (optional)
+  }
 ): Promise<JobApplicationEntry> => {
+  const formData = new FormData();
+  formData.append("companyName", updatedApplication.companyName);
+  formData.append("jobTitle", updatedApplication.jobTitle);
+
+
+  if (updatedApplication.jobLink) formData.append("jobLink", updatedApplication.jobLink);
+  if (updatedApplication.status) formData.append("status", updatedApplication.status);
+  if (updatedApplication.location) formData.append("location", updatedApplication.location);
+  if (updatedApplication.notes) formData.append("notes", updatedApplication.notes);
+  if (updatedApplication.salaryRange) formData.append("salaryRange", updatedApplication.salaryRange);
+
+  // Append file if user selected a new one
+  if (updatedApplication.file) {
+    formData.append("resumeFile", updatedApplication.file);
+  }
+
   const { data } = await api.put<JobApplicationEntry>(
-    `/job-application/${applicationId}`,
-    updatedApplication
+    `/job-application/${id}`,
+    formData,
+    {
+      headers: { "Content-Type": "multipart/form-data" },
+    }
   );
+
   return data;
 };
 
+
 // GET file
 export async function getDownloadFile(id: string): Promise<void> {
-  const res = await api.get(`/applications/${id}/download`, {
+  const res = await api.get(`/job-application/${id}/download`, {
     responseType: "blob", //expect binary data instead of JSON
   });
 

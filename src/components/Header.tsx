@@ -9,7 +9,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         {/* Logo / Branding */}
         <Link to={"/"} className="text-xl font-semibold text-gray-800">
-          Resume Analyzer
+          CareerCare
         </Link>
 
         {/* Desktop Navigation */}

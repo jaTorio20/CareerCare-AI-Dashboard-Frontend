@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
-import { getDetailApplication } from '@/api/jobApplication'
+import { getDetailApplication, getDownloadFile, deleteJobApplication } from '@/api/jobApplication'
 import { queryOptions, useSuspenseQuery, useMutation} from '@tanstack/react-query'
 import { StatusBadge } from '@/components/StatusBadge'
 
@@ -24,8 +24,35 @@ function ApplicationDetailsPage() {
     const {data: jobApplication} = useSuspenseQuery(jobApplicationQueryOptions(applicationId))
     const navigate = useNavigate();
 
+    const { mutateAsync: deleteMutate, isPending } = useMutation({
+      mutationFn: () => deleteJobApplication(applicationId),
+      onSuccess: () => {
+        navigate({to: '/applications'});
+      }
+    });
+
+    const { mutateAsync: downloadMutate, isPending: isDownload } = useMutation({
+      mutationFn: () => getDownloadFile(applicationId),
+      onSuccess: (data) => data, 
+    });
+
+    const handleDelete = async() => {
+      const confirmDelete = window.confirm("Are you sure you want to delete this resume?");
+      if (confirmDelete) {
+        await deleteMutate();
+      }
+    }
+
+    const handleDownload = async () => {
+      try {
+      await downloadMutate();
+    } catch (e) {
+      alert("Could not download file. Please try again.");
+    }
+    };
+
   return (
- <div className="min-h-screen bg-gray-50 px-4 sm:px-6 lg:px-8 py-10">
+ <div className="min-h-screen px-4 sm:px-6 lg:px-8 py-10">
       <div className="max-w-2xl mx-auto bg-white rounded-xl shadow-md p-6 sm:p-8">
         {/* Title + Company */}
         <h1 className="text-2xl font-bold text-gray-900 mb-2">
@@ -79,10 +106,32 @@ function ApplicationDetailsPage() {
           <Link
             to={`/applications/$applicationId/edit`}
             params={{applicationId: jobApplication._id}}
-            className="flex-1 px-4 py-2 text-center text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
+             className="flex-1 flex items-center justify-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
           >
             Edit Application
           </Link>
+
+          {jobApplication.originalName && (
+            <button
+              disabled={isDownload}
+              onClick={handleDownload}
+              className="flex-1 px-4 py-2 text-center cursor-pointer text-sm 
+              font-medium text-blue-600 border border-blue-600
+              disabled:opacity-50 rounded-md hover:bg-blue-50 transition"
+            >
+              { isDownload ? 'Downloading' : `Download ${ jobApplication.originalName }` }
+            </button>
+          )}
+
+          <button
+            onClick={handleDelete}
+            disabled={isPending}
+            className="flex-1 px-4 py-2 text-center cursor-pointer text-sm 
+            font-medium text-red-600 border border-red-600 rounded-md 
+            disabled:opacity-50 hover:bg-red-50 transition"
+          >
+            {isPending ? 'Deleting...' : 'Delete'}
+          </button>
         </div>
       </div>
     </div>

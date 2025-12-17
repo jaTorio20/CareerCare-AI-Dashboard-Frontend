@@ -27,7 +27,6 @@
     "@tiptap/starter-kit": "^3.13.0",
     "axios": "^1.13.2",
     "file-saver": "^2.0.5",
-    "html-docx-js": "^0.3.1",
     "html-docx-js-typescript": "^0.1.5",
     "html2pdf.js": "^0.12.1",
     "jspdf": "^3.0.4",
@@ -35,6 +34,7 @@
     "pdfmake": "^0.2.20",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-pdf": "^10.2.0",
     "tailwindcss": "^4.0.6"
   },
   "devDependencies": {
