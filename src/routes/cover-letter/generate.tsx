@@ -6,6 +6,7 @@ import type { CoverLetterEntry } from '@/types';
 import CoverLetterEditor from '@/components/CoverLetterEditor';
 import { exportDocx } from '@/utils/exporterDocument';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/cover-letter/generate')({
   component: () => (
@@ -50,6 +51,7 @@ function CoverLetterGenerate() {
 
 
   const convertToParagraphs = (text: string) => {
+    if (!text) return "";
     return text
       .split(/\n+/) // split on newlines
       .map(p => `<p>${p.trim()}</p>`)
@@ -59,6 +61,11 @@ function CoverLetterGenerate() {
   const {mutateAsync, isPending} = useMutation({
     mutationFn: generateCoverLetter,
     onSuccess: (data) => {
+      console.log("generateCoverLetter response:", data);
+      if (!data?.generatedLetter) {
+        toast.error("No generated letter returned from API");
+        return;
+      }
       const formatted = convertToParagraphs(data.generatedLetter);
       setGeneratedLetter(formatted);
       setEditedLetter(formatted);
@@ -72,11 +79,11 @@ function CoverLetterGenerate() {
       console.log("Saved cover letter:", saved);
       handleCancel();
       navigate({ to: "/cover-letter" }); // Back to cover letters list after save
+      toast.success('Saved successfully!')
     },
-    onError: (err) => {
-      console.error("Failed to save cover letter:", err);
-      alert("Failed to save cover letter");
-    },
+    onError: (err: any) => {
+      toast.error( err?.message || "An unexpected error occurred");
+    }
   })
 
   useEffect(() => {
@@ -142,6 +149,17 @@ function CoverLetterGenerate() {
   <h1 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
     Generate Cover Letter
   </h1>
+
+    Clear Text Button
+  <div className="flex justify-end mb-4">
+    <button
+      type="button"
+      onClick={handleCancel}
+      className="px-4 py-2 text-sm font-medium text-red-600 border border-red-300 rounded-lg hover:bg-red-50 transition"
+    >
+      Clear Text
+    </button>
+  </div>
 
   {/* Form */}
   <form

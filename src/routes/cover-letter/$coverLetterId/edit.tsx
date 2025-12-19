@@ -4,6 +4,8 @@ import { useMutation, useSuspenseQuery, queryOptions} from '@tanstack/react-quer
 import { getDetailLetter, updateCoverLetter} from '@/api/coverLetter'
 import CoverLetterEditor from '@/components/CoverLetterEditor'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import { toast } from 'sonner'
+
 const coverLetterQueryOptions = (id: string) => {
   return queryOptions({
     queryKey: ['cover-letter', id],
@@ -46,6 +48,10 @@ function CoverLetterEditPage() {
         to: '/cover-letter/$coverLetterId',
         params: { coverLetterId: coverLetter._id}
       })
+      toast.success('Updated successfully!')
+    },
+    onError: (err: any) => {
+      toast.error( err?.message || "An unexpected error occurred");
     }
   })
 

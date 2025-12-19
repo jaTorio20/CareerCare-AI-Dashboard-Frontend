@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { queryOptions, useSuspenseQuery, useMutation } from '@tanstack/react-query'
 import { getResume, deleteResume, getDownloadFile} from '@/api/resumes'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import { toast } from 'sonner'
 
 const resumeQueryOptions = (resumeId: string) =>{
   return queryOptions({
@@ -30,7 +31,20 @@ function ResumeDetailsPage() {
     mutationFn: () => deleteResume(resumeId),
     onSuccess: () => {
       navigate({to: '/resumes'});
-    }
+      toast.success('Resume deleted successfully!')
+    },
+    onError: (err: any) => {
+      toast.error(err?.message || "Delete failed. Please try again.");
+    },
+  });
+  const { mutateAsync: downloadMutate, isPending: isDownload } = useMutation({
+    mutationFn: () => getDownloadFile(resumeId),
+    onSuccess: () => {
+      toast.success('Downloaded successfully!')
+    },
+    onError: (err: any) => {
+      toast.error(err?.message || "Download failed. Please try again.");
+    },
   });
 
   const handleDelete = async() => {
@@ -42,7 +56,7 @@ function ResumeDetailsPage() {
 
   const handleDownload = async () => {
     try {
-    await getDownloadFile(resumeId);
+    await downloadMutate();
   } catch (e) {
     alert("Could not download file. Please try again.");
   }
@@ -125,15 +139,16 @@ function ResumeDetailsPage() {
     {/* Action Buttons */}
     <div className="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
       <button
+        disabled={isDownload}
         onClick={handleDownload}
-        className="flex-1 px-5 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition-colors"
+        className="cursor-pointer flex-1 px-5 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition-colors"
       >
-        Download {resume.originalName}
+        {isDownload ? 'Downloading...' : `Download ${resume.originalName}` }
       </button>
       <button
         onClick={handleDelete}
         disabled={isPending}
-        className="flex-1 px-5 py-3 text-sm font-medium text-white bg-red-600 rounded-lg shadow hover:bg-red-700 transition-colors disabled:opacity-50"
+        className="cursor-pointer flex-1 px-5 py-3 text-sm font-medium text-white bg-red-600 rounded-lg shadow hover:bg-red-700 transition-colors disabled:opacity-50"
       >
         {isPending ? "Deleting..." : "Delete Resume"}
       </button>

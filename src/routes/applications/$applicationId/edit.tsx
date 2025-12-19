@@ -4,6 +4,7 @@ import { updateJobApplication, getDetailApplication } from '@/api/jobApplication
 import { useMutation, useSuspenseQuery, queryOptions} from '@tanstack/react-query'
 import { ResumeViewer } from '@/components/ResumeViewer'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import { toast } from 'sonner'
 
 const jobApplicationQueryOptions = (id: string) => {
   return queryOptions({
@@ -58,6 +59,7 @@ function ApplicationEditPage() {
           to: '/applications/$applicationId/edit',
           params: { applicationId: jobApplication._id}
         })
+        toast.success('Updated successfully!')
       }
     })
     

@@ -96,6 +96,7 @@ function ResumeAnalyze() {
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Resume File</label>
           <input
+            required
             type="file"
             accept=".pdf,.doc,.docx"
             onChange={(e) => setFile(e.target.files?.[0] || null)}

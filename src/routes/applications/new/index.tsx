@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query';
 import { createJobApplication } from '@/api/jobApplication'
 import ProtectedRoute from '@/components/ProtectedRoute';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/applications/new/')({
     component: () => (
@@ -27,6 +28,10 @@ function NewJobApplication() {
     mutationFn: createJobApplication,
     onSuccess: () => {
       navigate({ to: '/applications'}) //navigate is where the form navigate after submit
+      toast.success('Added successfully!')
+    },
+    onError: (err: any) => {
+      toast.error( err?.message || "An unexpected error occurred");
     }
   });
 

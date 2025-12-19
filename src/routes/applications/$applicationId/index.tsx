@@ -3,6 +3,7 @@ import { getDetailApplication, getDownloadFile, deleteJobApplication } from '@/a
 import { queryOptions, useSuspenseQuery, useMutation} from '@tanstack/react-query'
 import { StatusBadge } from '@/components/StatusBadge'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import { toast } from 'sonner'
 
 const jobApplicationQueryOptions = (applicationId: string) => {
   return queryOptions({
@@ -32,6 +33,10 @@ function ApplicationDetailsPage() {
       mutationFn: () => deleteJobApplication(applicationId),
       onSuccess: () => {
         navigate({to: '/applications'});
+        toast.success('Deleted successfully!')
+      },
+      onError: (err: any) => {
+        toast.error( err?.message || "An unexpected error occurred");
       }
     });
 

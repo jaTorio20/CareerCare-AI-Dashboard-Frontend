@@ -3,6 +3,7 @@ import { getDetailLetter, deleteCoverLetter } from '@/api/coverLetter'
 import { queryOptions, useSuspenseQuery, useMutation} from '@tanstack/react-query'
 import { exportDocx } from '@/utils/exporterDocument'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import { toast } from 'sonner'
 
 const coverLetterQueryOptions = (coverLetterId: string) => {
   return queryOptions({
@@ -32,7 +33,11 @@ function CoverLetterDetailsPage() {
     mutationFn: () => deleteCoverLetter(coverLetterId),
     onSuccess: () => {
       navigate({to: '/cover-letter'});
-    }
+      toast.success('Deleted Successfully!')
+    },
+    onError: (err: any) => {
+      toast.error(err?.message || "Something went wrong. Please try again.");
+    },
   })
 
   const handleDelete = async() => {

@@ -36,7 +36,11 @@ api.interceptors.response.use((res) => res,
       try {
         const { accessToken:newToken } = await refreshAccessToken();
         setStoredAccessToken(newToken);
-        originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        originalRequest.headers = {
+          ...originalRequest.headers,
+          Authorization: `Bearer ${newToken}`,
+        };
+
         return api(originalRequest);
       } catch (err) {
         console.error('Refresh token failed', err)

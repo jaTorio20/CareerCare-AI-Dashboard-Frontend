@@ -3,7 +3,7 @@ import { Link, useNavigate } from '@tanstack/react-router'
 import { useAuth } from "@/context/AuthContext";
 import { logoutUser } from "@/api/auth";
 import { useMutation } from '@tanstack/react-query';
-
+import { toast } from 'sonner';
 
 
 const Header = () => {
@@ -17,7 +17,8 @@ const Header = () => {
     onSuccess: () => {
       setAccessToken(null);
       setUser(null);
-      navigate({ to: "/" });
+      navigate({ to: "/login" });
+      toast.success('Successfully Logged out!')
     },
     onError: (err: any) => {
       console.error("Logout failed:", err);
@@ -30,6 +31,7 @@ const Header = () => {
 
   const handleProtectedNav = (path: string) => {
   if (!user) {
+    toast.error("You need to login first");
     navigate({
       to: "/login",
       search: { redirect: path },
@@ -136,7 +138,7 @@ const Header = () => {
 
       <button         
         onClick={() => {
-          handleProtectedNav("/cover-letter");
+          handleProtectedNav("/applications");
           setIsOpen(false);
           }
         } 

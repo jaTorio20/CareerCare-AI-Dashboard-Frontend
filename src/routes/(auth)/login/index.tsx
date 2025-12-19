@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query'
 import { loginUser } from '@/api/auth'
 import { useAuth } from '@/context/AuthContext'
 import {z} from "zod";
+import { toast } from 'sonner'
 
 export const Route = createFileRoute('/(auth)/login/')({
   validateSearch: z.object({
@@ -29,9 +30,11 @@ function LoginPage() {
       // If redirect param exists, go there. Otherwise fallback to /resumes
       const redirectTo = search?.redirect || "/resumes";
       navigate({ to: redirectTo });
+      toast.success(`Welcome back, ${data.user.name}!`);
     },
     onError: (err: any) => {
       setError(err.message);
+      toast.error("Login failed. Please try again.");
     },
   });
 
@@ -44,7 +47,7 @@ function LoginPage() {
   }
 
   return (
-    <div className='max-w-md mx-auto'>
+    <div className='max-w-md mx-auto mt-10'>
       <h1 className="text-3xl font-bold mb-6">
         Login
       </h1>
