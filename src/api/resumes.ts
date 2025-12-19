@@ -25,7 +25,7 @@ export async function analyzeResume({
     headers: { "Content-Type": "multipart/form-data" },
   })
 
-  return data // shape: { resumeFile, jobDescription, analysis }
+  return data; // shape: { resumeFile, jobDescription, analysis }
 }
 
 // Save resume (creates card in DB)
@@ -41,14 +41,8 @@ export async function createResume(entry: Omit<ResumeEntry, "_id" | "createdAt" 
 // }
 
 export async function getResumes(): Promise<ResumeEntry[]> {
-  const token = getStoredAccessToken() // get token from memory
-  if (!token) throw new Error('No access token available') // avoid 401
 
-  const { data } = await api.get('/resumes', {
-    headers: {
-      Authorization: `Bearer ${token}`, // attach token
-    },
-  })
+  const { data } = await api.get('/resumes', )
   return data
 }
 

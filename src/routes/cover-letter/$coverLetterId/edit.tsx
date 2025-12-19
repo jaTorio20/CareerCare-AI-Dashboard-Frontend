@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { useMutation, useSuspenseQuery, queryOptions} from '@tanstack/react-query'
 import { getDetailLetter, updateCoverLetter} from '@/api/coverLetter'
 import CoverLetterEditor from '@/components/CoverLetterEditor'
-
+import ProtectedRoute from '@/components/ProtectedRoute'
 const coverLetterQueryOptions = (id: string) => {
   return queryOptions({
     queryKey: ['cover-letter', id],
@@ -12,10 +12,15 @@ const coverLetterQueryOptions = (id: string) => {
 }
 
 export const Route = createFileRoute('/cover-letter/$coverLetterId/edit')({
-  component: CoverLetterEditPage,
-  loader: async ({params, context: {queryClient}}) => {
-    return queryClient.ensureQueryData(coverLetterQueryOptions(params.coverLetterId))
-  }
+    component: () => (
+      <ProtectedRoute>
+       <CoverLetterEditPage/>
+      </ProtectedRoute>
+    ),
+
+  // loader: async ({params, context: {queryClient}}) => {
+  //   return queryClient.ensureQueryData(coverLetterQueryOptions(params.coverLetterId))
+  // }
 })
 
 function CoverLetterEditPage() {

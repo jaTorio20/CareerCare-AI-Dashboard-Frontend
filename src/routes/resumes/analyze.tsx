@@ -4,9 +4,14 @@ import { useMutation } from '@tanstack/react-query';
 import { analyzeResume, createResume } from '@/api/resumes';
 import type { ResumeAnalysis } from '@/types';
 import api from '@/lib/axios';
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 export const Route = createFileRoute('/resumes/analyze')({
-  component: ResumeAnalyze,
+    component: () => (
+    <ProtectedRoute>
+      <ResumeAnalyze />
+    </ProtectedRoute>
+  ),
 });
 
 type AnalysisResponse = {

@@ -1,14 +1,19 @@
-import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate, useSearch } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query'
 import { loginUser } from '@/api/auth'
 import { useAuth } from '@/context/AuthContext'
+import {z} from "zod";
 
 export const Route = createFileRoute('/(auth)/login/')({
+  validateSearch: z.object({
+    redirect: z.string().optional(),
+  }),
   component: LoginPage,
 })
 
 function LoginPage() {
+  const search = useSearch({ from: "/(auth)/login/" });
   const navigate = useNavigate();
   const { setAccessToken, setUser } = useAuth();
   const [email, setEmail] = useState('');
@@ -20,11 +25,14 @@ function LoginPage() {
     onSuccess: (data) => {
       setAccessToken(data.accessToken);
       setUser(data.user);
-      navigate({to: '/resumes'});
+
+      // If redirect param exists, go there. Otherwise fallback to /resumes
+      const redirectTo = search?.redirect || "/resumes";
+      navigate({ to: redirectTo });
     },
     onError: (err: any) => {
-      setError(err.message)
-    }
+      setError(err.message);
+    },
   });
 
   const handleSubmit = async (e: React.FormEvent) => {

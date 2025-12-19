@@ -5,10 +5,14 @@ import { generateCoverLetter, createCoverLetter } from '@/api/coverLetter';
 import type { CoverLetterEntry } from '@/types';
 import CoverLetterEditor from '@/components/CoverLetterEditor';
 import { exportDocx } from '@/utils/exporterDocument';
-
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 export const Route = createFileRoute('/cover-letter/generate')({
-  component: CoverLetterGenerate,
+  component: () => (
+    <ProtectedRoute>
+     <CoverLetterGenerate/>
+    </ProtectedRoute>
+  ),
 });
 
 function CoverLetterGenerate() {

@@ -1,6 +1,7 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { queryOptions, useSuspenseQuery, useMutation } from '@tanstack/react-query'
 import { getResume, deleteResume, getDownloadFile} from '@/api/resumes'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 const resumeQueryOptions = (resumeId: string) =>{
   return queryOptions({
@@ -10,10 +11,14 @@ const resumeQueryOptions = (resumeId: string) =>{
 }
 
 export const Route = createFileRoute('/resumes/$resumeId/')({
-  component: ResumeDetailsPage,
-  loader: async ({ params, context: { queryClient } }) => {
-    return queryClient.ensureQueryData(resumeQueryOptions(params.resumeId));
-  }
+    component: () => (
+    <ProtectedRoute>
+      <ResumeDetailsPage />
+    </ProtectedRoute>
+  ),
+  // loader: async ({ params, context: { queryClient } }) => {
+  //   return queryClient.ensureQueryData(resumeQueryOptions(params.resumeId));
+  // }
 })
 
 function ResumeDetailsPage() {

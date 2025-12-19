@@ -2,10 +2,14 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { useMutation } from '@tanstack/react-query';
 import { createJobApplication } from '@/api/jobApplication'
-
+import ProtectedRoute from '@/components/ProtectedRoute';
 
 export const Route = createFileRoute('/applications/new/')({
-  component: NewJobApplication,
+    component: () => (
+      <ProtectedRoute>
+       <NewJobApplication/>
+      </ProtectedRoute>
+    ),
 })
 
 function NewJobApplication() {

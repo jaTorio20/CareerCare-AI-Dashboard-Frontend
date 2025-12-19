@@ -34,11 +34,9 @@ export const Route = createFileRoute('/resumes/')({
 function ResumesPage() {
   // const { data: resumes } = useSuspenseQuery(resumeQueryOptions());
 
- const { user, isAuthLoading } = useAuth();
-
   // Only fetch if the user exists
   const { data: resumes } = useSuspenseQuery(resumeQueryOptions());
-  if (isAuthLoading || !user) return null;
+
 
   return (
 <div className="max-w-7xl mx-auto px-6 py-10">

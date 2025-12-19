@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { getDetailLetter, deleteCoverLetter } from '@/api/coverLetter'
 import { queryOptions, useSuspenseQuery, useMutation} from '@tanstack/react-query'
 import { exportDocx } from '@/utils/exporterDocument'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 const coverLetterQueryOptions = (coverLetterId: string) => {
   return queryOptions({
@@ -11,10 +12,15 @@ const coverLetterQueryOptions = (coverLetterId: string) => {
 }
 
 export const Route = createFileRoute('/cover-letter/$coverLetterId/')({
-  component: CoverLetterDetailsPage,
-  loader: async ({params, context: {queryClient}}) => {
-    return queryClient.ensureQueryData(coverLetterQueryOptions(params.coverLetterId));
-  }
+    component: () => (
+      <ProtectedRoute>
+       <CoverLetterDetailsPage/>
+      </ProtectedRoute>
+    ),
+
+  // loader: async ({params, context: {queryClient}}) => {
+  //   return queryClient.ensureQueryData(coverLetterQueryOptions(params.coverLetterId));
+  // }
 })
 
 function CoverLetterDetailsPage() {

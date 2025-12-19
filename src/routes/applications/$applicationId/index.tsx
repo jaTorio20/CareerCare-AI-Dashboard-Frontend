@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
 import { getDetailApplication, getDownloadFile, deleteJobApplication } from '@/api/jobApplication'
 import { queryOptions, useSuspenseQuery, useMutation} from '@tanstack/react-query'
 import { StatusBadge } from '@/components/StatusBadge'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 const jobApplicationQueryOptions = (applicationId: string) => {
   return queryOptions({
@@ -12,11 +13,14 @@ const jobApplicationQueryOptions = (applicationId: string) => {
 
 
 export const Route = createFileRoute('/applications/$applicationId/')({
-  component: ApplicationDetailsPage,
-
-  loader: async ({params, context: {queryClient}}) => {
-    return queryClient.ensureQueryData(jobApplicationQueryOptions(params.applicationId));
-  }
+    component: () => (
+      <ProtectedRoute>
+       <ApplicationDetailsPage/>
+      </ProtectedRoute>
+    ),
+  // loader: async ({params, context: {queryClient}}) => {
+  //   return queryClient.ensureQueryData(jobApplicationQueryOptions(params.applicationId));
+  // }
 })
 
 function ApplicationDetailsPage() {

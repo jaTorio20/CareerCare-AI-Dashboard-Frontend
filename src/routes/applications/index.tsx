@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { getJobApplication } from '@/api/jobApplication'
 import { Link } from '@tanstack/react-router'
 import { StatusBadge } from '@/components/StatusBadge'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 const jobApplicationQueryOptions = () => {
   return queryOptions({
@@ -18,11 +19,15 @@ export const Route = createFileRoute('/applications/')({
     ],  
   }),
 
-  component: JobApplicationPage,
+    component: () => (
+      <ProtectedRoute>
+       <JobApplicationPage/>
+      </ProtectedRoute>
+    ),
 
-  loader: async ({context: {queryClient}}) => {
-  return queryClient.ensureQueryData(jobApplicationQueryOptions())
-  }
+  // loader: async ({context: {queryClient}}) => {
+  // return queryClient.ensureQueryData(jobApplicationQueryOptions())
+  // }
 })
 
 function JobApplicationPage() {

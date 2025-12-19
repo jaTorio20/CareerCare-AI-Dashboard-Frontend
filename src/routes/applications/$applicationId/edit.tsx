@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { updateJobApplication, getDetailApplication } from '@/api/jobApplication'
 import { useMutation, useSuspenseQuery, queryOptions} from '@tanstack/react-query'
 import { ResumeViewer } from '@/components/ResumeViewer'
-
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 const jobApplicationQueryOptions = (id: string) => {
   return queryOptions({
@@ -13,11 +13,14 @@ const jobApplicationQueryOptions = (id: string) => {
 }
 
 export const Route = createFileRoute('/applications/$applicationId/edit')({
-  component: ApplicationEditPage,
-
-    loader: async ({params, context: {queryClient}}) => {
-    return queryClient.ensureQueryData(jobApplicationQueryOptions(params.applicationId))
-  }
+    component: () => (
+      <ProtectedRoute>
+       <ApplicationEditPage/>
+      </ProtectedRoute>
+    ),
+  //   loader: async ({params, context: {queryClient}}) => {
+  //   return queryClient.ensureQueryData(jobApplicationQueryOptions(params.applicationId))
+  // }
 })
 
 function ApplicationEditPage() {
