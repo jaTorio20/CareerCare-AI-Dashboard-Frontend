@@ -2,6 +2,8 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import { RouterProvider, createRouter } from '@tanstack/react-router'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { AuthProvider } from './context/AuthContext.tsx'
+
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
@@ -20,7 +22,9 @@ const queryClient = new QueryClient({
 // Create a new router instance
 const router = createRouter({
   routeTree,
-  context: {queryClient},
+  context: {
+    queryClient,
+  },
   defaultPreload: 'intent',
   scrollRestoration: true,
   defaultStructuralSharing: true,
@@ -34,16 +38,19 @@ declare module '@tanstack/react-router' {
   }
 }
 
+
 // Render the app
 const rootElement = document.getElementById('app')
 if (rootElement && !rootElement.innerHTML) {
   const root = ReactDOM.createRoot(rootElement)
   root.render(
-    <QueryClientProvider client={queryClient}>
-      <StrictMode>
-        <RouterProvider router={router} />
-      </StrictMode>,
-    </QueryClientProvider>
+    <AuthProvider>
+      <QueryClientProvider client={queryClient}>
+        <StrictMode>
+          <RouterProvider router={router} />
+        </StrictMode>,
+      </QueryClientProvider>
+    </AuthProvider>
   )
 }
 

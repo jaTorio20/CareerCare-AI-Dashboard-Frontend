@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { FileText, FileSignature, Briefcase, Pin, Paperclip  } from 'lucide-react' 
+import { FileText, FileSignature, Briefcase, Paperclip  } from 'lucide-react' 
 
 export const Route = createFileRoute('/')({
   component: App,

@@ -19,6 +19,8 @@ import { Route as ResumesResumeIdIndexRouteImport } from './routes/resumes/$resu
 import { Route as CoverLetterCoverLetterIdIndexRouteImport } from './routes/cover-letter/$coverLetterId/index'
 import { Route as ApplicationsNewIndexRouteImport } from './routes/applications/new/index'
 import { Route as ApplicationsApplicationIdIndexRouteImport } from './routes/applications/$applicationId/index'
+import { Route as authRegisterIndexRouteImport } from './routes/(auth)/register/index'
+import { Route as authLoginIndexRouteImport } from './routes/(auth)/login/index'
 import { Route as CoverLetterCoverLetterIdEditRouteImport } from './routes/cover-letter/$coverLetterId/edit'
 import { Route as ApplicationsApplicationIdEditRouteImport } from './routes/applications/$applicationId/edit'
 
@@ -74,6 +76,16 @@ const ApplicationsApplicationIdIndexRoute =
     path: '/applications/$applicationId/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const authRegisterIndexRoute = authRegisterIndexRouteImport.update({
+  id: '/(auth)/register/',
+  path: '/register/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const authLoginIndexRoute = authLoginIndexRouteImport.update({
+  id: '/(auth)/login/',
+  path: '/login/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoverLetterCoverLetterIdEditRoute =
   CoverLetterCoverLetterIdEditRouteImport.update({
     id: '/cover-letter/$coverLetterId/edit',
@@ -96,6 +108,8 @@ export interface FileRoutesByFullPath {
   '/resumes': typeof ResumesIndexRoute
   '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/login': typeof authLoginIndexRoute
+  '/register': typeof authRegisterIndexRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdIndexRoute
   '/applications/new': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId': typeof CoverLetterCoverLetterIdIndexRoute
@@ -110,6 +124,8 @@ export interface FileRoutesByTo {
   '/resumes': typeof ResumesIndexRoute
   '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/login': typeof authLoginIndexRoute
+  '/register': typeof authRegisterIndexRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdIndexRoute
   '/applications/new': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId': typeof CoverLetterCoverLetterIdIndexRoute
@@ -125,6 +141,8 @@ export interface FileRoutesById {
   '/resumes/': typeof ResumesIndexRoute
   '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/(auth)/login/': typeof authLoginIndexRoute
+  '/(auth)/register/': typeof authRegisterIndexRoute
   '/applications/$applicationId/': typeof ApplicationsApplicationIdIndexRoute
   '/applications/new/': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId/': typeof CoverLetterCoverLetterIdIndexRoute
@@ -141,6 +159,8 @@ export interface FileRouteTypes {
     | '/resumes'
     | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
+    | '/login'
+    | '/register'
     | '/applications/$applicationId'
     | '/applications/new'
     | '/cover-letter/$coverLetterId'
@@ -155,6 +175,8 @@ export interface FileRouteTypes {
     | '/resumes'
     | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
+    | '/login'
+    | '/register'
     | '/applications/$applicationId'
     | '/applications/new'
     | '/cover-letter/$coverLetterId'
@@ -169,6 +191,8 @@ export interface FileRouteTypes {
     | '/resumes/'
     | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
+    | '/(auth)/login/'
+    | '/(auth)/register/'
     | '/applications/$applicationId/'
     | '/applications/new/'
     | '/cover-letter/$coverLetterId/'
@@ -184,6 +208,8 @@ export interface RootRouteChildren {
   ResumesIndexRoute: typeof ResumesIndexRoute
   ApplicationsApplicationIdEditRoute: typeof ApplicationsApplicationIdEditRoute
   CoverLetterCoverLetterIdEditRoute: typeof CoverLetterCoverLetterIdEditRoute
+  authLoginIndexRoute: typeof authLoginIndexRoute
+  authRegisterIndexRoute: typeof authRegisterIndexRoute
   ApplicationsApplicationIdIndexRoute: typeof ApplicationsApplicationIdIndexRoute
   ApplicationsNewIndexRoute: typeof ApplicationsNewIndexRoute
   CoverLetterCoverLetterIdIndexRoute: typeof CoverLetterCoverLetterIdIndexRoute
@@ -262,6 +288,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplicationsApplicationIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)/register/': {
+      id: '/(auth)/register/'
+      path: '/register'
+      fullPath: '/register'
+      preLoaderRoute: typeof authRegisterIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/(auth)/login/': {
+      id: '/(auth)/login/'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof authLoginIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cover-letter/$coverLetterId/edit': {
       id: '/cover-letter/$coverLetterId/edit'
       path: '/cover-letter/$coverLetterId/edit'
@@ -288,6 +328,8 @@ const rootRouteChildren: RootRouteChildren = {
   ResumesIndexRoute: ResumesIndexRoute,
   ApplicationsApplicationIdEditRoute: ApplicationsApplicationIdEditRoute,
   CoverLetterCoverLetterIdEditRoute: CoverLetterCoverLetterIdEditRoute,
+  authLoginIndexRoute: authLoginIndexRoute,
+  authRegisterIndexRoute: authRegisterIndexRoute,
   ApplicationsApplicationIdIndexRoute: ApplicationsApplicationIdIndexRoute,
   ApplicationsNewIndexRoute: ApplicationsNewIndexRoute,
   CoverLetterCoverLetterIdIndexRoute: CoverLetterCoverLetterIdIndexRoute,

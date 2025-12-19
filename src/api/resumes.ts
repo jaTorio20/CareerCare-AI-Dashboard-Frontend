@@ -1,5 +1,6 @@
 import api from "@/lib/axios";
 import type { ResumeEntry, ResumeAnalysis } from "@/types";
+import { getStoredAccessToken } from "@/lib/authToken";
 
 // Analyze resume (preview only, not saved)
 export async function analyzeResume({
@@ -34,8 +35,20 @@ export async function createResume(entry: Omit<ResumeEntry, "_id" | "createdAt" 
 }
 
 // Fetch all resumes
+// export async function getResumes(): Promise<ResumeEntry[]> {
+//   const { data } = await api.get("/resumes")
+//   return data
+// }
+
 export async function getResumes(): Promise<ResumeEntry[]> {
-  const { data } = await api.get("/resumes")
+  const token = getStoredAccessToken() // get token from memory
+  if (!token) throw new Error('No access token available') // avoid 401
+
+  const { data } = await api.get('/resumes', {
+    headers: {
+      Authorization: `Bearer ${token}`, // attach token
+    },
+  })
   return data
 }
 
