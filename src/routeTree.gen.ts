@@ -19,6 +19,7 @@ import { Route as ResumesResumeIdIndexRouteImport } from './routes/resumes/$resu
 import { Route as CoverLetterCoverLetterIdIndexRouteImport } from './routes/cover-letter/$coverLetterId/index'
 import { Route as ApplicationsNewIndexRouteImport } from './routes/applications/new/index'
 import { Route as ApplicationsApplicationIdIndexRouteImport } from './routes/applications/$applicationId/index'
+import { Route as authVerifyIndexRouteImport } from './routes/(auth)/verify/index'
 import { Route as authRegisterIndexRouteImport } from './routes/(auth)/register/index'
 import { Route as authLoginIndexRouteImport } from './routes/(auth)/login/index'
 import { Route as CoverLetterCoverLetterIdEditRouteImport } from './routes/cover-letter/$coverLetterId/edit'
@@ -76,6 +77,11 @@ const ApplicationsApplicationIdIndexRoute =
     path: '/applications/$applicationId/',
     getParentRoute: () => rootRouteImport,
   } as any)
+const authVerifyIndexRoute = authVerifyIndexRouteImport.update({
+  id: '/(auth)/verify/',
+  path: '/verify/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const authRegisterIndexRoute = authRegisterIndexRouteImport.update({
   id: '/(auth)/register/',
   path: '/register/',
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
   '/login': typeof authLoginIndexRoute
   '/register': typeof authRegisterIndexRoute
+  '/verify': typeof authVerifyIndexRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdIndexRoute
   '/applications/new': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId': typeof CoverLetterCoverLetterIdIndexRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
   '/login': typeof authLoginIndexRoute
   '/register': typeof authRegisterIndexRoute
+  '/verify': typeof authVerifyIndexRoute
   '/applications/$applicationId': typeof ApplicationsApplicationIdIndexRoute
   '/applications/new': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId': typeof CoverLetterCoverLetterIdIndexRoute
@@ -143,6 +151,7 @@ export interface FileRoutesById {
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
   '/(auth)/login/': typeof authLoginIndexRoute
   '/(auth)/register/': typeof authRegisterIndexRoute
+  '/(auth)/verify/': typeof authVerifyIndexRoute
   '/applications/$applicationId/': typeof ApplicationsApplicationIdIndexRoute
   '/applications/new/': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId/': typeof CoverLetterCoverLetterIdIndexRoute
@@ -161,6 +170,7 @@ export interface FileRouteTypes {
     | '/cover-letter/$coverLetterId/edit'
     | '/login'
     | '/register'
+    | '/verify'
     | '/applications/$applicationId'
     | '/applications/new'
     | '/cover-letter/$coverLetterId'
@@ -177,6 +187,7 @@ export interface FileRouteTypes {
     | '/cover-letter/$coverLetterId/edit'
     | '/login'
     | '/register'
+    | '/verify'
     | '/applications/$applicationId'
     | '/applications/new'
     | '/cover-letter/$coverLetterId'
@@ -193,6 +204,7 @@ export interface FileRouteTypes {
     | '/cover-letter/$coverLetterId/edit'
     | '/(auth)/login/'
     | '/(auth)/register/'
+    | '/(auth)/verify/'
     | '/applications/$applicationId/'
     | '/applications/new/'
     | '/cover-letter/$coverLetterId/'
@@ -210,6 +222,7 @@ export interface RootRouteChildren {
   CoverLetterCoverLetterIdEditRoute: typeof CoverLetterCoverLetterIdEditRoute
   authLoginIndexRoute: typeof authLoginIndexRoute
   authRegisterIndexRoute: typeof authRegisterIndexRoute
+  authVerifyIndexRoute: typeof authVerifyIndexRoute
   ApplicationsApplicationIdIndexRoute: typeof ApplicationsApplicationIdIndexRoute
   ApplicationsNewIndexRoute: typeof ApplicationsNewIndexRoute
   CoverLetterCoverLetterIdIndexRoute: typeof CoverLetterCoverLetterIdIndexRoute
@@ -288,6 +301,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplicationsApplicationIdIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)/verify/': {
+      id: '/(auth)/verify/'
+      path: '/verify'
+      fullPath: '/verify'
+      preLoaderRoute: typeof authVerifyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/(auth)/register/': {
       id: '/(auth)/register/'
       path: '/register'
@@ -330,6 +350,7 @@ const rootRouteChildren: RootRouteChildren = {
   CoverLetterCoverLetterIdEditRoute: CoverLetterCoverLetterIdEditRoute,
   authLoginIndexRoute: authLoginIndexRoute,
   authRegisterIndexRoute: authRegisterIndexRoute,
+  authVerifyIndexRoute: authVerifyIndexRoute,
   ApplicationsApplicationIdIndexRoute: ApplicationsApplicationIdIndexRoute,
   ApplicationsNewIndexRoute: ApplicationsNewIndexRoute,
   CoverLetterCoverLetterIdIndexRoute: CoverLetterCoverLetterIdIndexRoute,

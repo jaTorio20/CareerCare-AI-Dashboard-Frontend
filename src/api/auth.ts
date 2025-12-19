@@ -23,6 +23,38 @@ export const registerUser = async ({
   }
 };
 
+// Verify OTP
+export const verifyUser = async ({
+  email,
+  otp,
+  }: {
+    email: string;
+    otp: string;
+  }) => {
+    try {
+      const { data } = await api.post("/auth/verify", {
+        email,
+        otp,
+      });
+
+      return data;
+    } catch (err: any) {
+      const message = err.response?.data?.message || "Failed to verify account";
+      throw new Error(message);
+    }
+};
+
+// Resend OTP
+export const resendOtp = async ({ email }: { email: string }) => {
+  try {
+    const { data } = await api.post("/auth/resend-otp", { email });
+    return data;
+  } catch (err: any) {
+    const message = err.response?.data?.message || "Failed to resend OTP";
+    throw new Error(message);
+  }
+};
+
 export const loginUser = async (credentials: {
   email: string;
   password: string;

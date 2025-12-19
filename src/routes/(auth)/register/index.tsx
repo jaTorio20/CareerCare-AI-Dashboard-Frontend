@@ -2,15 +2,16 @@ import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { registerUser } from '@/api/auth';
-import { useAuth } from '@/context/AuthContext';
+import { toast } from 'sonner';
 
 export const Route = createFileRoute('/(auth)/register/')({
+  
   component: RegisterPage,
 })
 
 function RegisterPage() {
 const navigate = useNavigate();
-const { setAccessToken, setUser } = useAuth();
+// const { setAccessToken, setUser } = useAuth();
 const [name, setName] = useState('');
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
@@ -18,10 +19,11 @@ const [error, setError] = useState('');
 
 const { mutateAsync, isPending } = useMutation({
   mutationFn: registerUser,
+  // onSuccess: (data) => {
   onSuccess: (data) => {
-    setAccessToken(data.accessToken);
-    setUser(data.user);
-    navigate({ to: '/resumes' });
+    const verifiedEmail = data.email || email; // use backend email if returned
+    navigate({ to: '/verify', search: { email: verifiedEmail } });
+    toast.success('OTP sent. Please check your email');
   },
   onError: (err: any) => {
     setError(err.message);
