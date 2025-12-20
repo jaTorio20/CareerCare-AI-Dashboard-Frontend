@@ -91,14 +91,18 @@ function LoginPage() {
       </form>
 
       <p className="text-sm text-center mt-4 space-x-0.5">
-        <span>
-          Don't have an account?
-        </span>
-        <Link to='/register' className='text-blue-600 hover:underline
-        font-medium'>
+        <span>Don't have an account?</span>
+        <Link to="/register" className="text-blue-600 hover:underline font-medium">
           Register
         </Link>
       </p>
+
+      <p className="text-sm text-center mt-2">
+        <Link to="/forgot-password" className="text-blue-600 hover:underline font-medium">
+          Forgot Password?
+        </Link>
+      </p>
+
     </div>
   )
 }

@@ -72,16 +72,6 @@ const { mutateAsync: verifyMutate, isPending: isVerifying } = useMutation({
     }
   };
 
-  const handleResend = async () => {
-    setError("");
-    setMessage("");
-    try {
-      await resendMutate({ email });
-    } catch (err: any) {
-      console.log(err.message);
-    }
-  };
-
   return (
     <div className="max-w-md mx-auto">
       <h1 className="text-3xl font-bold mb-6">Verify Account</h1>

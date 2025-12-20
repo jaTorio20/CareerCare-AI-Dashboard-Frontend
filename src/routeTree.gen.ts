@@ -22,8 +22,10 @@ import { Route as ApplicationsApplicationIdIndexRouteImport } from './routes/app
 import { Route as authVerifyIndexRouteImport } from './routes/(auth)/verify/index'
 import { Route as authRegisterIndexRouteImport } from './routes/(auth)/register/index'
 import { Route as authLoginIndexRouteImport } from './routes/(auth)/login/index'
+import { Route as authForgotPasswordIndexRouteImport } from './routes/(auth)/forgot-password/index'
 import { Route as CoverLetterCoverLetterIdEditRouteImport } from './routes/cover-letter/$coverLetterId/edit'
 import { Route as ApplicationsApplicationIdEditRouteImport } from './routes/applications/$applicationId/edit'
+import { Route as authResetPasswordTokenRouteImport } from './routes/(auth)/reset-password/$token'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -92,6 +94,11 @@ const authLoginIndexRoute = authLoginIndexRouteImport.update({
   path: '/login/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const authForgotPasswordIndexRoute = authForgotPasswordIndexRouteImport.update({
+  id: '/(auth)/forgot-password/',
+  path: '/forgot-password/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CoverLetterCoverLetterIdEditRoute =
   CoverLetterCoverLetterIdEditRouteImport.update({
     id: '/cover-letter/$coverLetterId/edit',
@@ -104,6 +111,11 @@ const ApplicationsApplicationIdEditRoute =
     path: '/applications/$applicationId/edit',
     getParentRoute: () => rootRouteImport,
   } as any)
+const authResetPasswordTokenRoute = authResetPasswordTokenRouteImport.update({
+  id: '/(auth)/reset-password/$token',
+  path: '/reset-password/$token',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -112,8 +124,10 @@ export interface FileRoutesByFullPath {
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
   '/resumes': typeof ResumesIndexRoute
+  '/reset-password/$token': typeof authResetPasswordTokenRoute
   '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/forgot-password': typeof authForgotPasswordIndexRoute
   '/login': typeof authLoginIndexRoute
   '/register': typeof authRegisterIndexRoute
   '/verify': typeof authVerifyIndexRoute
@@ -129,8 +143,10 @@ export interface FileRoutesByTo {
   '/applications': typeof ApplicationsIndexRoute
   '/cover-letter': typeof CoverLetterIndexRoute
   '/resumes': typeof ResumesIndexRoute
+  '/reset-password/$token': typeof authResetPasswordTokenRoute
   '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/forgot-password': typeof authForgotPasswordIndexRoute
   '/login': typeof authLoginIndexRoute
   '/register': typeof authRegisterIndexRoute
   '/verify': typeof authVerifyIndexRoute
@@ -147,8 +163,10 @@ export interface FileRoutesById {
   '/applications/': typeof ApplicationsIndexRoute
   '/cover-letter/': typeof CoverLetterIndexRoute
   '/resumes/': typeof ResumesIndexRoute
+  '/(auth)/reset-password/$token': typeof authResetPasswordTokenRoute
   '/applications/$applicationId/edit': typeof ApplicationsApplicationIdEditRoute
   '/cover-letter/$coverLetterId/edit': typeof CoverLetterCoverLetterIdEditRoute
+  '/(auth)/forgot-password/': typeof authForgotPasswordIndexRoute
   '/(auth)/login/': typeof authLoginIndexRoute
   '/(auth)/register/': typeof authRegisterIndexRoute
   '/(auth)/verify/': typeof authVerifyIndexRoute
@@ -166,8 +184,10 @@ export interface FileRouteTypes {
     | '/applications'
     | '/cover-letter'
     | '/resumes'
+    | '/reset-password/$token'
     | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
+    | '/forgot-password'
     | '/login'
     | '/register'
     | '/verify'
@@ -183,8 +203,10 @@ export interface FileRouteTypes {
     | '/applications'
     | '/cover-letter'
     | '/resumes'
+    | '/reset-password/$token'
     | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
+    | '/forgot-password'
     | '/login'
     | '/register'
     | '/verify'
@@ -200,8 +222,10 @@ export interface FileRouteTypes {
     | '/applications/'
     | '/cover-letter/'
     | '/resumes/'
+    | '/(auth)/reset-password/$token'
     | '/applications/$applicationId/edit'
     | '/cover-letter/$coverLetterId/edit'
+    | '/(auth)/forgot-password/'
     | '/(auth)/login/'
     | '/(auth)/register/'
     | '/(auth)/verify/'
@@ -218,8 +242,10 @@ export interface RootRouteChildren {
   ApplicationsIndexRoute: typeof ApplicationsIndexRoute
   CoverLetterIndexRoute: typeof CoverLetterIndexRoute
   ResumesIndexRoute: typeof ResumesIndexRoute
+  authResetPasswordTokenRoute: typeof authResetPasswordTokenRoute
   ApplicationsApplicationIdEditRoute: typeof ApplicationsApplicationIdEditRoute
   CoverLetterCoverLetterIdEditRoute: typeof CoverLetterCoverLetterIdEditRoute
+  authForgotPasswordIndexRoute: typeof authForgotPasswordIndexRoute
   authLoginIndexRoute: typeof authLoginIndexRoute
   authRegisterIndexRoute: typeof authRegisterIndexRoute
   authVerifyIndexRoute: typeof authVerifyIndexRoute
@@ -322,6 +348,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof authLoginIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)/forgot-password/': {
+      id: '/(auth)/forgot-password/'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof authForgotPasswordIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/cover-letter/$coverLetterId/edit': {
       id: '/cover-letter/$coverLetterId/edit'
       path: '/cover-letter/$coverLetterId/edit'
@@ -336,6 +369,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApplicationsApplicationIdEditRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/(auth)/reset-password/$token': {
+      id: '/(auth)/reset-password/$token'
+      path: '/reset-password/$token'
+      fullPath: '/reset-password/$token'
+      preLoaderRoute: typeof authResetPasswordTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -346,8 +386,10 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationsIndexRoute: ApplicationsIndexRoute,
   CoverLetterIndexRoute: CoverLetterIndexRoute,
   ResumesIndexRoute: ResumesIndexRoute,
+  authResetPasswordTokenRoute: authResetPasswordTokenRoute,
   ApplicationsApplicationIdEditRoute: ApplicationsApplicationIdEditRoute,
   CoverLetterCoverLetterIdEditRoute: CoverLetterCoverLetterIdEditRoute,
+  authForgotPasswordIndexRoute: authForgotPasswordIndexRoute,
   authLoginIndexRoute: authLoginIndexRoute,
   authRegisterIndexRoute: authRegisterIndexRoute,
   authVerifyIndexRoute: authVerifyIndexRoute,

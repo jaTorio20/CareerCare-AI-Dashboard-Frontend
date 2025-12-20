@@ -55,6 +55,42 @@ export const resendOtp = async ({ email }: { email: string }) => {
   }
 };
 
+// Forgot Password
+export const sendPasswordReset = async (email: string) => {
+  try {
+    const { data } = await api.post("/auth/forgot-password", { email });
+    return data;
+  } catch (err: any) {
+    const message = err.response?.data?.message || "Failed to send password reset";
+    throw new Error(message);
+  }
+};
+
+
+// Verify reset token
+export const getPasswordToken = async (token: string) => {
+  try {
+    const { data } = await api.get(`/auth/reset-password/${token}`);
+    return data;
+  } catch (err: any) {
+    const message = err.response?.data?.message || "Invalid or expired reset token";
+    throw new Error(message);
+  }
+};
+
+
+// Save new password
+export const saveNewPassword = async (token: string, password: string) => {
+  try {
+    const { data } = await api.post(`/auth/reset-password/${token}`, { password });
+    return data;
+  } catch (err: any) {
+    const message = err.response?.data?.message || "Failed to reset password";
+    throw new Error(message);
+  }
+};
+
+
 export const loginUser = async (credentials: {
   email: string;
   password: string;
