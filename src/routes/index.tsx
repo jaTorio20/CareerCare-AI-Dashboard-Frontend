@@ -1,11 +1,13 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
 import { FileText, FileSignature, Briefcase, Paperclip  } from 'lucide-react' 
+import { UseProtectedNav } from '@/components/UseProtectedNav'
 
 export const Route = createFileRoute('/')({
   component: App,
 })
 
 function App() {
+  const handleProtectedNav = UseProtectedNav();
   return (
     <div className="min-h-screen flex flex-col">
       {/* Hero Section */}
@@ -21,18 +23,18 @@ function App() {
         </p>
         {/* Call to Action */}
         <div className="mt-8 flex justify-center gap-4">
-          <Link
-            to="/resumes/analyze"
+          <button
+            onClick={() => handleProtectedNav("/resumes/analyze")}
             className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
           >
             Get Started
-          </Link>
-          <Link
-            to="/applications"
+          </button>
+          <button
+            onClick={() => handleProtectedNav("/applications")}
             className="px-6 py-3 rounded-lg bg-gray-200 text-gray-800 font-medium hover:bg-gray-300 transition"
           >
             View Applications
-          </Link>
+          </button>
         </div>
       </div>
     </header>
@@ -42,8 +44,8 @@ function App() {
       <main className="grow">
         <div className="max-w-7xl mx-auto px-6 py-18 grid gap-15 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {/* Resume Analyzer */}
-          <Link
-            to="/resumes/analyze"
+          <button
+            onClick={() => handleProtectedNav('/resumes/analyze')}
             className="relative transform md:rotate-10 hover:rotate-0 group block bg-white rounded-lg shadow hover:shadow-md transition p-6 text-center border border-gray-200"
           >
             <Paperclip className='absolute -rotate-30 -top-2 -left-2 w-6 h-6 text-emerald-600'></Paperclip>
@@ -54,11 +56,11 @@ function App() {
             <p className="text-gray-600">
               Upload your resume and get AI-powered insights to improve your chances.
             </p>
-          </Link>
+          </button>
 
           {/* Generate Cover Letter */}
-          <Link
-            to="/cover-letter"
+          <button
+            onClick={() => handleProtectedNav('/cover-letter/generate')}
             className="relative transform md:-rotate-3 hover:rotate-0  group block bg-white rounded-lg shadow hover:shadow-md transition p-6 text-center border border-gray-200"
           >
             <Paperclip className='absolute -rotate-28 -top-2 -left-2 w-6 h-6 text-rose-500'></Paperclip>
@@ -69,11 +71,11 @@ function App() {
             <p className="text-gray-600">
               Create tailored cover letters instantly with AI assistance.
             </p>
-          </Link>
+          </button>
 
           {/* Job Application */}
-          <Link
-            to="/applications"
+          <button
+            onClick={() => handleProtectedNav('/applications')}
             className="relative transform md:rotate-10 hover:rotate-0  group block bg-white rounded-lg shadow hover:shadow-md transition p-6 text-center border border-gray-200"
           >
             <Paperclip className='absolute -rotate-58 -top-2 -left-2 w-6 h-6 text-indigo-500'></Paperclip>
@@ -85,7 +87,7 @@ function App() {
             <p className="text-gray-600">
               Manage and track your job applications in one place.
             </p>
-          </Link>
+          </button>
         </div>
       </main>
 

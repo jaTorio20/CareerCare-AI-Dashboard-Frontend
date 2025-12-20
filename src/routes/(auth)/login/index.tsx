@@ -20,15 +20,16 @@ function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  // If redirect param exists, go there. Otherwise fallback to /
+  const redirectTo = search?.redirect || "/";
 
   const { mutateAsync, isPending } = useMutation({
     mutationFn: loginUser,
     onSuccess: (data) => {
+      sessionStorage.setItem("justLoggedIn", "true");
+
       setAccessToken(data.accessToken);
       setUser(data.user);
-
-      // If redirect param exists, go there. Otherwise fallback to /resumes
-      const redirectTo = search?.redirect || "/resumes";
       navigate({ to: redirectTo });
       toast.success(`Welcome back, ${data.user.name}!`);
     },
@@ -37,6 +38,11 @@ function LoginPage() {
       toast.error("Login failed. Please try again.");
     },
   });
+
+  const googleLogin = async () => {
+    sessionStorage.setItem("justLoggedIn", "true");
+    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google?redirect=${encodeURIComponent(redirectTo)}`;
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -89,6 +95,13 @@ function LoginPage() {
           }
         </button>
       </form>
+
+      <button
+        onClick={googleLogin}
+        className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md w-full mt-4"
+      >
+        Login with Google
+      </button>
 
       <p className="text-sm text-center mt-4 space-x-0.5">
         <span>Don't have an account?</span>

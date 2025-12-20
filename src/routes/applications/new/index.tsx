@@ -154,6 +154,7 @@ function NewJobApplication() {
       <label className="block text-sm font-medium text-gray-700 mb-1">Resume File (optional)</label>
       <input
         type="file"
+        accept=".pdf,.docx"
         onChange={(e) => setFile(e.target.files?.[0] ?? null)}
         className="w-full text-gray-700"
       />

@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { logoutUser } from "@/api/auth";
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-
+import { UseProtectedNav } from './UseProtectedNav';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -29,18 +29,7 @@ const Header = () => {
     logoutMutation.mutate();
   };
 
-  const handleProtectedNav = (path: string) => {
-  if (!user) {
-    toast.error("You need to login first");
-    navigate({
-      to: "/login",
-      search: { redirect: path },
-    });
-    return;
-  }
-
-  navigate({ to: path });
-};
+  const handleProtectedNav = UseProtectedNav();
 
   return (
 <header className="bg-white shadow-md sticky top-0 z-50">
