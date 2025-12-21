@@ -49,3 +49,24 @@ export type JobApplicationEntry = {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface InterviewSession {
+  _id: string;
+  userId: string;
+  jobTitle: string;
+  companyName: string;
+  topic: string;
+  difficulty: string;
+  status: "in-progress" | "completed";
+  startedAt: string;
+}
+
+export interface InterviewMessage {
+  _id: string;
+  sessionId: string;
+  role: "user" | "ai";
+  text: string;
+  audioUrl?: string;
+  createdAt: string;
+}
+

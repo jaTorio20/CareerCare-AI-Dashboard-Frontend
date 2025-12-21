@@ -1,0 +1,109 @@
+import { useState, type FormEvent } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createSession } from "@/api/interview";
+import { toast } from "sonner";
+
+export function NewSessionButton({ onSessionCreated }: { onSessionCreated: (id: string) => void }) {
+  const queryClient = useQueryClient();
+  const [open, setOpen] = useState(false);
+  const [form, setForm] = useState({
+    jobTitle: "",
+    companyName: "",
+    topic: "",
+    difficulty: "none",
+  });
+
+  const createSessionMutation = useMutation({
+    mutationFn: createSession,
+    onSuccess: (newSession) => {
+      queryClient.invalidateQueries({ queryKey: ["sessions"] });
+      onSessionCreated(newSession._id);
+      setOpen(false); // close modal
+      setForm({ jobTitle: "", companyName: "", topic: "", difficulty: "none" });
+    },
+    onError: (err) => {
+      toast.error("Failed to create interview room." + err.message);
+    }
+  });
+
+  const formSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    if (form) {
+      await createSessionMutation.mutateAsync(form);
+    }
+  };
+
+
+  return (
+    <>
+      <button
+        onClick={() => setOpen(true)}
+        className="mb-4 p-2 bg-blue-500 text-white rounded"
+      >
+        Start New Chat
+      </button>
+
+      {open && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
+            <h2 className="text-lg font-bold mb-4">Start New Interview</h2>
+            <form
+              onSubmit={formSubmit}
+              className="space-y-3"
+            >
+              <input
+                type="text"
+                placeholder="Job Title"
+                value={form.jobTitle}
+                onChange={(e) => setForm({ ...form, jobTitle: e.target.value })}
+                className="w-full border p-2 rounded"
+                required
+              />
+              <input
+                type="text"
+                placeholder="Company Name"
+                value={form.companyName}
+                onChange={(e) => setForm({ ...form, companyName: e.target.value })}
+                className="w-full border p-2 rounded"
+              />
+              <input
+                type="text"
+                placeholder="Topic"
+                value={form.topic}
+                onChange={(e) => setForm({ ...form, topic: e.target.value })}
+                className="w-full border p-2 rounded"
+              />
+              <select
+                value={form.difficulty}
+                onChange={(e) => setForm({ ...form, difficulty: e.target.value })}
+                className="w-full border p-2 rounded"
+              >
+                <option value="none">None</option>
+                <option value="easy">Easy</option>
+                <option value="medium">Medium</option>
+                <option value="hard">Hard</option>
+              </select>
+
+              <div className="flex justify-end gap-2 mt-4">
+                <button
+                  type="button"
+                  onClick={() => setOpen(false)}
+                  className="px-4 py-2 border rounded"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={createSessionMutation.isPending}
+                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                >
+                  {createSessionMutation.isPending ? "Creating..." : "Create"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

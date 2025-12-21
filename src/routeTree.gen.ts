@@ -16,6 +16,7 @@ import { Route as ApplicationsIndexRouteImport } from './routes/applications/ind
 import { Route as ResumesAnalyzeRouteImport } from './routes/resumes/analyze'
 import { Route as CoverLetterGenerateRouteImport } from './routes/cover-letter/generate'
 import { Route as ResumesResumeIdIndexRouteImport } from './routes/resumes/$resumeId/index'
+import { Route as InterviewSessionsIndexRouteImport } from './routes/interview/sessions/index'
 import { Route as CoverLetterCoverLetterIdIndexRouteImport } from './routes/cover-letter/$coverLetterId/index'
 import { Route as ApplicationsNewIndexRouteImport } from './routes/applications/new/index'
 import { Route as ApplicationsApplicationIdIndexRouteImport } from './routes/applications/$applicationId/index'
@@ -60,6 +61,11 @@ const CoverLetterGenerateRoute = CoverLetterGenerateRouteImport.update({
 const ResumesResumeIdIndexRoute = ResumesResumeIdIndexRouteImport.update({
   id: '/resumes/$resumeId/',
   path: '/resumes/$resumeId/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InterviewSessionsIndexRoute = InterviewSessionsIndexRouteImport.update({
+  id: '/interview/sessions/',
+  path: '/interview/sessions/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CoverLetterCoverLetterIdIndexRoute =
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/applications/$applicationId': typeof ApplicationsApplicationIdIndexRoute
   '/applications/new': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId': typeof CoverLetterCoverLetterIdIndexRoute
+  '/interview/sessions': typeof InterviewSessionsIndexRoute
   '/resumes/$resumeId': typeof ResumesResumeIdIndexRoute
 }
 export interface FileRoutesByTo {
@@ -153,6 +160,7 @@ export interface FileRoutesByTo {
   '/applications/$applicationId': typeof ApplicationsApplicationIdIndexRoute
   '/applications/new': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId': typeof CoverLetterCoverLetterIdIndexRoute
+  '/interview/sessions': typeof InterviewSessionsIndexRoute
   '/resumes/$resumeId': typeof ResumesResumeIdIndexRoute
 }
 export interface FileRoutesById {
@@ -173,6 +181,7 @@ export interface FileRoutesById {
   '/applications/$applicationId/': typeof ApplicationsApplicationIdIndexRoute
   '/applications/new/': typeof ApplicationsNewIndexRoute
   '/cover-letter/$coverLetterId/': typeof CoverLetterCoverLetterIdIndexRoute
+  '/interview/sessions/': typeof InterviewSessionsIndexRoute
   '/resumes/$resumeId/': typeof ResumesResumeIdIndexRoute
 }
 export interface FileRouteTypes {
@@ -194,6 +203,7 @@ export interface FileRouteTypes {
     | '/applications/$applicationId'
     | '/applications/new'
     | '/cover-letter/$coverLetterId'
+    | '/interview/sessions'
     | '/resumes/$resumeId'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
     | '/applications/$applicationId'
     | '/applications/new'
     | '/cover-letter/$coverLetterId'
+    | '/interview/sessions'
     | '/resumes/$resumeId'
   id:
     | '__root__'
@@ -232,6 +243,7 @@ export interface FileRouteTypes {
     | '/applications/$applicationId/'
     | '/applications/new/'
     | '/cover-letter/$coverLetterId/'
+    | '/interview/sessions/'
     | '/resumes/$resumeId/'
   fileRoutesById: FileRoutesById
 }
@@ -252,6 +264,7 @@ export interface RootRouteChildren {
   ApplicationsApplicationIdIndexRoute: typeof ApplicationsApplicationIdIndexRoute
   ApplicationsNewIndexRoute: typeof ApplicationsNewIndexRoute
   CoverLetterCoverLetterIdIndexRoute: typeof CoverLetterCoverLetterIdIndexRoute
+  InterviewSessionsIndexRoute: typeof InterviewSessionsIndexRoute
   ResumesResumeIdIndexRoute: typeof ResumesResumeIdIndexRoute
 }
 
@@ -304,6 +317,13 @@ declare module '@tanstack/react-router' {
       path: '/resumes/$resumeId'
       fullPath: '/resumes/$resumeId'
       preLoaderRoute: typeof ResumesResumeIdIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/interview/sessions/': {
+      id: '/interview/sessions/'
+      path: '/interview/sessions'
+      fullPath: '/interview/sessions'
+      preLoaderRoute: typeof InterviewSessionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/cover-letter/$coverLetterId/': {
@@ -396,6 +416,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApplicationsApplicationIdIndexRoute: ApplicationsApplicationIdIndexRoute,
   ApplicationsNewIndexRoute: ApplicationsNewIndexRoute,
   CoverLetterCoverLetterIdIndexRoute: CoverLetterCoverLetterIdIndexRoute,
+  InterviewSessionsIndexRoute: InterviewSessionsIndexRoute,
   ResumesResumeIdIndexRoute: ResumesResumeIdIndexRoute,
 }
 export const routeTree = rootRouteImport

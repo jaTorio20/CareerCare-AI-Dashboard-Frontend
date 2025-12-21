@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from '@tanstack/react-router'
-import { FileText, FileSignature, Briefcase, Paperclip  } from 'lucide-react' 
+import { FileText, FileSignature, Briefcase, Paperclip, Mic  } from 'lucide-react' 
 import { UseProtectedNav } from '@/components/UseProtectedNav'
+
 
 export const Route = createFileRoute('/')({
   component: App,
@@ -87,6 +88,16 @@ function App() {
             <p className="text-gray-600">
               Manage and track your job applications in one place.
             </p>
+          </button>
+                    {/* Interview Sessions */}
+          <button
+            onClick={() => handleProtectedNav('/interview/sessions')}
+            className="relative transform md:-rotate-6 hover:rotate-0 group block bg-white rounded-lg shadow hover:shadow-md transition p-6 text-center border border-gray-200"
+          >
+            <Paperclip className='absolute -rotate-45 -top-2 -left-2 w-6 h-6 text-purple-500' />
+            <Mic className="mx-auto mb-4 w-16 h-16 text-purple-500 group-hover:text-purple-600 transition-colors" />
+            <h2 className="text-xl font-semibold mb-2 text-gray-800">Interview Practice</h2>
+            <p className="text-gray-600">Prepare with AI-generated questions and feedback to ace your interviews.</p>
           </button>
         </div>
       </main>
