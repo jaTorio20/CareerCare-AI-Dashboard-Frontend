@@ -5,6 +5,8 @@ import { getSessions, getSessionMessages, sendChatMessage } from '@/api/intervie
 import { useState } from 'react'
 import type { InterviewMessage } from '@/types'
 import ResponsiveSidebar from '@/components/Interview/ResponsiveSidebar'
+import { sendAudioMessage } from '@/api/interview'
+import ChatInput from '@/components/Interview/MediaRecorder'
 
 export const Route = createFileRoute('/interview/sessions/')({
   component: () => (
@@ -71,6 +73,23 @@ const sendMessageMutation = useMutation({
   },
 });
 
+const sendAudioMutation = useMutation({
+  mutationFn: (formData: FormData) => sendAudioMessage(formData),
+  onSuccess: (data) => {
+    console.log("Audio send success:", data);
+    queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], (old = []) => [
+      ...(old?.filter((m) => m?._id !== "temp-user") ?? []),
+      data.userMessage,
+      data.aiMessage,
+    ]);
+  },
+  onError: (err) => {
+    console.error("Audio send failed:", err);
+  },
+});
+
+
+
 
   return (
     <div className="flex h-screen">
@@ -87,12 +106,24 @@ const sendMessageMutation = useMutation({
         {activeSessionId ? (
           <div>
             <div className="messages space-y-2">
-              {messages?.map((m: any) => (
+              {/* {messages?.map((m: any) => (
                 <div key={m._id} className={m.role === 'user' ? 'text-right' : 'text-left'}>
                   <span className="inline-block p-2 rounded bg-gray-100">{m.text}</span>
                 </div>
-              ))}
+              ))} */}
+
+              {messages?.map((m: any) => {
+                if (!m || !m.role) return null;
+                return (
+                  <div key={m._id} className={m.role === 'user' ? 'text-right' : 'text-left'}>
+                    <span className="inline-block p-2 rounded bg-gray-100">{m.text ?? ""}</span>
+                  </div>
+                );
+              })}
+
             </div>
+
+            {/* Text input form */}
             <form
               onSubmit={(e) => {
                 e.preventDefault()
@@ -108,6 +139,9 @@ const sendMessageMutation = useMutation({
                 Send
               </button>
             </form>
+            {/* Voice recorder input */}
+            <ChatInput sessionId={activeSessionId!} onSend={sendAudioMutation.mutate} />
+
           </div>
         ) : (
           <p>Select or start a session to begin chatting</p>

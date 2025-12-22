@@ -40,6 +40,17 @@ export const sendChatMessage = async ({
   return data; // shape: { userMessage, aiMessage }
 };
 
+// Send audio message in a session
+export const sendAudioMessage = async (formData: FormData): Promise<{ userMessage: InterviewMessage; aiMessage: InterviewMessage }> => {
+  const sessionId = formData.get("sessionId") as string;
+const { data } = await api.post(`/interview/sessions/${sessionId}/chat`, formData,
+  {
+     headers: { "Content-Type": "multipart/form-data" }, 
+  });  
+  return data;
+};
+
+
 // Fetch all messages for a session
 export const getSessionMessages = async (
   sessionId: string
