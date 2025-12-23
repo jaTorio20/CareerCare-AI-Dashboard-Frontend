@@ -4,9 +4,11 @@ import toWav from "audiobuffer-to-wav";
 export default function ChatInput({
   sessionId,
   onSend,
+  disabled,
 }: {
   sessionId: string;
-  onSend: (formData: FormData) => void;
+  onSend: (formData: FormData) => Promise<any>; // now async
+  disabled?: boolean;
 }) {
   const [recording, setRecording] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -26,27 +28,26 @@ export default function ChatInput({
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: "audio/webm",
-        });
-
-        // Decode webm → AudioBuffer
+        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/webm" });
         const arrayBuffer = await audioBlob.arrayBuffer();
         const audioCtx = new AudioContext();
         const decoded = await audioCtx.decodeAudioData(arrayBuffer);
 
-        // Convert AudioBuffer → WAV using audiobuffer-to-wav
         const wavBuffer = toWav(decoded);
         const wavBlob = new Blob([wavBuffer], { type: "audio/wav" });
 
-        // Build FormData with wavBlob
         const formData = new FormData();
         formData.append("audio", wavBlob, "recording.wav");
         formData.append("text", "");
         formData.append("sessionId", sessionId);
 
-        console.log("Sending WAV FormData:", [...formData.entries()]);
-        onSend(formData);
+        try {
+          await onSend(formData); // wait for backend to confirm
+          setRecording(false);    // reset only after success
+        } catch (err) {
+          console.error("Audio send failed:", err);
+          setRecording(false);    // also reset on error
+        }
       };
 
       mediaRecorder.start();
@@ -60,11 +61,8 @@ export default function ChatInput({
   const stopRecording = () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream
-        .getTracks()
-        .forEach((track) => track.stop());
+      mediaRecorderRef.current.stream.getTracks().forEach((track) => track.stop());
     }
-    setRecording(false);
   };
 
   return (
@@ -72,11 +70,12 @@ export default function ChatInput({
       <button
         type="button"
         onClick={recording ? stopRecording : startRecording}
+        disabled={disabled}
         className={`p-2 rounded ${
-          recording ? "bg-red-500" : "bg-blue-500"
+          recording ? "bg-red-500" : disabled ? "bg-gray-400" : "bg-blue-500"
         } text-white`}
       >
-        {recording ? "Stop" : "🎤 Record"}
+        {recording ? "Stop" : disabled ? "Uploading…" : "🎤 Record"}
       </button>
     </div>
   );

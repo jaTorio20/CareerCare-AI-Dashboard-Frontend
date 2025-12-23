@@ -7,6 +7,7 @@ import type { InterviewMessage } from '@/types'
 import ResponsiveSidebar from '@/components/Interview/ResponsiveSidebar'
 import { sendAudioMessage } from '@/api/interview'
 import ChatInput from '@/components/Interview/MediaRecorder'
+import AudioPlayer from '@/components/Interview/AudioPlayer'
 
 export const Route = createFileRoute('/interview/sessions/')({
   component: () => (
@@ -60,12 +61,9 @@ const sendMessageMutation = useMutation({
     return { prevMessages };
   },
   onSuccess: (data) => {
+    console.log("Mutation success:", data);
     // Replace temp user message with actual + append AI reply
-    queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], (old = []) => [
-      ...(old?.filter((m) => m._id !== "temp-user") ?? []),
-      data.userMessage,
-      data.aiMessage,
-    ]);
+    queryClient.invalidateQueries({ queryKey: ["messages", activeSessionId] });
   },
   onError: (_err, _text, context) => {
     // Rollback if error
@@ -73,20 +71,44 @@ const sendMessageMutation = useMutation({
   },
 });
 
+
 const sendAudioMutation = useMutation({
   mutationFn: (formData: FormData) => sendAudioMessage(formData),
-  onSuccess: (data) => {
-    console.log("Audio send success:", data);
+
+  onMutate: async () => {
+    await queryClient.cancelQueries({ queryKey: ["messages", activeSessionId] });
+    const prevMessages = queryClient.getQueryData<InterviewMessage[]>(["messages", activeSessionId]);
+
     queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], (old = []) => [
-      ...(old?.filter((m) => m?._id !== "temp-user") ?? []),
-      data.userMessage,
-      data.aiMessage,
+      ...old,
+      {
+        _id: "temp-audio",
+        sessionId: activeSessionId!,
+        role: "user",
+        text: "[sending audio…]",
+        createdAt: new Date().toISOString(),
+      },
     ]);
+
+    return { prevMessages };
   },
-  onError: (err) => {
-    console.error("Audio send failed:", err);
+
+  onSuccess: (data) => {
+    if (!data?.userMessage || !data?.aiMessage) {
+      console.error("Invalid response:", data);
+      return;
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["messages", activeSessionId] });
+  },
+
+
+  onError: (_err, _formData, context) => {
+    queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], context?.prevMessages ?? []);
   },
 });
+
+
 
 
 
@@ -117,7 +139,11 @@ const sendAudioMutation = useMutation({
                 return (
                   <div key={m._id} className={m.role === 'user' ? 'text-right' : 'text-left'}>
                     <span className="inline-block p-2 rounded bg-gray-100">{m.text ?? ""}</span>
+                    {m.audioUrl && (
+                      <AudioPlayer sessionId={activeSessionId!} audioKey={m.audioUrl} />
+                    )}
                   </div>
+                  
                 );
               })}
 
@@ -140,7 +166,11 @@ const sendAudioMutation = useMutation({
               </button>
             </form>
             {/* Voice recorder input */}
-            <ChatInput sessionId={activeSessionId!} onSend={sendAudioMutation.mutate} />
+            <ChatInput 
+            sessionId={activeSessionId!} 
+            onSend={sendAudioMutation.mutateAsync} 
+            disabled={sendAudioMutation.isPending}
+            />
 
           </div>
         ) : (
