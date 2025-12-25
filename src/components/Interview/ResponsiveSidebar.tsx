@@ -6,9 +6,11 @@ interface ResponsiveSidebarProps {
   sessions: InterviewSession[] | undefined;
   activeSessionId: string | null;
   setActiveSessionId: (id: string) => void;
+  deleteMutate: (id: string) => Promise<void>; // mutation function 
+  isDeleting: boolean;
 }
 
-export default function ResponsiveSidebar({ sessions, activeSessionId, setActiveSessionId }: ResponsiveSidebarProps) {
+export default function ResponsiveSidebar({ sessions, activeSessionId, setActiveSessionId, deleteMutate, isDeleting }: ResponsiveSidebarProps) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -37,7 +39,18 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
               }`}
               onClick={() => setActiveSessionId(s._id)}
             >
-              {s.jobTitle} @ {s.companyName}
+              <span>{s.jobTitle} @ {s.companyName}</span>
+
+              <button className="ml-2 text-red-600 hover:text-red-800" onClick={(e) => {
+                  e.stopPropagation(); // prevent triggering setActiveSessionId
+                  if (confirm("Are you sure you want to delete this session?")) {
+                    deleteMutate(s._id);
+                  }
+                }}
+                disabled={isDeleting}
+              >
+                ✕
+              </button>
             </li>
           ))}
         </ul>
@@ -77,6 +90,14 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
                   }}
                 >
                   {s.jobTitle} @ {s.companyName}
+
+                  <button 
+                  className="ml-2 text-red-600 hover:text-red-800" 
+                  onClick={() => deleteMutate(s._id)}
+                    disabled={isDeleting}
+                  >
+                    ✕
+                  </button>
                 </li>
               ))}
             </ul>

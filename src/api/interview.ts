@@ -77,3 +77,13 @@ export const getSessions = async (): Promise<InterviewSession[]> => {
   const { data } = await api.get("/interview/sessions");
   return data; // shape: InterviewSession[]
 };
+
+// Delete interview sessions
+export const deleteSessions = async (id: string): Promise<void> => {
+  try {
+    const { data} = await api.delete(`/interview/sessions/${id}`);
+    return data;
+  } catch (err) {
+    throw err;
+  }
+};
