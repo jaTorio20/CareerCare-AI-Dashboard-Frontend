@@ -28,11 +28,11 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 
 function RootLayout () {
   return (
-    <div className='min-h-screen bg-gray-100 flex flex-col'>
+    <div className='flex flex-col'>
       <HeadContent/>
       <Header/>
-      <main className="flex justify-center md:p-6">
-        <div className="w-full max-w-7xl rounded-2xl md:p-8">
+      <main className="flex justify-center md:px-6">
+        <div className="w-full max-w-7xl rounded-2xl md:px-8">
           <Outlet />
         </div>
       </main>

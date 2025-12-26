@@ -14,96 +14,134 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
   const [open, setOpen] = useState(false);
 
   return (
-    <>
-      {/* Hamburger button visible only on small screens */}
-    <header className="md:hidden py-4  px-2 flex border-b ">
-      <div>
-        <button
-          className=" text-gray-700 rounded"
-          onClick={() => setOpen(true)}
+<>
+  {/* Mobile Header */}
+  <button
+    onClick={() => setOpen(true)}
+    className="lg:hidden fixed top-20 left-4 z-40 rounded-full bg-indigo-600 p-3 text-white shadow-lg hover:bg-indigo-700 transition"
+  >
+    ☰
+  </button>
+
+ {/* Desktop Sidebar */}
+<aside className="hidden lg:flex w-72 flex-col bg-white border-r 
+  shadow-lg p-4 rounded-r-2xl ">
+  {/* New Session Button */}
+  <NewSessionButton
+    onSessionCreated={setActiveSessionId}
+  />
+
+  {/* Session List */}
+  <ul className="flex-1 overflow-y-auto space-y-2">
+    {sessions?.map((s: any) => {
+      const isActive = activeSessionId === s._id;
+
+      return (
+        <li
+          key={s._id}
+          onClick={() => setActiveSessionId(s._id)}
+          className={`group flex items-center justify-between px-4 py-2 rounded-xl cursor-pointer transition
+            ${
+              isActive
+                ? "bg-indigo-50 text-indigo-700 shadow-inner"
+                : "text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
+            }`}
         >
-          ☰ Menu
+          {/* Session Info */}
+          <span className="truncate text-sm font-medium">
+            {s.jobTitle} <span className="text-gray-400">@</span> {s.companyName}
+          </span>
+
+          {/* Delete Button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              if (confirm("Delete this session?")) deleteMutate(s._id);
+            }}
+            className="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 transition"
+          >
+            ✕
+          </button>
+        </li>
+      );
+    })}
+  </ul>
+</aside>
+
+
+
+{/* Mobile Drawer */}
+{open && (
+  <div className="fixed inset-0 z-50 flex">
+    {/* Backdrop */}
+    <div
+      className="absolute inset-0 bg-black/40 transition-opacity"
+      onClick={() => setOpen(false)}
+    />
+
+    {/* Drawer */}
+ <aside className="relative z-50 w-72 max-w-full bg-white max-h-screen overflow-y-auto
+ p-6 shadow-2xl rounded-r-3xl flex flex-col transition-transform
+ transform duration-300 ease-out ai-sidebar">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-lg font-semibold text-gray-800">Sessions</h2>
+        <button
+          onClick={() => setOpen(false)}
+          className="text-gray-600 hover:bg-gray-100 p-2 rounded-full transition"
+        >
+          ✕
         </button>
       </div>
-    </header>
 
-      {/* Sidebar for desktop */}
-      <aside className="hidden md:block w-64 border-r p-4">
-        <NewSessionButton onSessionCreated={(id) => setActiveSessionId(id)} />
-        <ul>
-          {sessions?.map((s: any) => (
+      {/* New Session Button */}
+      <NewSessionButton
+        onSessionCreated={(id) => {
+          setActiveSessionId(id);
+          setOpen(false);
+        }}
+      />
+
+      {/* Session List */}
+      <ul className="flex-1 overflow-y-auto space-y-2">
+        {sessions?.map((s: any) => {
+        const isActive = activeSessionId === s._id;
+        return(
             <li
               key={s._id}
-              className={`cursor-pointer p-2 ${
-                activeSessionId === s._id ? "bg-gray-200" : ""
-              }`}
               onClick={() => setActiveSessionId(s._id)}
+              className={`group flex items-center justify-between px-4 py-2 rounded-xl cursor-pointer transition
+                ${
+                  isActive
+                    ? "bg-indigo-50 text-indigo-700 shadow-inner"
+                    : "text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
+                }`}
             >
-              <span>{s.jobTitle} @ {s.companyName}</span>
-
-              <button className="ml-2 text-red-600 hover:text-red-800" onClick={(e) => {
-                  e.stopPropagation(); // prevent triggering setActiveSessionId
-                  if (confirm("Are you sure you want to delete this session?")) {
-                    deleteMutate(s._id);
-                  }
-                }}
-                disabled={isDeleting}
-              >
-                ✕
-              </button>
-            </li>
-          ))}
-        </ul>
-      </aside>
-
-      {/* Mobile drawer overlay */}
-      {open && (
-        <div className="fixed inset-0 z-50 flex">
-          {/* Dark background */}
-          <div
-            className="fixed inset-0 bg-black/50"
-            onClick={() => setOpen(false)}
-          />
-
-          {/* Sidebar drawer */}
-          <aside className="relative z-50 w-64 bg-white border-r p-4 h-full">
+            <span className="truncate">
+              {s.jobTitle} <span className="text-gray-400">@</span> {s.companyName}
+            </span>
             <button
-              className="mb-4 p-2 border rounded text-gray-700"
-              onClick={() => setOpen(false)}
+              onClick={(e) => {
+                e.stopPropagation();
+                deleteMutate(s._id);
+              }}
+              disabled={isDeleting}
+              className="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 transition"
             >
-              ✕ Close
+              ✕
             </button>
-            <NewSessionButton onSessionCreated={(id) => {
-              setActiveSessionId(id);
-              setOpen(false);
-            }} />
-            <ul>
-              {sessions?.map((s: any) => (
-                <li
-                  key={s._id}
-                  className={`cursor-pointer p-2 ${
-                    activeSessionId === s._id ? "bg-gray-200" : ""
-                  }`}
-                  onClick={() => {
-                    setActiveSessionId(s._id);
-                    setOpen(false);
-                  }}
-                >
-                  {s.jobTitle} @ {s.companyName}
+          </li>
+        )
 
-                  <button 
-                  className="ml-2 text-red-600 hover:text-red-800" 
-                  onClick={() => deleteMutate(s._id)}
-                    disabled={isDeleting}
-                  >
-                    ✕
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </aside>
-        </div>
-      )}
-    </>
+        })}
+      </ul>
+    </aside>
+  </div>
+)}
+
+
+
+</>
+
   );
 }
