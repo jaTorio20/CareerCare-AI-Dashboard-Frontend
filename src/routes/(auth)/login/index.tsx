@@ -88,7 +88,7 @@ function LoginPage() {
         />
 
         <button disabled={isPending}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2
+          className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-semibold px-4 py-2
           rounded-md w-full disabled:opacity-50">
           {
             isPending ? 'Logging in...' : 'Login'
@@ -98,7 +98,8 @@ function LoginPage() {
 
       <button
         onClick={googleLogin}
-        className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-md w-full mt-4"
+        className="bg-red-600 hover:bg-red-700 cursor-pointer
+         text-white font-semibold px-4 py-2 rounded-md w-full mt-4"
       >
         Login with Google
       </button>

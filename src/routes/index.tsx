@@ -10,10 +10,9 @@ export const Route = createFileRoute('/')({
 function App() {
   const handleProtectedNav = UseProtectedNav();
   return (
-    <div className="min-h-screen flex flex-col">
+  <div className="min-h-screen mt-5 flex flex-col">
       {/* Hero Section */}
-    {/* Hero Section */}
-    <header className="bg-linear-to-r rounded-lg from-blue-50 via-white to-white-50 shadow-sm">
+    <section className="bg-linear-to-r rounded-lg from-blue-50 via-white to-white-50 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-20 text-center">
         <h1 className="text-4xl md:text-5xl font-extrabold mb-6 text-gray-900 tracking-tight">
           <span className='text-indigo-600'>CareerCare </span>  
@@ -26,19 +25,19 @@ function App() {
         <div className="mt-8 flex justify-center gap-4">
           <button
             onClick={() => handleProtectedNav("/resumes/analyze")}
-            className="px-6 py-3 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
+            className="px-6 py-3 rounded-lg cursor-pointer bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
           >
             Get Started
           </button>
           <button
             onClick={() => handleProtectedNav("/applications")}
-            className="px-6 py-3 rounded-lg bg-gray-200 text-gray-800 font-medium hover:bg-gray-300 transition"
+            className="px-6 py-3 rounded-lg cursor-pointer bg-gray-200 text-gray-800 font-medium hover:bg-gray-300 transition"
           >
             View Applications
           </button>
         </div>
       </div>
-    </header>
+    </section>
 
 
       {/* Main Content */}
@@ -47,7 +46,9 @@ function App() {
           {/* Resume Analyzer */}
           <button
             onClick={() => handleProtectedNav('/resumes/analyze')}
-            className="relative transform md:rotate-10 hover:rotate-0 group block bg-white rounded-lg shadow hover:shadow-md transition p-6 text-center border border-gray-200"
+            className="relative transform rotate-1 hover:rotate-0 cursor-pointer
+            group block bg-white rounded-lg shadow hover:shadow-md 
+            transition p-6 text-center border border-gray-200"
           >
             <Paperclip className='absolute -rotate-30 -top-2 -left-2 w-6 h-6 text-emerald-600'></Paperclip>
             <FileText className="mx-auto mb-4 w-16 h-16 text-emerald-500 group-hover:text-emerald-600 transition-colors" />
@@ -62,7 +63,9 @@ function App() {
           {/* Generate Cover Letter */}
           <button
             onClick={() => handleProtectedNav('/cover-letter/generate')}
-            className="relative transform md:-rotate-3 hover:rotate-0  group block bg-white rounded-lg shadow hover:shadow-md transition p-6 text-center border border-gray-200"
+            className="relative transform -rotate-1 hover:rotate-0 cursor-pointer
+            group block bg-white rounded-lg shadow hover:shadow-md 
+            transition p-6 text-center border border-gray-200"
           >
             <Paperclip className='absolute -rotate-28 -top-2 -left-2 w-6 h-6 text-rose-500'></Paperclip>
             <FileSignature className="mx-auto mb-4 w-16 h-16 text-rose-500 group-hover:text-rose-600 transition-colors" />
@@ -77,7 +80,9 @@ function App() {
           {/* Job Application */}
           <button
             onClick={() => handleProtectedNav('/applications')}
-            className="relative transform md:rotate-10 hover:rotate-0  group block bg-white rounded-lg shadow hover:shadow-md transition p-6 text-center border border-gray-200"
+            className="relative transform rotate-1 hover:rotate-0 cursor-pointer
+            group block bg-white rounded-lg shadow hover:shadow-md 
+            transition p-6 text-center border border-gray-200"
           >
             <Paperclip className='absolute -rotate-58 -top-2 -left-2 w-6 h-6 text-indigo-500'></Paperclip>
 
@@ -92,7 +97,9 @@ function App() {
                     {/* Interview Sessions */}
           <button
             onClick={() => handleProtectedNav('/interview/sessions')}
-            className="relative transform md:-rotate-6 hover:rotate-0 group block bg-white rounded-lg shadow hover:shadow-md transition p-6 text-center border border-gray-200"
+            className="relative transform -rotate-1 hover:rotate-0 cursor-pointer
+            group block bg-white rounded-lg shadow hover:shadow-md 
+            transition p-6 text-center border border-gray-200"
           >
             <Paperclip className='absolute -rotate-45 -top-2 -left-2 w-6 h-6 text-purple-500' />
             <Mic className="mx-auto mb-4 w-16 h-16 text-purple-500 group-hover:text-purple-600 transition-colors" />
@@ -101,8 +108,6 @@ function App() {
           </button>
         </div>
       </main>
-
-
     </div>
   )
 }

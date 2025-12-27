@@ -8,6 +8,8 @@ import { exportDocx } from '@/utils/exporterDocument';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { toast } from 'sonner';
 
+import { useQuota } from '@/context/QuotaContext';
+
 export const Route = createFileRoute('/cover-letter/generate')({
   component: () => (
     <ProtectedRoute>
@@ -58,18 +60,32 @@ function CoverLetterGenerate() {
       .join('');
   }
 
+  const { quotaExceeded, setQuotaExceeded } = useQuota();
   const {mutateAsync, isPending} = useMutation({
     mutationFn: generateCoverLetter,
     onSuccess: (data) => {
-      console.log("generateCoverLetter response:", data);
-      if (!data?.generatedLetter) {
-        toast.error("No generated letter returned from API");
-        return;
-      }
+      // console.log("generateCoverLetter response:", data);
+      // if (!data?.generatedLetter) {
+      //   toast.error("No generated letter returned from API");
+      //   return;
+      // }
       const formatted = convertToParagraphs(data.generatedLetter);
       setGeneratedLetter(formatted);
       setEditedLetter(formatted);
-    }
+    },
+    onError: (err: any) => {
+      const message = err?.response?.data?.message || "Please try again.";
+      const retryDelay = err?.response?.data?.retryDelay;
+
+      if (/quota/i.test(message)) {
+        setQuotaExceeded(true);
+        toast.error(
+          retryDelay ? `${message} Retry after ${retryDelay}.` : message
+        );
+      } else {
+        toast.error(message);
+      }
+    },
   });
 
 
@@ -150,7 +166,7 @@ function CoverLetterGenerate() {
     Generate Cover Letter
   </h1>
 
-    Clear Text Button
+  {/* Clear Text Button */}
   <div className="flex justify-end mb-4">
     <button
       type="button"
@@ -225,7 +241,7 @@ function CoverLetterGenerate() {
     <div className="pt-4">
       <button
         type="submit"
-        disabled={isPending}
+        disabled={isPending || quotaExceeded}
         className="w-full rounded-lg bg-linear-to-r from-blue-600 to-indigo-600 px-6 py-3 text-white font-semibold shadow-md hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isPending ? "Generating..." : "Generate Cover Letter"}

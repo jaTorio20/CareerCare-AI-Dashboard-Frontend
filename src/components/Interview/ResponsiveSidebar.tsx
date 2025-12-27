@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { NewSessionButton } from "@/components/Interview/NewSessionButton";
 import type { InterviewSession } from "@/types";
+import { Brain, Trash } from "lucide-react";
 
 interface ResponsiveSidebarProps {
   sessions: InterviewSession[] | undefined;
@@ -16,12 +17,17 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
   return (
 <>
   {/* Mobile Header */}
-  <button
-    onClick={() => setOpen(true)}
-    className="lg:hidden fixed top-20 left-4 z-40 rounded-full bg-indigo-600 p-3 text-white shadow-lg hover:bg-indigo-700 transition"
-  >
-    ☰
-  </button>
+    <button
+      onClick={() => setOpen(true)}
+      className="lg:hidden fixed z-40 m-2 md:m-0
+      rounded-full border bg-indigo-600 p-2
+       cursor-pointer hover:scale-[1.2] transform duration-200 ease-in-out
+        text-white shadow-lg hover:border-indigo-600 hover:bg-transparent
+         hover:text-indigo-600 transition"
+    >
+      <Brain/>
+    </button>
+
 
  {/* Desktop Sidebar */}
 <aside className="hidden lg:flex w-72 flex-col bg-white border-r 
@@ -71,18 +77,21 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
 
 
 {/* Mobile Drawer */}
-{open && (
-  <div className="fixed inset-0 z-50 flex">
+  <div className={`fixed inset-0 z-50 flex transition-opacity
+      ${open ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"}`}>
+    
     {/* Backdrop */}
-    <div
-      className="absolute inset-0 bg-black/40 transition-opacity"
-      onClick={() => setOpen(false)}
-    />
+    <div className="absolute inset-0 bg-black/40 transition-opacity"
+      onClick={() => setOpen(false)}/>
 
     {/* Drawer */}
- <aside className="relative z-50 w-72 max-w-full bg-white max-h-screen overflow-y-auto
- p-6 shadow-2xl rounded-r-3xl flex flex-col transition-transform
- transform duration-300 ease-out ai-sidebar">
+    <aside className={`relative z-50 w-72 
+      max-w-full bg-white max-h-screen overflow-y-auto
+      p-6 shadow-2xl rounded-r-3xl flex flex-col transition-transform
+      transform duration-300 ease-out ai-sidebar
+      ${open ? "translate-x-0" : "-translate-x-full"}`}
+      onClick={(e) => e.stopPropagation()}>
+
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-lg font-semibold text-gray-800">Sessions</h2>
@@ -107,19 +116,18 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
         {sessions?.map((s: any) => {
         const isActive = activeSessionId === s._id;
         return(
-            <li
-              key={s._id}
-              onClick={() => setActiveSessionId(s._id)}
-              className={`group flex items-center justify-between px-4 py-2 rounded-xl cursor-pointer transition
-                ${
-                  isActive
-                    ? "bg-indigo-50 text-indigo-700 shadow-inner"
-                    : "text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
-                }`}
+          <li
+            key={s._id}
+            onClick={() => setActiveSessionId(s._id)} //setOpen(false) if want to auto close sidebar             
+            className={`group flex items-center justify-between px-4 py-2 rounded-xl cursor-pointer transition
+              ${ isActive
+                  ? "bg-indigo-50 text-indigo-700 shadow-inner"
+                  : "text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
+              }`}
             >
             <span className="truncate">
               {s.jobTitle} <span className="text-gray-400">@</span> {s.companyName}
-            </span>
+            </span>          
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -128,16 +136,15 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
               disabled={isDeleting}
               className="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 transition"
             >
-              ✕
+              <Trash className="w-5 h-5"/>
             </button>
           </li>
         )
-
         })}
       </ul>
     </aside>
   </div>
-)}
+
 
 
 

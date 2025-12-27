@@ -5,6 +5,8 @@ import { analyzeResume, createResume } from '@/api/resumes';
 import type { ResumeAnalysis } from '@/types';
 import api from '@/lib/axios';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import { toast } from 'sonner';
+import { useQuota } from '@/context/QuotaContext';
 
 export const Route = createFileRoute('/resumes/analyze')({
     component: () => (
@@ -28,12 +30,27 @@ function ResumeAnalyze() {
   const [jobDescription, setJobDescription] = useState('');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null);
 
+  const { quotaExceeded, setQuotaExceeded } = useQuota();
   const { mutateAsync, isPending } = useMutation({
     mutationFn: analyzeResume,
     onSuccess: (data) => {
       //  has data of shape { resumeFile, jobDescription, analysis }
       setAnalysisResult(data);
-    }
+      // setQuotaExceeded(false);
+    },
+    onError: (err: any) => {
+      const message = err?.response?.data?.message || "Please try again.";
+      const retryDelay = err?.response?.data?.retryDelay;
+
+      if (/quota/i.test(message)) {
+        setQuotaExceeded(true);
+        toast.error(
+          retryDelay ? `${message} Retry after ${retryDelay}.` : message
+        );
+      } else {
+        toast.error(message);
+      }
+    },
   });
 
   const { mutateAsync: saveMutation, isPending: isSaving} = useMutation({
@@ -88,7 +105,7 @@ function ResumeAnalyze() {
   };
 
  return (
-    <div className="max-w-xl mx-auto bg-white shadow-md rounded-lg p-6">
+    <div className="max-w-xl mx-auto bg-white shadow-md rounded-lg p-6 mt-5">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">Upload Resume for Analysis</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -119,10 +136,10 @@ function ResumeAnalyze() {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={isPending}
+          disabled={isPending || quotaExceeded}
           className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
         >
-          {isPending ? "Analyzing..." : "Analyze Resume"}
+          {quotaExceeded ? "Quota Exhausted" : isPending ? "Analyzing..." : "Analyze Resume"}
         </button>
       </form>
 
@@ -141,13 +158,13 @@ function ResumeAnalyze() {
           } */}
 
           <div className="mt-2">
-
             <ul className="list-disc list-inside text-sm text-gray-700">
-              {analysisResult?.analysis.atsSuggestions.map((s, i) => (
-              <li key={i}>
-                <strong className="text-sm text-gray-800">ATS Suggestion: {s}</strong> 
-              </li>
-              ))}
+              {analysisResult?.analysis.atsSuggestions?.length > 0 &&
+                analysisResult.analysis.atsSuggestions.map((s, i) => (
+                  <li key={i}>
+                    <strong className="text-sm text-gray-800">{s}</strong>
+                  </li>
+                ))}
             </ul>
           </div>
 

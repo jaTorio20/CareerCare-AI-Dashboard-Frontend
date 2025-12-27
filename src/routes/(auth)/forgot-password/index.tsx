@@ -35,7 +35,7 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto mt-5">
       <h1 className="text-3xl font-bold mb-6">Forgot Password</h1>
 
       {error && (

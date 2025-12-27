@@ -2,15 +2,13 @@ import { createFileRoute } from '@tanstack/react-router'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getSessions, getSessionMessages, sendChatMessage, sendAudioMessage } from '@/api/interview'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import type { InterviewMessage } from '@/types'
 import ResponsiveSidebar from '@/components/Interview/ResponsiveSidebar'
-import {  } from '@/api/interview'
 import AudioRecorder from '@/components/Interview/AudioRecorder'
 import AudioMessage from '@/components/Interview/AudioMessage'
 import { deleteSessions } from '@/api/interview'
 import AITypingIndicator from '@/components/Interview/AITypingIndicator'
-import { useRef } from 'react'
 
 export const Route = createFileRoute('/interview/sessions/')({
   component: () => (
@@ -132,11 +130,40 @@ function InterviewSessionsPage() {
     textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
   };
 
+  // --------------- MESSAGE FORM SUBMIT -----------------
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const currentText = text; // snapshot before clearing
 
+    // Clear immediately
+    setText("");
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
+
+    // Trigger mutation with rollback
+    sendMessageMutation.mutate(currentText, {
+      onError: () => {
+        // Rollback: restore text if mutation fails
+        setText(currentText);
+        if (textareaRef.current) {
+          textareaRef.current.style.height = textareaRef.current.scrollHeight + "px";
+        }
+      },
+    });
+  };
+
+  //---------------- SCROLL TO LATEST MESSAGE --------------
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages, sendMessageMutation.isSuccess]);
 
 
   return (
-<div className="flex h-[90vh] md:h-[85vh] lg:h-[80vh] bg-gray-50 mt-2">
+<div className="flex h-[80vh] md:h-[85vh] lg:h-[80vh] bg-gray-50 mt-5 w-full">
   {/* Sidebar */}
   <ResponsiveSidebar
     sessions={sessions}
@@ -144,6 +171,7 @@ function InterviewSessionsPage() {
     setActiveSessionId={setActiveSessionId}
     deleteMutate={deleteMutate}
     isDeleting={isDeleting}
+    
   />
 
   {/* Chat Area */}
@@ -198,17 +226,14 @@ function InterviewSessionsPage() {
               </div>
             </div>
           )}
+
+          {/* scroll target */} 
+          <div ref={messagesEndRef} />
         </div>
 
           {/* Input Area */}
           <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              const form = e.target as HTMLFormElement;
-              const input = form.elements.namedItem("text") as HTMLInputElement;
-              sendMessageMutation.mutate(input.value);
-              input.value = "";
-            }}
+            onSubmit={handleSubmit}
             className="mx-5 rounded-lg bg-gray-200 px-4 py-3 gap-2"
           >
             <textarea
@@ -219,8 +244,14 @@ function InterviewSessionsPage() {
               value={text}
               onChange={(e) => setText(e.target.value)}
               onInput={handleInput}
+              onKeyDown={(e) => { 
+                if (e.key === "Enter" && !e.shiftKey) { 
+                  e.preventDefault();
+                  (e.target as HTMLTextAreaElement).form?.requestSubmit();
+                  } 
+                }}
               className="flex-1 min-w-full border text-sm resize-none
-                        overflow-y-auto max-h-40 focus:outline-none border-none"
+                overflow-y-auto max-h-40 focus:outline-none border-none"
             />
 
             <div className='justify-end space-x-1.5 flex'>

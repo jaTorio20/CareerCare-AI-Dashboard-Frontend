@@ -69,7 +69,7 @@ function ApplicationEditPage() {
     await mutateAsync();
   }
   return (
-      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-8 space-y-6">
+      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-8 space-y-6 mt-5">
     {/* Company Name */}
     <div>
       <label className="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
