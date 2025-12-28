@@ -163,7 +163,7 @@ function InterviewSessionsPage() {
 
 
   return (
-<div className="flex h-[80vh] md:h-[85vh] lg:h-[80vh] bg-gray-50 mt-5 w-full">
+<div className="flex h-[80vh] md:h-[85vh] lg:h-[80vh] bg-gray-50 w-full">
   {/* Sidebar */}
   <ResponsiveSidebar
     sessions={sessions}

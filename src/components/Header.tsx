@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link, useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate, useRouterState  } from '@tanstack/react-router'
 import { useAuth } from "@/context/AuthContext";
 import { logoutUser } from "@/api/auth";
 import { useMutation } from '@tanstack/react-query';
@@ -31,42 +31,53 @@ const Header = () => {
 
   const handleProtectedNav = UseProtectedNav();
 
-  // ACTIVE NAV BUTTON
-  const base = 'text-indigo-400';
-  const active = 'text-white hover:text-indigo-400';
+  // ACTIVE NAV BUTTON MD TO LARGE SCREEN
+  const navItems = [
+    { label: "Resumes", path: "/resumes"},
+    { label: "Cover Letter", path: "/cover-letter"},
+    { label: "Applications", path: "/applications"},
+    { label: "AI Interview", path: "/interview/sessions"},
+  ];
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const base = 'text-gray-700 cursor-pointer hover:text-indigo-600 font-medium';
+  const active = 'text-indigo-600 font-medium cursor-pointer hover:text-indigo-700';
+  
+  // ACTIVE NAV BUTTON FOR SMALLER SCREEN
+  const navItemsMobile = [
+    { icon: File, label: "Resumes", path: "/resumes"},
+    { icon: Pencil, label: "Cover Letter", path: "/cover-letter"},
+    { icon: Briefcase,label: "Applications", path: "/applications"},
+    { icon: Bot, label: "AI Interview", path: "/interview/sessions"},
+  ];
+  const pathnameMobile = useRouterState({ select: (s) => s.location.pathname });
+  const baseMobile = 'text-gray-700 cursor-pointer hover:text-indigo-600 font-medium';
+  const activeMobile = 'text-indigo-600 font-medium cursor-pointer hover:text-indigo-700';
 
   return (
+    
 <header className="bg-white shadow-md sticky top-0 z-50">
   <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
     {/* Logo */}
-    <Link to="/" className="text-xl font-semibold text-gray-800">
+    <Link to="/" className="text-xl border-b-amber-300 font-semibold text-indigo-600">
       CareerCare
     </Link>
 
     {/* Desktop Nav + Auth */}
     <div className="hidden md:flex items-center space-x-8">
       <nav className="flex space-x-8">
-        <button
-          onClick={() => handleProtectedNav("/resumes")}
-          className="text-gray-700 cursor-pointer hover:text-blue-600 font-medium"
-        >
-          Resumes
-        </button>
-
-        <button onClick={() => handleProtectedNav("/cover-letter")} 
-        className="text-gray-700 cursor-pointer hover:text-blue-600 font-medium">Cover Letter</button>
-        <button
-          onClick={() => handleProtectedNav("/applications")}
-          className="text-gray-700 cursor-pointer hover:text-blue-600 font-medium"
-        >
-          Applications
-        </button>
-        <button
-          onClick={() => handleProtectedNav("/interview/sessions")}
-          className="text-gray-700 cursor-pointer hover:text-blue-600 font-medium"
-        >
-          AI Interview
-        </button>
+        {navItems.map(item => {
+          const isActive = pathname.startsWith(item.path);
+          return (
+              <button
+                key={item.path}
+                onClick={() => handleProtectedNav(item.path)}
+                className={isActive ? active : base}
+              >
+                {item.label}
+              </button>
+          );
+        })}
+        
       </nav>
 
       {/* Auth Buttons (desktop) */}
@@ -113,26 +124,19 @@ const Header = () => {
   <div className={ `md:hidden bg-white border-t border-gray-200 
     overflow-hidden transition-all duration-300 ease-linear `}>
     <nav className=" bg-white border-t border-gray-200 flex justify-around py-2 md:hidden">
-      <button onClick={() => handleProtectedNav("/resumes")}
-       className="flex flex-col items-center cursor-pointer text-gray-700 hover:text-blue-600">
-        <File className="h-6 w-6" />
-        <span className="text-xs">Resumes</span>
-      </button>
-      <button onClick={() => handleProtectedNav("/cover-letter")} 
-       className="flex flex-col items-center cursor-pointer text-gray-700 hover:text-blue-600">
-        <Pencil className="h-6 w-6" />
-        <span className="text-xs">Cover Letter</span>
-      </button>
-      <button onClick={() => handleProtectedNav("/applications")} 
-       className="flex flex-col items-center cursor-pointer text-gray-700 hover:text-blue-600">
-        <Briefcase className="h-6 w-6" />
-        <span className="text-xs">Applications</span>
-      </button>
-      <button onClick={() => handleProtectedNav("/interview/sessions")} 
-       className="flex flex-col items-center cursor-pointer text-gray-700 hover:text-blue-600">
-        <Bot className="h-6 w-6" />
-        <span className="text-xs">AI Interview</span>
-      </button>
+        {navItemsMobile.map(item => {
+          const isActive = pathnameMobile.startsWith(item.path);
+          return (
+              <button
+                key={item.path}
+                onClick={() => handleProtectedNav(item.path)}
+                className={`flex flex-col items-center gap-1 ${isActive ? activeMobile : baseMobile}`}
+              >
+                <item.icon className="h-6 w-6" />
+                <span className="text-xs">{item.label}</span>
+              </button>
+          );
+        })}
     </nav>
   </div>
 

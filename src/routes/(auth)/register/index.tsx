@@ -15,7 +15,7 @@ const navigate = useNavigate();
 const [name, setName] = useState('');
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
-const [error, setError] = useState('');
+// const [error, setError] = useState('');
 
 const { mutateAsync, isPending } = useMutation({
   mutationFn: registerUser,
@@ -26,7 +26,12 @@ const { mutateAsync, isPending } = useMutation({
     toast.success('OTP sent. Please check your email');
   },
   onError: (err: any) => {
-    setError(err.message);
+    // setError(err.message);
+    const msg = err.response?.data?.error ||
+      err.response?.data?.message ||
+      'Failed to register';
+    toast.error(msg)
+    throw new Error(msg);
   }
 });
 
@@ -38,21 +43,20 @@ const handleSubmit = async (e: React.FormEvent) => {
   } catch (err: any) {
       console.log(err.message);
   }
-
 }
 
   return (
-    <div className='max-w-md mx-auto mt-5'>
+    <div className='max-w-md mx-auto mt-5 p-2'>
       <h1 className="text-3xl font-bold mb-6">
         Register
       </h1>
-      {
+      {/* {
         error && (
           <div className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4">
             { error }
           </div>
         )
-      }
+      } */}
       <form onSubmit={handleSubmit} className="space-y-4">
         <input 
           type="text" 
@@ -80,6 +84,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           onChange={(e) => setPassword(e.target.value)}
           placeholder='Password'
           // autoComplete='off'
+          minLength={8}
           className="w-full border
           border-gray outline-none focus:border-blue-700 rounded-md p-2" 
         />

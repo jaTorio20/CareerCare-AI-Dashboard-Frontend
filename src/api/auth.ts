@@ -18,7 +18,9 @@ export const registerUser = async ({
 
     return data;
   } catch (err: any) {
-    const message = err.response?.data?.message || 'Failed to register';
+    const message = err.response?.data?.error ||
+      err.response?.data?.message ||
+      'Failed to register';
     throw new Error(message);
   }
 };
@@ -39,8 +41,10 @@ export const verifyUser = async ({
 
       return data;
     } catch (err: any) {
-      const message = err.response?.data?.message || "Failed to verify account";
-      throw new Error(message);
+    const message = err.response?.data?.error ||
+      err.response?.data?.message ||
+      'Failed to register';
+    throw new Error(message);
     }
 };
 
@@ -99,7 +103,8 @@ export const loginUser = async (credentials: {
     const { data } = await api.post('/auth/login', credentials);
     return data;
   } catch (err: any) {
-    const message = err.response?.data?.message || 'Failed to login';
+    const message = err.response?.data?.error 
+    || err.response?.data?.message || 'Failed to login';
     throw new Error(message);
   }
 };

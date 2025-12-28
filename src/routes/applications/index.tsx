@@ -4,11 +4,12 @@ import { getJobApplication } from '@/api/jobApplication'
 import { Link } from '@tanstack/react-router'
 import { StatusBadge } from '@/components/StatusBadge'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import NotFound from '@/components/NotFound'
 
 const jobApplicationQueryOptions = () => {
   return queryOptions({
     queryKey: ['applications'],
-    queryFn: () => getJobApplication(),
+    queryFn: async () => await getJobApplication(),
   })
 }
 
@@ -18,16 +19,15 @@ export const Route = createFileRoute('/applications/')({
       { title: 'Job Applications', content: 'List of Job Applied' },
     ],  
   }),
+  component: () => (
+    <ProtectedRoute>
+      <JobApplicationPage/>
+    </ProtectedRoute>
+  ),
 
-    component: () => (
-      <ProtectedRoute>
-       <JobApplicationPage/>
-      </ProtectedRoute>
-    ),
-
-  // loader: async ({context: {queryClient}}) => {
-  // return queryClient.ensureQueryData(jobApplicationQueryOptions())
-  // }
+  loader: async ({context: {queryClient}}) => {
+   return queryClient.ensureQueryData(jobApplicationQueryOptions())
+  }
 })
 
 function JobApplicationPage() {

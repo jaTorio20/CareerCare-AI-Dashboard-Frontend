@@ -1,9 +1,8 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { getResumes } from '@/api/resumes'
 import { Link } from '@tanstack/react-router'
 import ProtectedRoute from '@/components/ProtectedRoute'
-import { useAuth } from '@/context/AuthContext'
 
 const resumeQueryOptions = () => {
   return queryOptions({
@@ -26,9 +25,9 @@ export const Route = createFileRoute('/resumes/')({
     </ProtectedRoute>
   ),
 
-  // loader: async ({ context: { queryClient } }) => { //prefetching for faster load
-  //   return queryClient.ensureQueryData(resumeQueryOptions())
-  // }
+  loader: async ({ context: { queryClient } }) => { //prefetching for faster load
+    return queryClient.ensureQueryData(resumeQueryOptions())
+  }
 })
 
 function ResumesPage() {

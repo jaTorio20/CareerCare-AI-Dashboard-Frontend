@@ -34,8 +34,8 @@ function LoginPage() {
       toast.success(`Welcome back, ${data.user.name}!`);
     },
     onError: (err: any) => {
-      setError(err.message);
-      toast.error("Login failed. Please try again.");
+      // setError(msg);
+      toast.error(err.message);
     },
   });
 
@@ -53,17 +53,17 @@ function LoginPage() {
   }
 
   return (
-    <div className='max-w-md mx-auto mt-10'>
+    <div className='max-w-md mx-auto mt-10 p-2'>
       <h1 className="text-3xl font-bold mb-6">
         Login
       </h1>
-      {
+      {/* {
         error && (
           <div className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4">
             { error }
           </div>
         )
-      }
+      } */}
       <form onSubmit={handleSubmit}
       className="space-y-4">
 

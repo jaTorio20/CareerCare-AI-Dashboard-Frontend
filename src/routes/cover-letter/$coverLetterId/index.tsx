@@ -1,27 +1,37 @@
-import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, Link, notFound } from '@tanstack/react-router'
 import { getDetailLetter, deleteCoverLetter } from '@/api/coverLetter'
 import { queryOptions, useSuspenseQuery, useMutation} from '@tanstack/react-query'
 import { exportDocx } from '@/utils/exporterDocument'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { toast } from 'sonner'
+import NotFound from '@/components/NotFound'
+import ErrorPage from '@/components/ErrorPage'
+import {z} from 'zod'
 
+const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i)
 const coverLetterQueryOptions = (coverLetterId: string) => {
   return queryOptions({
     queryKey: ['cover-letter', coverLetterId],
-    queryFn: () => getDetailLetter(coverLetterId),
+    queryFn: async () => await getDetailLetter(coverLetterId),
   })
 }
 
 export const Route = createFileRoute('/cover-letter/$coverLetterId/')({
-    component: () => (
-      <ProtectedRoute>
-       <CoverLetterDetailsPage/>
-      </ProtectedRoute>
-    ),
+  component: () => (
+    <ProtectedRoute>
+      <CoverLetterDetailsPage/>
+    </ProtectedRoute>
+  ),
+  notFoundComponent: NotFound,
+  errorComponent: ErrorPage,
 
-  // loader: async ({params, context: {queryClient}}) => {
-  //   return queryClient.ensureQueryData(coverLetterQueryOptions(params.coverLetterId));
-  // }
+  loader: async ({params, context: {queryClient}}) => {
+    // Block invalid IDs
+    if (!objectIdSchema.safeParse(params.coverLetterId).success) {
+      throw notFound()
+    }
+    return queryClient.ensureQueryData(coverLetterQueryOptions(params.coverLetterId));
+  }
 })
 
 function CoverLetterDetailsPage() {

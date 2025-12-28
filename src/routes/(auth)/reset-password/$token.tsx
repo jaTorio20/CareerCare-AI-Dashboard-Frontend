@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getPasswordToken, saveNewPassword } from "@/api/auth";
@@ -48,9 +48,10 @@ function ResetPasswordPage() {
   if (isLoading) return <p>Verifying reset link...</p>;
   if (isError || !data?.valid) {
     return (
-      <div className="max-w-md mx-auto text-center">
+      <div className="max-w-md mx-auto text-center mt-5">
         <h1 className="text-2xl font-bold mb-4">Invalid or expired link</h1>
         <p className="text-gray-600">Please request a new password reset.</p>
+        <Link to="/forgot-password">Reset Password</Link>
       </div>
     );
   }
@@ -69,6 +70,7 @@ function ResetPasswordPage() {
         <input
           type="password"
           value={password}
+          minLength={8}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="New Password"
           className="w-full border border-gray outline-none focus:border-blue-700 rounded-md p-2"

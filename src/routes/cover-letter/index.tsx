@@ -24,9 +24,9 @@ export const Route = createFileRoute('/cover-letter/')({
     </ProtectedRoute>
   ),
 
-  // loader: async ({context: {queryClient}}) => {
-  //   return queryClient.ensureQueryData(coverLetterQueryOptions())
-  // }
+  loader: async ({context: {queryClient}}) => {
+    return queryClient.ensureQueryData(coverLetterQueryOptions())
+  }
 
 });
 

@@ -38,7 +38,7 @@ export function NewSessionButton({ onSessionCreated }: { onSessionCreated: (id: 
     <>
       <button
         onClick={() => setOpen(true)}
-        className="mb-4 p-2 bg-blue-500 text-white rounded"
+        className="mb-4 p-2 cursor-pointer hover:bg-blue-700 bg-blue-600 text-white rounded"
       >
         Start New Chat
       </button>

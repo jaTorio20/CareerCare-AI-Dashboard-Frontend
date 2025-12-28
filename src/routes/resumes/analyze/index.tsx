@@ -7,13 +7,16 @@ import api from '@/lib/axios';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { toast } from 'sonner';
 import { useQuota } from '@/context/QuotaContext';
+import NotFound from '@/components/NotFound';
 
-export const Route = createFileRoute('/resumes/analyze')({
+export const Route = createFileRoute('/resumes/analyze/')({
     component: () => (
     <ProtectedRoute>
       <ResumeAnalyze />
     </ProtectedRoute>
   ),
+  notFoundComponent: NotFound,
+  
 });
 
 type AnalysisResponse = {

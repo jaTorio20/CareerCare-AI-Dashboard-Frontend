@@ -1,27 +1,35 @@
-import { createFileRoute, useNavigate, Link } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, Link, notFound } from '@tanstack/react-router'
 import { getDetailApplication, getDownloadFile, deleteJobApplication } from '@/api/jobApplication'
 import { queryOptions, useSuspenseQuery, useMutation} from '@tanstack/react-query'
 import { StatusBadge } from '@/components/StatusBadge'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { toast } from 'sonner'
+import NotFound from '@/components/NotFound'
+import {z} from 'zod'
 
+const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i)
 const jobApplicationQueryOptions = (applicationId: string) => {
   return queryOptions({
     queryKey: ['applications', applicationId],
-    queryFn: () => getDetailApplication(applicationId),
+    queryFn: async () => await getDetailApplication(applicationId),
   })
 }
 
 
 export const Route = createFileRoute('/applications/$applicationId/')({
-    component: () => (
-      <ProtectedRoute>
-       <ApplicationDetailsPage/>
-      </ProtectedRoute>
-    ),
-  // loader: async ({params, context: {queryClient}}) => {
-  //   return queryClient.ensureQueryData(jobApplicationQueryOptions(params.applicationId));
-  // }
+  component: () => (
+    <ProtectedRoute>
+      <ApplicationDetailsPage/>
+    </ProtectedRoute>
+  ),
+  notFoundComponent: NotFound,
+  loader: async ({params, context: {queryClient}}) => {
+    // Block invalid IDs
+    if (!objectIdSchema.safeParse(params.applicationId).success) {
+      throw notFound()
+    }
+    return queryClient.ensureQueryData(jobApplicationQueryOptions(params.applicationId));
+  },
 })
 
 function ApplicationDetailsPage() {

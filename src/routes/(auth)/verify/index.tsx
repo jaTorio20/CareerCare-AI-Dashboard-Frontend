@@ -1,5 +1,5 @@
-import { createFileRoute, Link, useNavigate, useSearch } from '@tanstack/react-router'
-import { useState, useEffect } from 'react';
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
+import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { verifyUser, resendOtp } from '@/api/auth';
 import { useAuth } from '@/context/AuthContext';
@@ -23,12 +23,6 @@ function VerifyPage() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
-  // useEffect(() => {
-  //   const params = new URLSearchParams(window.location.search);
-  //   const emailParam = params.get('email');
-  //   if (emailParam) setEmail(emailParam);
-  // }, []);
-
 // mutation for verifying OTP
 const { mutateAsync: verifyMutate, isPending: isVerifying } = useMutation({
   mutationFn: verifyUser,
@@ -43,8 +37,9 @@ const { mutateAsync: verifyMutate, isPending: isVerifying } = useMutation({
     toast.success(`Account verified! Welcome, ${data.user.name}.`);
   },
   onError: (err: any) => {
-    setError(err.message);
-    toast.error("Verification failed. Please try again.");
+    // setError(err.message);
+    // toast.error("Verification failed. Please try again.");
+    toast.error(err.message || 'Verification failed.');
   }
 });
 
@@ -73,19 +68,8 @@ const { mutateAsync: verifyMutate, isPending: isVerifying } = useMutation({
   };
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto mt-5 p-2">
       <h1 className="text-3xl font-bold mb-6">Verify Account</h1>
-
-      {/* {error && (
-        <div className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4">
-          {error}
-        </div>
-      )}
-      {message && (
-        <div className="bg-green-100 text-green-700 px-4 py-2 rounded mb-4">
-          {message}
-        </div>
-      )} */}
 
       <form onSubmit={handleVerify} className="space-y-4">
         <input
