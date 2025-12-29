@@ -20,6 +20,8 @@ function VerifyPage() {
   // read email from query string (?email=...)
   const [email] = useState(searchEmail || "");
   const [otp, setOtp] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [message, setMessage] = useState('');
 
@@ -61,7 +63,7 @@ const { mutateAsync: verifyMutate, isPending: isVerifying } = useMutation({
     setError("");
     setMessage("");
     try {
-      await verifyMutate({ email, otp: otp.trim()});
+      await verifyMutate({ email, name, password, otp: otp.trim()});
     } catch (err: any) {
       console.log(err.message);
     }
@@ -78,9 +80,34 @@ const { mutateAsync: verifyMutate, isPending: isVerifying } = useMutation({
           readOnly
           className="w-full border border-gray outline-none rounded-md p-2 bg-gray-100"
         />
+
+        <input 
+          type="text" 
+          value={name} 
+          onChange={(e) => setName(e.target.value)}
+          placeholder='Name'
+          required
+          // autoComplete='off' 
+          className="w-full border
+          border-gray outline-none focus:border-blue-700 rounded-md p-2" 
+        />
+
+        <input 
+          type="password" 
+          value={password} 
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder='Password'
+          // autoComplete='off'
+          required
+          minLength={8}
+          className="w-full border
+          border-gray outline-none focus:border-blue-700 rounded-md p-2" 
+        />
+
         <input
           type="text"
           value={otp}
+          required
           onChange={(e) => setOtp(e.target.value)}
           placeholder="Enter OTP"
           className="w-full border border-gray outline-none focus:border-blue-700 rounded-md p-2"

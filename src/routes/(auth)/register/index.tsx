@@ -12,9 +12,7 @@ export const Route = createFileRoute('/(auth)/register/')({
 function RegisterPage() {
 const navigate = useNavigate();
 // const { setAccessToken, setUser } = useAuth();
-const [name, setName] = useState('');
 const [email, setEmail] = useState('');
-const [password, setPassword] = useState('');
 // const [error, setError] = useState('');
 
 const { mutateAsync, isPending } = useMutation({
@@ -38,7 +36,7 @@ const { mutateAsync, isPending } = useMutation({
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   try {
-    await mutateAsync({name, email, password}); //will take name, email, password from the form upon submission
+    await mutateAsync({email}); //will take name, email, password from the form upon submission
     
   } catch (err: any) {
       console.log(err.message);
@@ -58,16 +56,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         )
       } */}
       <form onSubmit={handleSubmit} className="space-y-4">
-        <input 
-          type="text" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)}
-          placeholder='Name'
-          // autoComplete='off' 
-          className="w-full border
-          border-gray outline-none focus:border-blue-700 rounded-md p-2" 
 
-        />
         <input 
           type="email" 
           value={email} 
@@ -77,16 +66,6 @@ const handleSubmit = async (e: React.FormEvent) => {
           className="w-full border
           border-gray outline-none focus:border-blue-700 rounded-md p-2" 
 
-        />
-        <input 
-          type="password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder='Password'
-          // autoComplete='off'
-          minLength={8}
-          className="w-full border
-          border-gray outline-none focus:border-blue-700 rounded-md p-2" 
         />
 
         <button disabled={isPending}

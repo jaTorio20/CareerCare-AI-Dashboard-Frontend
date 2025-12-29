@@ -1,19 +1,19 @@
 import api from "@/lib/axios";
 
 export const registerUser = async ({
-  name,
+  // name,
   email,
-  password
+  // password
 }: {
-  name: string;
+  // name: string;
   email: string;
-  password: string;
+  // password: string;
 }) => {
   try {
     const { data } = await api.post('/auth/register', {
-      name,
+      // name,
       email,
-      password,
+      // password,
     });
 
     return data;
@@ -28,14 +28,20 @@ export const registerUser = async ({
 // Verify OTP
 export const verifyUser = async ({
   email,
+  name,
+  password,
   otp,
   }: {
     email: string;
+    name: string;
+    password: string;
     otp: string;
   }) => {
     try {
       const { data } = await api.post("/auth/verify", {
         email,
+        name,
+        password,
         otp,
       });
 
