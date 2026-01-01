@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import ProtectedRoute from '@/components/ProtectedRoute'
-import { useQuery, useMutation, useQueryClient, queryOptions } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import {sendChatMessage, sendAudioMessage } from '@/api/interview'
 import { useState, useRef, useEffect } from 'react'
 import type { InterviewMessage } from '@/types'
@@ -28,15 +28,16 @@ function InterviewSessionsPage() {
   const queryClient = useQueryClient()
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null)
 
-  // Sidebar: fetch sessions
+  //  --------------- Sidebar: fetch sessions -------------
   const { data: sessions } = useQuery(sessionsQueryOptions())
 
-  // Chatroom: fetch messages for active session
+  // ----------- Chatroom: fetch messages for active session ----------
   const { data: messages = [] } = useQuery({
     ...messagesQueryOptions(activeSessionId!),
     enabled: !!activeSessionId,
   })
  
+  // ------------------ SEND TEXT MESSAGE ------------------
   const sendMessageMutation = useMutation({
     mutationFn: (text: string) =>
       sendChatMessage({ sessionId: activeSessionId!, text }),
@@ -83,6 +84,7 @@ function InterviewSessionsPage() {
     },
   });
 
+  // ---------------- SEND AUDIO -------------------
   const sendAudioMutation = useMutation({
     mutationFn: async (formData: FormData) => sendAudioMessage(formData),
     onMutate: async () => {
@@ -121,6 +123,7 @@ function InterviewSessionsPage() {
     },
   });
 
+  // ------------- DELETE SESSIONS -----------------
   const { mutateAsync: deleteMutate, isPending: isDeleting } = useMutation({
     mutationFn: (id: string) => deleteSessions(id),
     onSuccess: (_data, id) => {

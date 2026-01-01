@@ -5,7 +5,7 @@ import { logoutUser } from "@/api/auth";
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { UseProtectedNav } from './UseProtectedNav';
-import { Bot, Briefcase, Pencil, File } from 'lucide-react';
+import { Bot, Briefcase, Pencil, File, LogOut, ChevronDown } from 'lucide-react';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -107,74 +107,104 @@ const Header = () => {
           <div ref={guestDropdownRef} className="relative">
             <button
               onClick={() => setGuestDropdownOpen(v => !v)}
-              className="flex items-center gap-1 text-gray-700 hover:text-indigo-600 font-medium px-3 py-2"
+              className="cursor-pointer text-gray-700
+              flex items-center gap-1 font-medium px-3 py-2"
             >
               Menu
-              <svg
-                className={`w-4 h-4 transition-transform ${guestDropdownOpen ? "rotate-180" : ""}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+            <ChevronDown
+              className={`w-4 h-4 text-gray-800 hover:text-gray-600 transition-transform duration-200
+                group-hover:text-gray-700
+                ${guestDropdownOpen ? "rotate-180 text-indigo-600" : ""}
+            `}/>
+
             </button>
 
             {guestDropdownOpen && (
-              <div className="absolute right-0 top-full mt-2 w-40 rounded-md bg-white shadow-lg border z-50">
+              <div className="
+                absolute right-0 top-full mt-2 w-50
+                rounded-xl bg-white
+                border border-gray-200
+                shadow-lg
+                z-50
+                overflow-hidden
+              ">
                 <Link
                   to="/login"
                   onClick={() => setGuestDropdownOpen(false)}
-                  className="block px-4 py-2 text-sm hover:bg-gray-100"
+                  className="
+                    flex items-center gap-2
+                    px-4 py-2.5 text-sm text-gray-700
+                    hover:bg-gray-50 hover:text-indigo-600
+                    transition-colors
+                  "
                 >
                   Login
                 </Link>
+
+                <div className="h-px bg-gray-100" />
+
                 <Link
                   to="/register"
                   onClick={() => setGuestDropdownOpen(false)}
-                  className="block px-4 py-2 text-sm hover:bg-gray-100"
+                  className="
+                    flex items-center gap-2
+                    px-4 py-2.5 text-sm text-gray-700
+                    hover:bg-gray-50 hover:text-indigo-600
+                    transition-colors
+                  "
                 >
                   Register
                 </Link>
               </div>
             )}
+
           </div>
           ) : (
           <div ref={avatarDropdownRef} className="relative">
             <button
               onClick={() => setAvatarDropdownOpen(v => !v)}
               className="cursor-pointer
-              flex items-center focus:outline-none  hover:text-indigo-600 "
+              flex items-center focus:outline-none text-gray-800 hover:text-gray-600 "
             >
               <img
                 src={
                   user?.avatar?.url || "/user.png"
                 }
                 alt="User avatar"
-                className="w-9 h-9 rounded-full object-cover hover:ring-1 hover:ring-indigo-500 transition"
+                className="w-9 h-9 rounded-full object-cover transition"
               />
-              <svg
-                className={`w-4 h-4 transition-transform ${avatarDropdownOpen ? "rotate-180" : ""}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
+            <ChevronDown
+              className={`w-4 h-4 transition-transform duration-200
+                ${avatarDropdownOpen ? "rotate-180 text-indigo-600" : ""}
+            `}/>
+
             </button>
 
             {avatarDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-40 rounded-md bg-white shadow-lg border z-50">
-                <button
-                  onClick={() => {
-                    handleLogout();
-                    setAvatarDropdownOpen(false);
-                  }}
-                  className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                >
-                  Logout
-                </button>
+            <div className="absolute right-0 mt-3 w-54 rounded-xl bg-white shadow-lg border border-gray-100 z-50 overflow-hidden">
+              {/* User Info */}
+              <div className="px-4 py-3 border-b border-gray-100">
+                <p className="text-sm font-medium text-gray-800 truncate">
+                  {user.name}
+                </p>
+                <p className="text-xs text-gray-500 truncate">
+                  {user.email}
+                </p>
               </div>
+
+              {/* Actions */}
+              <button
+                onClick={() => {
+                  handleLogout();
+                  setAvatarDropdownOpen(false);
+                }}
+                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm
+                      text-red-600 hover:bg-red-50 transition-colors"
+              >
+              <LogOut className="w-4 h-4 text-red-500" />
+                Logout
+              </button>
+            </div>
             )}
           </div>
           )}
