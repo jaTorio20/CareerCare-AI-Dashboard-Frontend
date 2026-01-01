@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createSession } from "@/api/interview";
 import { toast } from "sonner";
+import { createPortal } from "react-dom";
 
 export function NewSessionButton({ onSessionCreated }: { onSessionCreated: (id: string) => void }) {
   const queryClient = useQueryClient();
@@ -43,8 +44,8 @@ export function NewSessionButton({ onSessionCreated }: { onSessionCreated: (id: 
         Start New Chat
       </button>
 
-      {open && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black/50">
+      {open && createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white rounded-lg p-6 w-96 shadow-lg">
             <h2 className="text-lg font-bold mb-4">Start New Interview</h2>
             <form
@@ -88,21 +89,24 @@ export function NewSessionButton({ onSessionCreated }: { onSessionCreated: (id: 
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="px-4 py-2 border rounded"
+                  className="cursor-pointer hover:bg-gray-200
+                  px-4 py-2 border rounded"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={createSessionMutation.isPending}
-                  className="px-4 py-2 bg-blue-600 text-white rounded"
+                  className="cursor-pointer hover:bg-blue-800
+                  px-4 py-2 bg-blue-600 text-white rounded"
                 >
                   {createSessionMutation.isPending ? "Creating..." : "Create"}
                 </button>
               </div>
             </form>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

@@ -2,11 +2,12 @@ import { createContext, useContext, useState, type ReactNode, useEffect } from "
 import { refreshAccessToken } from "@/api/auth";
 import { setStoredAccessToken } from "@/lib/authToken";
 import { toast } from "sonner";
+import type { User } from "@/types";
 
 export type AuthContextType = {
   accessToken: string | null;
   setAccessToken: (token: string | null) => void;
-  user: {id: string; email: string; name: string} | null;
+  user: User | null;
   setUser: (user: AuthContextType['user']) => void;
   isAuthLoading: boolean 
 }

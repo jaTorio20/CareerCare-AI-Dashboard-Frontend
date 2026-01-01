@@ -19,7 +19,7 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
   {/* Mobile Header */}
     <button
       onClick={() => setOpen(true)}
-      className="lg:hidden fixed z-40 m-2 md:m-0
+      className="lg:hidden fixed z-40 m-2
       rounded-full border bg-indigo-600 p-2
        cursor-pointer hover:scale-[1.2] transform duration-200 ease-in-out
         text-white shadow-lg hover:border-indigo-600 hover:bg-transparent

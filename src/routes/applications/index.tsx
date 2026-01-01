@@ -4,7 +4,6 @@ import { getJobApplication } from '@/api/jobApplication'
 import { Link } from '@tanstack/react-router'
 import { StatusBadge } from '@/components/StatusBadge'
 import ProtectedRoute from '@/components/ProtectedRoute'
-import NotFound from '@/components/NotFound'
 
 const jobApplicationQueryOptions = () => {
   return queryOptions({

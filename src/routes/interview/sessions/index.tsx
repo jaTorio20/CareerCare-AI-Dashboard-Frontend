@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import ProtectedRoute from '@/components/ProtectedRoute'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { getSessions, getSessionMessages, sendChatMessage, sendAudioMessage } from '@/api/interview'
+import { useQuery, useMutation, useQueryClient, queryOptions } from '@tanstack/react-query'
+import {sendChatMessage, sendAudioMessage } from '@/api/interview'
 import { useState, useRef, useEffect } from 'react'
 import type { InterviewMessage } from '@/types'
 import ResponsiveSidebar from '@/components/Interview/ResponsiveSidebar'
@@ -9,6 +9,8 @@ import AudioRecorder from '@/components/Interview/AudioRecorder'
 import AudioMessage from '@/components/Interview/AudioMessage'
 import { deleteSessions } from '@/api/interview'
 import AITypingIndicator from '@/components/Interview/AITypingIndicator'
+import { v4 as uuidv4 } from "uuid";
+import { sessionsQueryOptions, messagesQueryOptions } from '@/features/interview/interview.queries'
 
 export const Route = createFileRoute('/interview/sessions/')({
   component: () => (
@@ -16,6 +18,10 @@ export const Route = createFileRoute('/interview/sessions/')({
       <InterviewSessionsPage />
     </ProtectedRoute>
   ),
+  loader: async ({ context: { queryClient } }) => {
+    await queryClient.ensureQueryData(sessionsQueryOptions())
+    return null
+  },
 })
 
 function InterviewSessionsPage() {
@@ -23,18 +29,14 @@ function InterviewSessionsPage() {
   const [activeSessionId, setActiveSessionId] = useState<string | null>(null)
 
   // Sidebar: fetch sessions
-  const { data: sessions } = useQuery({
-    queryKey: ['sessions'],
-    queryFn: getSessions,
-  })
+  const { data: sessions } = useQuery(sessionsQueryOptions())
 
   // Chatroom: fetch messages for active session
-  const { data: messages } = useQuery({
-    queryKey: ['messages', activeSessionId],
-    queryFn: () => activeSessionId ? getSessionMessages(activeSessionId) : [],
+  const { data: messages = [] } = useQuery({
+    ...messagesQueryOptions(activeSessionId!),
     enabled: !!activeSessionId,
   })
-
+ 
   const sendMessageMutation = useMutation({
     mutationFn: (text: string) =>
       sendChatMessage({ sessionId: activeSessionId!, text }),
@@ -49,21 +51,31 @@ function InterviewSessionsPage() {
       ]);
 
       // Optimistically add user message
+      const tempMessageId = uuidv4();
       queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], (old = []) => [
         ...old,
-        { _id: "temp-user", 
+        { _id: tempMessageId, 
           sessionId: activeSessionId!,
           role: "user",
           text, 
           createdAt: new Date().toISOString() 
         },
       ]);
-      return { prevMessages };
+      return { prevMessages, tempMessageId };
     },
-    onSuccess: (data) => {
-      console.log("Mutation success:", data);
-      // Replace temp user message with actual + append AI reply
-      queryClient.invalidateQueries({ queryKey: ["messages", activeSessionId] });
+    onSuccess: (data, _text, context) => {
+      if (!data?.userMessage || !data?.aiMessage) return;
+
+      queryClient.setQueryData<InterviewMessage[]>(
+        ["messages", activeSessionId],
+        (old = []) => {
+          return old
+            .map(m =>
+              m._id === context?.tempMessageId ? data.userMessage : m
+            )
+            .concat(data.aiMessage);
+        }
+      );
     },
     onError: (_err, _text, context) => {
       // Rollback if error
@@ -71,35 +83,41 @@ function InterviewSessionsPage() {
     },
   });
 
-
   const sendAudioMutation = useMutation({
-    mutationFn: (formData: FormData) => sendAudioMessage(formData),
+    mutationFn: async (formData: FormData) => sendAudioMessage(formData),
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ["messages", activeSessionId] });
       const prevMessages = queryClient.getQueryData<InterviewMessage[]>(["messages", activeSessionId]);
 
+      const tempAudioId = uuidv4();
       queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], (old = []) => [
         ...old,
         {
-          _id: "temp-audio",
+          _id: tempAudioId,
           sessionId: activeSessionId!,
           role: "user",
           text: "[sending audio…]",
           createdAt: new Date().toISOString(),
         },
       ]);
-      return { prevMessages };
+      return { prevMessages, tempAudioId };
     },
 
-    onSuccess: (data) => {
-      if (!data?.userMessage || !data?.aiMessage) {
-        console.error("Invalid response:", data);
-        return;
-      }
-      queryClient.invalidateQueries({ queryKey: ["messages", activeSessionId] });
+    onSuccess: (data, _variables, context) => {
+      if (!data?.userMessage || !data?.aiMessage || !context?.tempAudioId) return;
+
+      // Replace temporary message with actual audio message
+      queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], (old = []) =>
+        old
+          .map(m => (m._id === context.tempAudioId ? data.userMessage : m))
+          .concat(data.aiMessage)
+      );
     },
-    onError: (_err, _formData, context) => {
-      queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], context?.prevMessages ?? []);
+    onError: (_err, _variables, context) => {
+      // Remove temporary message if sending failed
+      queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], (old = []) =>
+        old?.filter(m => m._id !== context?.tempAudioId) ?? []
+      );
     },
   });
 
@@ -155,11 +173,11 @@ function InterviewSessionsPage() {
 
   //---------------- SCROLL TO LATEST MESSAGE --------------
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages, sendMessageMutation.isSuccess]);
+    if (!activeSessionId) return;
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, activeSessionId]);
 
 
   return (
@@ -180,7 +198,7 @@ function InterviewSessionsPage() {
       <>
         {/* Messages */}
         <div className="flex-1 overflow-y-auto flex flex-col justify-center px-4">
-          {(!messages || messages.length === 0) ? (
+          {messages.length === 0 ? (
             <div className="text-center text-gray-400 text-sm">
               How can I help you?
             </div>
@@ -202,10 +220,14 @@ function InterviewSessionsPage() {
                         : "bg-white text-gray-800 rounded-bl-md border"
                       }`}
                   >
-                    <p className="whitespace-pre-wrap">{m.text ?? ""}</p>
+                    {/* Only show text if this is a text message*/}
+                    {!m.audioUrl && m.text && (
+                      <p className="whitespace-pre-wrap">{m.text}</p>
+                    )}
 
+                    {/* Only show audio player if message has audio */}
                     {m.audioUrl && (
-                      <div className="mt-2">
+                      <div className="">
                         <AudioMessage
                           sessionId={activeSessionId}
                           audioKey={m.audioUrl}
@@ -219,7 +241,7 @@ function InterviewSessionsPage() {
           )}
 
           {/* AI Typing */}
-          {sendMessageMutation.isPending && (
+          {sendMessageMutation.isPending && !sendAudioMutation.isPending && (
             <div className="flex justify-start">
               <div className="rounded-2xl border bg-white px-4 py-2">
                 <AITypingIndicator />

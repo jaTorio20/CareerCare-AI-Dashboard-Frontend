@@ -1,3 +1,17 @@
+export interface UserAvatar {
+  url?: string;
+  filename?: string;
+}
+
+export interface User {
+  id: string;
+  email: string;
+  name?: string;
+  avatar?: UserAvatar;
+  role?: "user" | "admin";
+}
+
+
 // Base analysis type
 export type ResumeAnalysis = {
   atsFriendly: boolean;
