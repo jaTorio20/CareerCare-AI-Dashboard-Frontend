@@ -22,8 +22,8 @@ function VerifyPage() {
   const [otp, setOtp] = useState('');
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
+  const [, setError] = useState('');
+  const [, setMessage] = useState('');
 
 // mutation for verifying OTP
 const { mutateAsync: verifyMutate, isPending: isVerifying } = useMutation({

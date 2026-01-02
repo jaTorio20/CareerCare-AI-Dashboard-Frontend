@@ -1,6 +1,5 @@
 import api from "@/lib/axios";
 import type { ResumeEntry, ResumeAnalysis } from "@/types";
-import { getStoredAccessToken } from "@/lib/authToken";
 
 // Analyze resume (preview only, not saved)
 export async function analyzeResume({
