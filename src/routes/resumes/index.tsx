@@ -3,6 +3,7 @@ import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { getResumes } from '@/api/resumes'
 import { Link } from '@tanstack/react-router'
 import ProtectedRoute from '@/components/ProtectedRoute'
+import { Plus } from 'lucide-react'
 
 const resumeQueryOptions = () => {
   return queryOptions({
@@ -25,9 +26,9 @@ export const Route = createFileRoute('/resumes/')({
     </ProtectedRoute>
   ),
 
-  loader: async ({ context: { queryClient } }) => { //prefetching for faster load
-    return queryClient.ensureQueryData(resumeQueryOptions())
-  }
+  // loader: async ({ context: { queryClient } }) => { //prefetching for faster load
+  //   return queryClient.ensureQueryData(resumeQueryOptions())
+  // }
 })
 
 function ResumesPage() {
@@ -46,9 +47,10 @@ function ResumesPage() {
     </h1>
     <Link
       to="/resumes/analyze"
-      className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition-colors"
+      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition-colors"
     >
-      + Upload Resume
+      <Plus className="w-4 h-4" />
+      <span className="hidden md:inline">+ Upload Resume</span>
     </Link>
   </div>
 

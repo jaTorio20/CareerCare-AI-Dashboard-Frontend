@@ -52,10 +52,29 @@ export async function createJobApplication({
 }
 
 //GET all the job application
-export const getJobApplication = async (): Promise<JobApplicationEntry[]> => {
-  const {data} = await api.get(`/job-application`);
-  return data;
+interface JobApplicationPageData {
+  data: JobApplicationEntry[];
+  nextCursor: string | null;
 }
+
+interface GetJobApplicationParams {
+  cursor?: string;
+  limit?: number;
+  search?: string;
+}
+
+export const getJobApplication = async ({
+  cursor,
+  limit = 9,
+  search = '',
+}: GetJobApplicationParams): Promise<JobApplicationPageData> => {
+  // await new Promise((resolve) => setTimeout(resolve, 3000));
+  const { data } = await api.get('/job-application', {
+    params: { cursor, limit, search },
+  });
+  return data;
+};
+
 
 //GET detail job application
 export const getDetailApplication = async (id: string): Promise<JobApplicationEntry> => {

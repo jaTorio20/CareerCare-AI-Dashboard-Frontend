@@ -18,10 +18,10 @@ export const Route = createFileRoute('/interview/sessions/')({
       <InterviewSessionsPage />
     </ProtectedRoute>
   ),
-  loader: async ({ context: { queryClient } }) => {
-    await queryClient.ensureQueryData(sessionsQueryOptions())
-    return null
-  },
+  // loader: async ({ context: { queryClient } }) => {
+  //   await queryClient.ensureQueryData(sessionsQueryOptions())
+  //   return null
+  // },
 })
 
 function InterviewSessionsPage() {

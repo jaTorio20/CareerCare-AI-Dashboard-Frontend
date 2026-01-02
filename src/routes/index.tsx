@@ -1,14 +1,24 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { FileText, FileSignature, Briefcase, Paperclip, Mic  } from 'lucide-react' 
-import { UseProtectedNav } from '@/components/UseProtectedNav'
-
+// import { UseProtectedNav } from '@/components/UseProtectedNav'
+import { ProtectedLink } from '@/components/ProtectedLink'
 
 export const Route = createFileRoute('/')({
+  head: () => ({
+    title: 'CareerCare - AI Job Application & Resume Dashboard',
+    meta: [
+      {
+        name: 'description',
+        content:
+          'CareerCare helps you analyze resumes, generate cover letters, track job applications, and practice interviews using AI.',
+      },
+    ],
+  }),
   component: App,
 })
 
 function App() {
-  const handleProtectedNav = UseProtectedNav();
+  // const handleProtectedNav = UseProtectedNav();
   return (
   <div className="min-h-screen mt-5 flex flex-col">
       {/* Hero Section */}
@@ -23,18 +33,18 @@ function App() {
         </p>
         {/* Call to Action */}
         <div className="mt-8 flex justify-center gap-4">
-          <button
-            onClick={() => handleProtectedNav("/resumes/analyze")}
+          <ProtectedLink
+            to="/resumes/analyze"
             className="px-6 py-3 rounded-lg cursor-pointer bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition"
           >
             Get Started
-          </button>
-          <button
-            onClick={() => handleProtectedNav("/applications")}
-            className="px-6 py-3 rounded-lg cursor-pointer bg-gray-200 text-gray-800 font-medium hover:bg-gray-300 transition"
+          </ProtectedLink>
+          <ProtectedLink
+            to="/applications"
+            className="px-6 py-3 rounded-lg bg-gray-200 text-gray-800 font-medium hover:bg-gray-300 transition"
           >
             View Applications
-          </button>
+          </ProtectedLink>
         </div>
       </div>
     </section>
@@ -44,8 +54,8 @@ function App() {
       <main className="grow">
         <div className="max-w-7xl mx-auto px-6 py-18 grid gap-15 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
           {/* Resume Analyzer */}
-          <button
-            onClick={() => handleProtectedNav('/resumes/analyze')}
+          <ProtectedLink
+            to='/resumes/analyze'
             className="relative transform rotate-1 hover:rotate-0 cursor-pointer
             group block bg-white rounded-lg shadow hover:shadow-md 
             transition p-6 text-center border border-gray-200"
@@ -58,11 +68,11 @@ function App() {
             <p className="text-gray-600">
               Upload your resume and get AI-powered insights to improve your chances.
             </p>
-          </button>
+          </ProtectedLink>
 
           {/* Generate Cover Letter */}
-          <button
-            onClick={() => handleProtectedNav('/cover-letter/generate')}
+          <ProtectedLink
+            to='/cover-letter/generate'
             className="relative transform -rotate-1 hover:rotate-0 cursor-pointer
             group block bg-white rounded-lg shadow hover:shadow-md 
             transition p-6 text-center border border-gray-200"
@@ -75,11 +85,11 @@ function App() {
             <p className="text-gray-600">
               Create tailored cover letters instantly with AI assistance.
             </p>
-          </button>
+          </ProtectedLink>
 
           {/* Job Application */}
-          <button
-            onClick={() => handleProtectedNav('/applications')}
+          <ProtectedLink
+            to='/applications'
             className="relative transform rotate-1 hover:rotate-0 cursor-pointer
             group block bg-white rounded-lg shadow hover:shadow-md 
             transition p-6 text-center border border-gray-200"
@@ -93,10 +103,10 @@ function App() {
             <p className="text-gray-600">
               Manage and track your job applications in one place.
             </p>
-          </button>
+          </ProtectedLink>
                     {/* Interview Sessions */}
-          <button
-            onClick={() => handleProtectedNav('/interview/sessions')}
+          <ProtectedLink
+            to='/interview/sessions'
             className="relative transform -rotate-1 hover:rotate-0 cursor-pointer
             group block bg-white rounded-lg shadow hover:shadow-md 
             transition p-6 text-center border border-gray-200"
@@ -105,7 +115,7 @@ function App() {
             <Mic className="mx-auto mb-4 w-16 h-16 text-purple-500 group-hover:text-purple-600 transition-colors" />
             <h2 className="text-xl font-semibold mb-2 text-gray-800">Interview Practice</h2>
             <p className="text-gray-600">Prepare with AI-generated questions and feedback to ace your interviews.</p>
-          </button>
+          </ProtectedLink>
         </div>
       </main>
     </div>

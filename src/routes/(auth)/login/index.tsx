@@ -19,7 +19,6 @@ function LoginPage() {
   const { setAccessToken, setUser } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
   // If redirect param exists, go there. Otherwise fallback to /
   const redirectTo = search?.redirect || "/";
 

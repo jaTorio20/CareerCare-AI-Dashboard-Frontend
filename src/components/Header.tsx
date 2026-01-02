@@ -4,7 +4,7 @@ import { useAuth } from "@/context/AuthContext";
 import { logoutUser } from "@/api/auth";
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
-import { UseProtectedNav } from './UseProtectedNav';
+import { ProtectedLink } from './ProtectedLink';
 import { Bot, Briefcase, Pencil, File, LogOut, ChevronDown } from 'lucide-react';
 
 const Header = () => {
@@ -32,7 +32,7 @@ const Header = () => {
     logoutMutation.mutate();
   };
 
-  const handleProtectedNav = UseProtectedNav();
+  // const handleProtectedNav = UseProtectedNav();
 
   // ACTIVE NAV BUTTON MD TO LARGE SCREEN
   const navItems = [
@@ -77,9 +77,9 @@ const Header = () => {
 
   return (   
     <header className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
         {/* Logo */}
-        <Link to="/" className="text-xl border-b-amber-300 font-semibold text-indigo-600">
+        <Link to="/" className="text-xl font-semibold text-indigo-600">
           CareerCare
         </Link>
 
@@ -89,13 +89,13 @@ const Header = () => {
             {navItems.map(item => {
               const isActive = pathname.startsWith(item.path);
               return (
-                  <button
+                  <ProtectedLink
                     key={item.path}
-                    onClick={() => handleProtectedNav(item.path)}
+                    to={item.path}
                     className={isActive ? active : base}
                   >
                     {item.label}
-                  </button>
+                  </ProtectedLink>
               );
             })}
             
@@ -231,20 +231,20 @@ const Header = () => {
         </button>
       </div>
 
-      <div className={ `md:hidden bg-white border-t border-gray-200 
+      <div className={ `md:hidden bg-white 
         overflow-hidden transition-all duration-300 ease-linear `}>
-        <nav className=" bg-white border-t border-gray-200 flex justify-around py-2 md:hidden">
+        <nav className=" bg-white border-gray-200 flex justify-around py-2 md:hidden">
             {navItemsMobile.map(item => {
               const isActive = pathnameMobile.startsWith(item.path);
               return (
-                  <button
+                  <ProtectedLink
                     key={item.path}
-                    onClick={() => handleProtectedNav(item.path)}
+                    to={item.path}
                     className={`flex flex-col items-center gap-1 ${isActive ? activeMobile : baseMobile}`}
                   >
                     <item.icon className="h-6 w-6" />
                     <span className="text-xs">{item.label}</span>
-                  </button>
+                  </ProtectedLink>
               );
             })}
         </nav>
