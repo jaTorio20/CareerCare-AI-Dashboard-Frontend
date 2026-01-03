@@ -5,6 +5,7 @@ import { loginUser } from '@/api/auth'
 import { useAuth } from '@/context/AuthContext'
 import {z} from "zod";
 import { toast } from 'sonner'
+import { Loader } from 'lucide-react'
 
 export const Route = createFileRoute('/(auth)/login/')({
   validateSearch: z.object({
@@ -38,9 +39,20 @@ function LoginPage() {
     },
   });
 
-  const googleLogin = async () => {
+  const { mutateAsync: googleAsync, isPending: isRedirecting } = useMutation({
+    mutationFn: async () => {
     sessionStorage.setItem("justLoggedIn", "true");
-    window.location.href = `${import.meta.env.VITE_API_URL}/api/auth/google?redirect=${encodeURIComponent(redirectTo)}`;
+    return`${import.meta.env.VITE_API_URL}/api/auth/google?redirect=${encodeURIComponent(redirectTo)}`;
+    },
+    onSuccess: (url) => window.location.href = url,
+    onError: (err) => {
+      console.error("Google login failed:", err);
+      toast.error("Google login failed. Please try again.");    
+    },
+  });
+    
+  const googleLogin = async () => {
+    await googleAsync();
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -71,6 +83,7 @@ function LoginPage() {
           value={email} 
           onChange={(e) => setEmail(e.target.value)}
           placeholder='Email'
+          required
           // autoComplete='off'          
           className="w-full border
           border-gray outline-none focus:border-blue-700 rounded-md p-2" 
@@ -80,27 +93,41 @@ function LoginPage() {
           type="password" 
           value={password} 
           onChange={(e) => setPassword(e.target.value)}
+          required
           placeholder='Password'
           // autoComplete='off'
           className="w-full border
           border-gray outline-none focus:border-blue-700 rounded-md p-2" 
         />
 
-        <button disabled={isPending}
+        <button 
+          disabled={isPending}
           className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-semibold px-4 py-2
-          rounded-md w-full disabled:opacity-50">
-          {
-            isPending ? 'Logging in...' : 'Login'
-          }
+          rounded-md w-full disabled:opacity-50 flex items-center justify-center">
+          {isPending ? ( 
+            <span className="flex items-center  gap-2">
+              <Loader className="animate-spin h-5 w-5" /> 
+              Logging in... 
+            </span>
+          ) :  "Login" } 
         </button>
+
       </form>
 
       <button
         onClick={googleLogin}
-        className="bg-red-600 hover:bg-red-700 cursor-pointer
-         text-white font-semibold px-4 py-2 rounded-md w-full mt-4"
+        disabled={isRedirecting}
+        className={` flex items-center justify-center
+          bg-red-600 hover:bg-red-700 cursor-pointer
+        text-white font-semibold px-4 py-2 rounded-md w-full mt-4
+        ${isRedirecting ? "opacity-50 cursor-not-allowed" : ""}`}
       >
-        Login with Google
+        {isRedirecting ? (
+          <span className="flex items-center gap-2">
+            <Loader className="animate-spin h-5 w-5" /> 
+            Redirecting... 
+          </span>
+        ) : "Login with Google"}
       </button>
 
       <p className="text-sm text-center mt-4 space-x-0.5">

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { getPasswordToken, saveNewPassword } from "@/api/auth";
 import { toast } from "sonner";
+import { Loader } from "lucide-react";
 
 export const Route = createFileRoute("/(auth)/reset-password/$token")({
   component: ResetPasswordPage,
@@ -70,6 +71,7 @@ function ResetPasswordPage() {
         <input
           type="password"
           value={password}
+          required
           minLength={8}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="New Password"
@@ -78,9 +80,16 @@ function ResetPasswordPage() {
 
         <button
           disabled={isPending}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded-md w-full disabled:opacity-50"
+          className=" flex items-center justify-center
+          bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 
+          py-2 rounded-md w-full disabled:opacity-50"
         >
-          {isPending ? "Resetting..." : "Reset Password"}
+          {isPending ? (
+            <span className="flex items-center gap-2">
+              <Loader className="animate-spin h-5 w-5" /> 
+              Sending... 
+            </span>
+            ) : "Reset Password"}
         </button>
       </form>
     </div>

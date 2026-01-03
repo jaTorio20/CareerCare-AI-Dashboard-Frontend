@@ -5,7 +5,7 @@ import { logoutUser } from "@/api/auth";
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import { ProtectedLink } from './ProtectedLink';
-import { Bot, Briefcase, Pencil, File, LogOut, ChevronDown } from 'lucide-react';
+import { Bot, Briefcase, Pencil, File, LogOut, ChevronDown, Loader } from 'lucide-react';
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,7 +16,7 @@ const Header = () => {
 
   const { user, setUser, setAccessToken } = useAuth();
 
-  const logoutMutation = useMutation({
+  const {mutateAsync, isPending} = useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
       setAccessToken(null);
@@ -28,8 +28,8 @@ const Header = () => {
       console.error("Logout failed:", err);
     }
   });
-  const handleLogout = () => {
-    logoutMutation.mutate();
+  const handleLogout = async () => {
+    await mutateAsync();
   };
 
   // const handleProtectedNav = UseProtectedNav();
@@ -194,15 +194,28 @@ const Header = () => {
 
               {/* Actions */}
               <button
+                disabled={isPending}
                 onClick={() => {
                   handleLogout();
                   setAvatarDropdownOpen(false);
                 }}
-                className="w-full flex items-center gap-2 px-4 py-2.5 text-sm
-                      text-red-600 hover:bg-red-50 transition-colors"
+                className="disabled:opacity-50 disabled:cursor-not-allowed
+                w-full flex items-center gap-2 px-4 py-2.5 text-sm
+              text-red-600 hover:bg-red-50 transition-colors"
               >
-              <LogOut className="w-4 h-4 text-red-500" />
-                Logout
+              {/* 
+                Logout */}
+              {isPending ? (
+                <span className="flex items-center gap-2 ">
+                  <Loader className="animate-spin h-5 w-5 text-red-500" /> 
+                  Logging out...
+                </span>
+                ) : (
+                  <span className='flex items-center gap-2'>
+                    <LogOut className="w-4 h-4 text-red-500" />
+                    Logout
+                  </span>
+                )}
               </button>
             </div>
             )}
@@ -299,13 +312,26 @@ const Header = () => {
                 <>
                   {/* <span className="text-gray-700 font-medium">Welcome, {user.name}</span> */}
                   <button
+                    disabled={isPending}
                     onClick={() => {
                       handleLogout();
                       setIsOpen(false);
                     }}
-                    className="text-red-600 hover:text-red-900 font-medium px-3 py-2 cursor-pointer transition-colors"
+                    className="text-red-600
+                     hover:text-red-900 font-medium px-3 
+                     py-2 cursor-pointer transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                    Logout
+                    {isPending ? (
+                      <span className="flex items-center gap-2">
+                        <Loader className="animate-spin h-5 w-5 text-red-500" /> 
+                        Logging out...
+                      </span>
+                      ) : (
+                      <span className='flex items-center gap-2'>
+                        <LogOut className="w-4 h-4 text-red-500" />
+                        Logout
+                      </span>
+                    )}
                   </button>
                 </>
               )}

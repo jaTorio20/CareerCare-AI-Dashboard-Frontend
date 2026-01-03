@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { registerUser } from '@/api/auth';
 import { toast } from 'sonner';
+import { Loader } from 'lucide-react';
 
 export const Route = createFileRoute('/(auth)/register/')({
   
@@ -62,6 +63,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           value={email} 
           onChange={(e) => setEmail(e.target.value)}
           placeholder='Email'
+          required
           // autoComplete='off'          
           className="w-full border
           border-gray outline-none focus:border-blue-700 rounded-md p-2" 
@@ -69,9 +71,15 @@ const handleSubmit = async (e: React.FormEvent) => {
         />
 
         <button disabled={isPending}
-          className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2
+          className=" flex items-center justify-center
+          bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2
           rounded-md w-full disabled:opacity-50">
-          { isPending ? 'Registering...' : 'Register' }
+          { isPending ? (
+            <span className="flex items-center  gap-2">
+              <Loader className="animate-spin h-5 w-5" /> 
+              Registering... 
+            </span>
+          ) : 'Register' }
         </button>
       </form>
 
