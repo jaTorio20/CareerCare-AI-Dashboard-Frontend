@@ -4,6 +4,8 @@ import { queryOptions, useSuspenseQuery } from '@tanstack/react-query'
 import { Link } from '@tanstack/react-router'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { Plus } from 'lucide-react'
+import { CoverLetterSkeleton } from '@/components/cover-letter/CoverLetterSkeleton'
+import { Suspense } from 'react'
 
 const coverLetterQueryOptions = () => {
   return queryOptions({
@@ -21,7 +23,9 @@ export const Route = createFileRoute('/cover-letter/')({
 
   component: () => (
     <ProtectedRoute>
-      <CoverLetterPage/>
+      <Suspense fallback={<CoverLetterSkeleton />}>
+        <CoverLetterPage />
+      </Suspense>
     </ProtectedRoute>
   ),
 

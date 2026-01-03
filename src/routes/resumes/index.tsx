@@ -4,6 +4,8 @@ import { getResumes } from '@/api/resumes'
 import { Link } from '@tanstack/react-router'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { Plus } from 'lucide-react'
+import { ResumeSkeleton } from '@/components/Resume/ResumeSkeleton'
+import { Suspense } from 'react'
 
 const resumeQueryOptions = () => {
   return queryOptions({
@@ -22,7 +24,9 @@ export const Route = createFileRoute('/resumes/')({
   // component: ResumesPage,
     component: () => (
     <ProtectedRoute>
-      <ResumesPage />
+      <Suspense fallback={<ResumeSkeleton />}>
+        <ResumesPage />
+      </Suspense>
     </ProtectedRoute>
   ),
 

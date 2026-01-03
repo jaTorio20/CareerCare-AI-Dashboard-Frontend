@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate, Link, notFound } from '@tanstack/react-router'
 import { getDetailApplication, getDownloadFile, deleteJobApplication } from '@/api/jobApplication'
 import { queryOptions, useSuspenseQuery, useMutation} from '@tanstack/react-query'
-import { StatusBadge } from '@/components/StatusBadge'
+import { StatusBadge } from '@/components/Job-Application/StatusBadge'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { toast } from 'sonner'
 import NotFound from '@/components/NotFound'

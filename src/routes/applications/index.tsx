@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { getJobApplication } from '@/api/jobApplication'
 import { Link } from '@tanstack/react-router'
-import { StatusBadge } from '@/components/StatusBadge'
+import { StatusBadge } from '@/components/Job-Application/StatusBadge'
 import ProtectedRoute from '@/components/ProtectedRoute'
 import { useEffect, useRef, useState } from 'react'
 import { Plus } from 'lucide-react'

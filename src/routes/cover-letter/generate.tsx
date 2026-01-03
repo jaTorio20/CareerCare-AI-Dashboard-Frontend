@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { generateCoverLetter, createCoverLetter } from '@/api/coverLetter';
 import type { CoverLetterEntry } from '@/types';
-import CoverLetterEditor from '@/components/CoverLetterEditor';
+import CoverLetterEditor from '@/components/cover-letter/CoverLetterEditor';
 import { exportDocx } from '@/utils/exporterDocument';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { toast } from 'sonner';
