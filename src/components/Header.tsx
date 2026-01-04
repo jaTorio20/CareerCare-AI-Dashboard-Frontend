@@ -76,7 +76,8 @@ const Header = () => {
 
 
   return (   
-    <header className="bg-white shadow-md sticky top-0 z-50">
+    <header id='app-header'
+    className="bg-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="text-xl font-semibold text-indigo-600">

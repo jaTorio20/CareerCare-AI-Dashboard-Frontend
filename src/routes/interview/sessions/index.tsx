@@ -184,7 +184,8 @@ function InterviewSessionsPage() {
 
 
   return (
-<div className="flex h-[80vh] md:h-[85vh] lg:h-[80vh] bg-gray-50 w-full">
+<div className="flex h-[calc(97dvh-var(--header-h))] bg-gray-50 w-full overflow-hidden">
+
   {/* Sidebar */}
   <ResponsiveSidebar
     sessions={sessions}
@@ -196,13 +197,13 @@ function InterviewSessionsPage() {
   />
 
   {/* Chat Area */}
-  <main className="flex-1 flex flex-col ">
+  <main className="flex-1 flex justify-center">
     {activeSessionId ? (
-      <>
+      <section className='max-w-3xl w-full justify-items-center flex flex-col'>
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto flex flex-col justify-center px-4">
+        <div className="flex-1 overflow-y-auto flex flex-col px-4 pt-2 pb-4">
           {messages.length === 0 ? (
-            <div className="text-center text-gray-400 text-sm">
+            <div className="text-center items-center text-gray-400 text-sm pt-20">
               How can I help you?
             </div>
           ) : (
@@ -301,11 +302,13 @@ function InterviewSessionsPage() {
               />
             </div>
           </form>
-      </>
+      </section>
     ) : (
-      <div className="flex flex-1 items-center justify-center text-gray-500 text-sm">
-        Select or start a session to begin your AI interview
-      </div>
+      <section className='max-w-3xl justify-items-center flex flex-col'>
+        <div className="flex flex-1 items-center justify-center text-gray-500 text-sm">
+          Select or start a session to begin your AI interview
+        </div>
+      </section>
     )}
   </main>
 </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { NewSessionButton } from "@/components/Interview/NewSessionButton";
 import type { InterviewSession } from "@/types";
 import { Brain, Trash } from "lucide-react";
+import { getSessionLabel } from '@/utils/interviews/interview'
 
 interface ResponsiveSidebarProps {
   sessions: InterviewSession[] | undefined;
@@ -30,7 +31,7 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
 
 
  {/* Desktop Sidebar */}
-<aside className="hidden lg:flex w-72 flex-col bg-white border-r 
+<aside className="hidden lg:flex w-62 flex-col bg-white
   shadow-lg p-4 rounded-r-2xl ">
   {/* New Session Button */}
   <NewSessionButton
@@ -55,7 +56,7 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
         >
           {/* Session Info */}
           <span className="truncate text-sm font-medium">
-            {s.jobTitle} <span className="text-gray-400">@</span> {s.companyName}
+             {getSessionLabel(s)}
           </span>
 
           {/* Delete Button */}
@@ -125,8 +126,8 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
                   : "text-gray-700 hover:bg-indigo-50 hover:text-indigo-700"
               }`}
             >
-            <span className="truncate">
-              {s.jobTitle} <span className="text-gray-400">@</span> {s.companyName}
+            <span className="truncate text-sm font-medium">
+                {getSessionLabel(s)}
             </span>          
             <button
               onClick={(e) => {

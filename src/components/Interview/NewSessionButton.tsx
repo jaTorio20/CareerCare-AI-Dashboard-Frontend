@@ -22,17 +22,34 @@ export function NewSessionButton({ onSessionCreated }: { onSessionCreated: (id: 
       setOpen(false); // close modal
       setForm({ jobTitle: "", companyName: "", topic: "", difficulty: "none" });
     },
-    onError: (err) => {
-      toast.error("Failed to create interview room." + err.message);
+    onError: (err: any) => {
+      const message =
+        err?.response?.data?.error || err.message || "Unknown error";
+      toast.error("Failed to create interview room. " + message);
     }
+
   });
 
   const formSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    if (form) {
-      await createSessionMutation.mutateAsync(form);
+
+    // At least one of the three fields must be filled
+    if (!form.jobTitle && !form.companyName && !form.topic) {
+      toast.error("At least one of Job Title, Company Name, or Topic is required.");
+      return;
     }
-  };
+
+    // Prepare payload with defaults
+    const payload = {
+      jobTitle: form.jobTitle || "none",
+      companyName: form.companyName || "none",
+      topic: form.topic || "none",
+      difficulty: form.difficulty || "none",
+    };
+
+    await createSessionMutation.mutateAsync(payload);
+};
+
 
 
   return (
@@ -54,15 +71,15 @@ export function NewSessionButton({ onSessionCreated }: { onSessionCreated: (id: 
             >
               <input
                 type="text"
-                placeholder="Job Title"
+                placeholder="Job Title "
                 value={form.jobTitle}
                 onChange={(e) => setForm({ ...form, jobTitle: e.target.value })}
                 className="w-full border p-2 rounded"
-                required
+                
               />
               <input
                 type="text"
-                placeholder="Company Name"
+                placeholder="Company Name "
                 value={form.companyName}
                 onChange={(e) => setForm({ ...form, companyName: e.target.value })}
                 className="w-full border p-2 rounded"

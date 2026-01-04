@@ -3,6 +3,7 @@ import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import { QueryClient } from '@tanstack/react-query'
 import Header from '../components/Header'
+import { useHeaderHeight } from '@/hooks/header/useHeaderHeight'
 
 type RouterContext = {
   queryClient: QueryClient
@@ -27,12 +28,13 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 })
 
 function RootLayout () {
+  useHeaderHeight();
   return (
     <div className='flex flex-col'>
       <HeadContent/>
       <Header/>
-      <main className="flex justify-center md:px-6">
-        <div className="w-full max-w-7xl rounded-2xl md:px-8">
+      <main className="flex justify-center ">
+        <div className="w-full max-w-full rounded-2xl">
           <Outlet />
         </div>
       </main>
