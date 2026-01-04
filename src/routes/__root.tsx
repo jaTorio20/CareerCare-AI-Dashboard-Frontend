@@ -12,15 +12,42 @@ type RouterContext = {
 
 export const Route = createRootRouteWithContext<RouterContext>()({
   head: () => ({
+    title: 'CareerCare AI — Resume Analyzer & AI Interview',
     meta: [
-    {
-      name: 'description',
-      content: 'AI-powered automation for resumes, cover letters, and job application tracking in one dashboard.'
-    },
-    {
-      title: 'CareerCare AI Dashboard'
-    }
-  ]
+      // Main SEO
+      { name: 'description', content: 'Analyze resumes, generate cover letters, and practice AI interviews with CareerCare AI.' },
+      { name: 'keywords', content: 'AI resume analyzer, cover letter generator, job application tracker, AI interview practice, CareerCare AI' },
+
+      // Open Graph (Facebook, LinkedIn, Messenger)
+      { property: 'og:type', content: 'website' },
+      { property: 'og:title', content: 'CareerCare AI — Resume Analyzer & AI Interview' },
+      { property: 'og:description', content: 'AI-powered platform for resumes, cover letters, and interviews.' },
+      { property: 'og:image', content: 'https://career-care-ai.vercel.app/og-image.png' },
+      { property: 'og:url', content: 'https://career-care-ai.vercel.app/' },
+
+      // Twitter / X
+      { name: 'twitter:card', content: 'summary_large_image' },
+      { name: 'twitter:title', content: 'CareerCare AI — Resume Analyzer & AI Interview' },
+      { name: 'twitter:description', content: 'AI-powered platform for resumes, cover letters, and interviews.' },
+      { name: 'twitter:image', content: 'https://career-care-ai.vercel.app/og-image.png' },
+
+      // PWA / mobile hints
+      { name: 'theme-color', content: '#4f46e5' },
+    ],
+    //  structured data
+    scripts: [
+      {
+        tagName: 'script',
+        type: 'application/ld+json',
+        innerHTML: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          "name": "CareerCare AI",
+          "url": "https://career-care-ai.vercel.app/",
+          "description": "Analyze resumes, generate cover letters, track job applications, and practice AI interviews via text or voice."
+        })
+      }
+    ]
   }),
 
   component: RootLayout,
