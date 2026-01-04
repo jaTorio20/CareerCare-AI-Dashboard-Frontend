@@ -2,8 +2,8 @@ export const CoverLetterSkeleton = function () {
   return (
     <div className="max-w-5xl mx-auto px-6 py-10">
       <div className="flex justify-between mb-8">
-        <div className="h-8 w-48 bg-gray-300 rounded animate-pulse" />
-        <div className="h-10 w-32 bg-gray-300 rounded animate-pulse" />
+        <div className="h-8 w-40 md:w-56 bg-gray-300 rounded animate-pulse" />
+        <div className="h-8 w-15 md:w-40 bg-gray-300 rounded animate-pulse" />
       </div>
 
       <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

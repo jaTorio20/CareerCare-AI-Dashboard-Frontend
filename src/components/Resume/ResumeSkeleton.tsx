@@ -3,8 +3,8 @@ export function ResumeSkeleton() {
     <div className="max-w-7xl mx-auto px-6 py-10">
       {/* Header Skeleton */}
       <div className="flex items-center justify-between mb-8">
-        <div className="h-8 w-56 bg-gray-300 rounded animate-pulse" />
-        <div className="h-10 w-40 bg-gray-300 rounded-lg animate-pulse" />
+        <div className="h-8 w-40 md:w-56 bg-gray-300 rounded animate-pulse" />
+        <div className="h-8 w-15 md:w-40 bg-gray-300 rounded-lg animate-pulse" />
       </div>
 
       {/* Grid Skeleton */}
