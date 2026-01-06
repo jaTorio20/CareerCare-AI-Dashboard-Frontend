@@ -35,19 +35,19 @@ export const Route = createRootRouteWithContext<RouterContext>()({
       { name: 'theme-color', content: '#4f46e5' },
     ],
     //  structured data
-    scripts: [
-      {
-        tagName: 'script',
-        type: 'application/ld+json',
-        innerHTML: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          "name": "CareerCare AI",
-          "url": "https://career-care-ai.vercel.app/",
-          "description": "Analyze resumes, generate cover letters, track job applications, and practice AI interviews via text or voice."
-        })
-      }
-    ]
+    // scripts: [
+    //   {
+    //     tagname: 'script',
+    //     type: 'application/ld+json',
+    //     innerHTML: JSON.stringify({
+    //       "@context": "https://schema.org",
+    //       "@type": "WebSite",
+    //       "name": "CareerCare AI",
+    //       "url": "https://career-care-ai.vercel.app/",
+    //       "description": "Analyze resumes, generate cover letters, track job applications, and practice AI interviews via text or voice."
+    //     })
+    //   }
+    // ]
   }),
 
   component: RootLayout,

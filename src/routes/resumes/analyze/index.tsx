@@ -1,13 +1,14 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { analyzeResume, createResume } from '@/api/resumes';
+import { analyzeResume, createResume, waitForAnalysis } from '@/api/resumes';
 import type { ResumeAnalysis } from '@/types';
 import api from '@/lib/axios';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { toast } from 'sonner';
 import { useQuota } from '@/context/QuotaContext';
 import NotFound from '@/components/NotFound';
+import { Loader } from 'lucide-react';
 
 export const Route = createFileRoute('/resumes/analyze/')({
     component: () => (
@@ -25,6 +26,7 @@ type AnalysisResponse = {
   originalName: string,
   jobDescription: string,
   analysis: ResumeAnalysis,
+  jobId?: string;
 };
 
 function ResumeAnalyze() {
@@ -34,27 +36,6 @@ function ResumeAnalyze() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null);
 
   const { quotaExceeded, setQuotaExceeded } = useQuota();
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: analyzeResume,
-    onSuccess: (data) => {
-      //  has data of shape { resumeFile, jobDescription, analysis }
-      setAnalysisResult(data);
-      // setQuotaExceeded(false);
-    },
-    onError: (err: any) => {
-      const message = err?.response?.data?.message || "Please try again.";
-      const retryDelay = err?.response?.data?.retryDelay;
-
-      if (/quota/i.test(message)) {
-        setQuotaExceeded(true);
-        toast.error(
-          retryDelay ? `${message} Retry after ${retryDelay}.` : message
-        );
-      } else {
-        toast.error(message);
-      }
-    },
-  });
 
   const { mutateAsync: saveMutation, isPending: isSaving} = useMutation({
     mutationFn: createResume,
@@ -69,27 +50,40 @@ function ResumeAnalyze() {
     },
   });
 
+  const [loading, setLoading] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if(!file) return;
+      if (!file || loading || quotaExceeded) return;
 
-    if (file) {
-      await mutateAsync({ file, jobDescription });
+    try {
+      setAnalysisResult(null);
+      setLoading(true);
+
+      // enqueue job
+      const { jobId } = await analyzeResume({ file, jobDescription });
+
+      // wait for worker to finish
+      const result = await waitForAnalysis(jobId);
+      setAnalysisResult(result);
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message || "Failed to analyze resume");
+    } finally {
+      setLoading(false);
     }
-    
   };
+
 
   const handleSave = async () => {
     if (!analysisResult) return;
     
     const entry = {
-      // userId: "123", // later from auth
       publicId: analysisResult.publicId,
-      resumeFile: analysisResult.resumeFile, // Cloudinary URL from backend
-      jobDescription: analysisResult.jobDescription,
       originalName: analysisResult.originalName,
+      jobDescription: analysisResult.jobDescription,
       analysis: analysisResult.analysis,
-      isTemp: false,
+      jobId: analysisResult.jobId, // optional, include if exists
+      resumeFile: analysisResult.resumeFile,
     };
     await saveMutation(entry);
   };
@@ -139,11 +133,24 @@ function ResumeAnalyze() {
         {/* Submit Button */}
         <button
           type="submit"
-          disabled={isPending || quotaExceeded}
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
+          disabled={loading || quotaExceeded}
+           className={`w-full bg-blue-600 text-white py-2 px-4 
+            rounded-md hover:bg-blue-700 transition-colors
+            ${loading || quotaExceeded ? "opacity-50 cursor-not-allowed hover:bg-blue-600" : ""}
+          `}
         >
-          {quotaExceeded ? "Quota Exhausted" : isPending ? "Analyzing..." : "Analyze Resume"}
+          {quotaExceeded
+            ? "Quota Exhausted"
+            : loading
+            ? (
+                <span className="flex items-center justify-center gap-2">
+                  <Loader className="animate-spin h-5 w-5" />
+                  Analyzing...
+                </span>
+              )
+            : "Analyze Resume"}
         </button>
+
       </form>
 
       {/* Analysis Result */}
@@ -160,17 +167,6 @@ function ResumeAnalyze() {
             {/* : null
           } */}
 
-          <div className="mt-2">
-            <ul className="list-disc list-inside text-sm text-gray-700">
-              {analysisResult?.analysis.atsSuggestions?.length > 0 &&
-                analysisResult.analysis.atsSuggestions.map((s, i) => (
-                  <li key={i}>
-                    <strong className="text-sm text-gray-800">{s}</strong>
-                  </li>
-                ))}
-            </ul>
-          </div>
-
           {analysisResult?.analysis.jobFitSuggestions && analysisResult?.analysis.jobFitSuggestions.length > 0 && (
             <div className="mt-2">
               <strong className="text-sm text-gray-800">Job Fit Suggestions:</strong>
@@ -182,6 +178,17 @@ function ResumeAnalyze() {
             </div>
           )}
 
+          {analysisResult?.analysis.atsSuggestions && analysisResult?.analysis.atsSuggestions.length > 0 && (
+            <div className="mt-2">
+              <strong className="text-sm text-gray-800">Example:</strong>
+              <ul className="list-disc list-inside text-sm text-gray-700">
+                {analysisResult?.analysis.atsSuggestions?.length > 0 &&
+                  analysisResult.analysis.atsSuggestions.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
+              </ul>
+            </div>
+          )}
           {/* Save / Cancel buttons */}
           <div className="flex gap-4 mt-4">
             <button

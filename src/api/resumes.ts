@@ -1,5 +1,5 @@
 import api from "@/lib/axios";
-import type { ResumeEntry, ResumeAnalysis } from "@/types";
+import type { CreateResumeInput, ResumeEntry } from "@/types";
 
 // Analyze resume (preview only, not saved)
 export async function analyzeResume({
@@ -8,29 +8,50 @@ export async function analyzeResume({
 }: {
   file: File
   jobDescription: string
-}): Promise<{
-  resumeFile: string
-  publicId: string 
-  originalName: string
-  jobDescription: string
-  analysis: ResumeAnalysis
-
-}> {
+}): Promise<{ jobId: string }> {
   const formData = new FormData();
   formData.append("resumeFile", file);
   formData.append("jobDescription", jobDescription);
 
   const { data } = await api.post("/resumes/analyze", formData, {
     headers: { "Content-Type": "multipart/form-data" },
-  })
+  });
 
-  return data; // shape: { resumeFile, jobDescription, analysis }
+  return { jobId: data.jobId };
 }
 
+
+// Poll for completed analysis
+export async function waitForAnalysis(
+  jobId: string,
+  maxTries = 20,
+  intervalMs = 1000
+) {
+  for (let i = 0; i < maxTries; i++) {
+    try {
+      const { data } = await api.get(`/resumes/temp`, {
+        params: { jobId },
+      });
+
+      if (data?.analysis) {
+        return data;
+      }
+    } catch (err: any) {
+      // 404 = still processing → ignore
+    }
+
+    await new Promise(res => setTimeout(res, intervalMs));
+  }
+
+  throw new Error("Analysis timed out");
+}
+
+
+
 // Save resume (creates card in DB)
-export async function createResume(entry: Omit<ResumeEntry, "_id" | "createdAt" | "updatedAt">): Promise<ResumeEntry> {
-  const { data } = await api.post("/resumes", entry)
-  return data // full ResumeEntry with _id, timestamps
+export async function createResume( entry: CreateResumeInput ): Promise<ResumeEntry> {
+  const { data } = await api.post("/resumes", entry);
+  return data;
 }
 
 // Fetch all resumes

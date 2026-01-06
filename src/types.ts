@@ -20,6 +20,16 @@ export type ResumeAnalysis = {
   jobFitSuggestions: string[];
 }
 
+export type CreateResumeInput = {
+  publicId: string;
+  originalName: string;
+  jobDescription?: string;
+  jobId?: string;
+  analysis?: ResumeAnalysis;
+  resumeFile: string;
+};
+
+
 // Saved resume entry (card)
 export type ResumeEntry = {
   _id: string;

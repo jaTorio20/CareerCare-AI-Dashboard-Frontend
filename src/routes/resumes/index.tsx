@@ -43,7 +43,7 @@ function ResumesPage() {
 
 
   return (
-<div className="max-w-7xl mx-auto px-6 py-10">
+<div className="max-w-5xl mx-auto px-6 py-10">
   {/* Header */}
   <div className="flex items-center justify-between mb-8">
     <h1 className="text-3xl font-extrabold text-gray-900 tracking-tight">
@@ -54,7 +54,7 @@ function ResumesPage() {
       className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition-colors"
     >
       <Plus className="w-4 h-4" />
-      <span className="hidden md:inline">+ Upload Resume</span>
+      <span className="hidden md:inline">Upload Resume</span>
     </Link>
   </div>
 
