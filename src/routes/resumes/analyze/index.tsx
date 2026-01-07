@@ -35,7 +35,7 @@ function ResumeAnalyze() {
   const [jobDescription, setJobDescription] = useState('');
   const [analysisResult, setAnalysisResult] = useState<AnalysisResponse | null>(null);
 
-  const { quotaExceeded, setQuotaExceeded } = useQuota();
+  const { quotaExceeded } = useQuota();
 
   const { mutateAsync: saveMutation, isPending: isSaving} = useMutation({
     mutationFn: createResume,
