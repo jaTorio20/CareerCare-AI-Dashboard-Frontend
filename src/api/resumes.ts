@@ -46,19 +46,11 @@ export async function waitForAnalysis(
   throw new Error("Analysis timed out");
 }
 
-
-
 // Save resume (creates card in DB)
 export async function createResume( entry: CreateResumeInput ): Promise<ResumeEntry> {
   const { data } = await api.post("/resumes", entry);
   return data;
 }
-
-// Fetch all resumes
-// export async function getResumes(): Promise<ResumeEntry[]> {
-//   const { data } = await api.get("/resumes")
-//   return data
-// }
 
 export async function getResumes(): Promise<ResumeEntry[]> {
 

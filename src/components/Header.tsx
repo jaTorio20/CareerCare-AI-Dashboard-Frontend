@@ -312,6 +312,25 @@ const Header = () => {
               ) : (
                 <>
                   {/* <span className="text-gray-700 font-medium">Welcome, {user.name}</span> */}
+                  
+                  <div className='flex items-center gap-2'>
+                    <img
+                      src={
+                        user?.avatar?.url || "/user.png"
+                      }
+                      alt="User avatar"
+                      className="w-9 h-9 rounded-full object-cover transition"
+                    />
+
+                    <div className="border-b border-gray-100">
+                      <p className="text-sm font-medium text-gray-800 truncate">
+                        {user.name}
+                      </p>
+                      <p className="text-xs text-gray-500 truncate">
+                        {user.email}
+                      </p>
+                    </div>
+                  </div>
                   <button
                     disabled={isPending}
                     onClick={() => {
@@ -328,10 +347,10 @@ const Header = () => {
                         Logging out...
                       </span>
                       ) : (
-                      <span className='flex items-center gap-2'>
-                        <LogOut className="w-4 h-4 text-red-500" />
-                        Logout
-                      </span>
+                        <span className='flex items-center gap-2'>
+                          <LogOut className="w-4 h-4 text-red-500" />
+                          Logout
+                        </span>
                     )}
                   </button>
                 </>

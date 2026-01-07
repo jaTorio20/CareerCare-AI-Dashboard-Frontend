@@ -43,7 +43,7 @@ function CoverLetterPage() {
 <div className="max-w-5xl mx-auto px-6 py-10">
   {/* Header */}
   <div className="flex items-center justify-between mb-8">
-    <h1 className="text-3xl font-extrabold text-gray-900">Cover Letters</h1>
+    <h1 className="text-3xl font-bold text-gray-900">Cover Letters</h1>
     <Link
       to="/cover-letter/generate"
       className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition-colors"

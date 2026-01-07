@@ -14,10 +14,15 @@ export interface User {
 
 // Base analysis type
 export type ResumeAnalysis = {
-  atsFriendly: boolean;
-  atsSuggestions: string[];
-  jobFitPercentage: number;
-  jobFitSuggestions: string[];
+  atsScore: number; // 0-100
+  formatIssues: string[];
+  keywordMatchPercentage: number; // 0-100
+  missingKeywords: string[];
+  strengthKeywords: string[];
+  improvementSuggestions: {
+    priority: "high" | "medium" | "low";
+    message: string;
+  }[];
 }
 
 export type CreateResumeInput = {
@@ -28,7 +33,6 @@ export type CreateResumeInput = {
   analysis?: ResumeAnalysis;
   resumeFile: string;
 };
-
 
 // Saved resume entry (card)
 export type ResumeEntry = {
