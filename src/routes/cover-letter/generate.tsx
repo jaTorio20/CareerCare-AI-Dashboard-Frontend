@@ -160,7 +160,7 @@ function CoverLetterGenerate() {
   }
 
   return (
-<div className="max-w-3xl mx-auto px-6 py-10">
+<div className="max-w-4xl mx-auto py-10">
   {/* Header */}
   <h1 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
     Generate Cover Letter
@@ -251,19 +251,19 @@ function CoverLetterGenerate() {
 
   {/* Editor after generation */}
   {generatedLetter && !isPending && (
-    <div className="mt-10 bg-white border border-gray-200 rounded-xl shadow-md p-8 space-y-6">
-      <h2 className="text-2xl font-semibold text-gray-900 mb-4">
+    <div className="mt-10 space-y-6">
+      <h2 className="text-2xl font-semibold text-gray-900 p-5">
         Edit Your Cover Letter
       </h2>
-      <div className="rounded-md border border-gray-300 bg-gray-50 p-3">
+
         <CoverLetterEditor
           initialHTML={editedLetter}
           onChange={(html) => setEditedLetter(html)}
         />
-      </div>
+
 
       {/* Editor Actions */}
-      <div className="flex flex-col sm:flex-row gap-4 pt-4">
+      <div className="flex flex-col sm:flex-row gap-4 mb-6 px-3 py-5">
         <button
           onClick={handleSave}
           disabled={isSaving || !editedLetter.trim()}

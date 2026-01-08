@@ -11,15 +11,43 @@ import {
 
 type Props = {
   editor: Editor | null
+  zoom: number
+  setZoom: (z: number) => void
 }
 
-export default function EditorMenuBar({ editor }: Props) {
+export default function EditorMenuBar({ editor, zoom, setZoom}: Props) {
   if (!editor) return null
 
   const sizes = ["10pt", "12pt", "14pt", "16pt", "18pt", "20pt", "24pt"]
-
+  const zoomLevels = [50, 55, 65, 75, 85, 100]
+  const fontList = ["Arial, sans-serif", "Times New Roman, serif", "Georgia, serif", "Calibri, sans-serif"]
   return (
     <div className="flex flex-wrap items-center gap-3 mb-4 bg-gray-100 p-2 rounded-lg shadow-sm">
+      
+      {/* Font Family */}
+      <div className="flex items-center gap
+       shadow-sm rounded">
+        <select
+          onChange={(e) => editor.chain().setFontFamily(e.target.value).run()}
+          defaultValue=""
+          className="cursor-pointer rounded focus:outline-none
+           border-gray-300 text-sm "
+        >
+          <option value="" disabled>Font Family</option>
+          {fontList.map((f) => (
+            <option key={f} value={f}>
+              {f.split(",")[0]} {/* show readable name */}
+            </option>
+          ))}
+        </select>
+        <button
+          onClick={() => editor.chain().unsetFontFamily().run()}
+          className="px-2 py-1 text-xs rounded bg-gray-200 hover:bg-gray-300"
+        >
+          Reset
+        </button>
+      </div>
+      
       {/* Inline formatting */}
       <div className="flex items-center gap-2">
         <button
@@ -52,11 +80,12 @@ export default function EditorMenuBar({ editor }: Props) {
       </div>
 
       {/* Font size */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 shadow-sm">
         <select
           onChange={(e) => editor.chain().setFontSize(e.target.value).run()}
           defaultValue=""
-          className="cursor-pointer rounded hover:bg-gray-200 border-gray-300 text-sm"
+          className="cursor-pointer rounded focus:outline-none
+           border-gray-300 text-sm"
         >
           <option value="" disabled>
             Font size
@@ -76,11 +105,13 @@ export default function EditorMenuBar({ editor }: Props) {
       </div>
 
       {/* Line spacing */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 shadow-sm">
         <select
           onChange={(e) => editor.chain().setLineHeight(e.target.value).run()}
           defaultValue=""
-          className="hover:bg-gray-200 cursor-pointer rounded border-gray-300 text-sm"
+          className="
+          cursor-pointer focus:outline-none
+           rounded text-sm"
         >
           <option value="" disabled>
             Line spacing
@@ -99,14 +130,16 @@ export default function EditorMenuBar({ editor }: Props) {
       </div>
 
       {/* Paragraph spacing */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-2 shadow-sm">
         <select
           onChange={(e) => {
             const [top, bottom] = e.target.value.split(",")
             editor.chain().setParagraphSpacing(top, bottom).run()
           }}
           defaultValue=""
-          className="hover:bg-gray-200 cursor-pointer rounded border-gray-300 text-sm"
+          className="focus:outline-none
+          cursor-pointer rounded
+           border-gray-300 text-sm"
         >
           <option value="" disabled>
             Paragraph spacing
@@ -155,6 +188,23 @@ export default function EditorMenuBar({ editor }: Props) {
           <AlignJustify className="w-5 h-5 text-gray-700" />
         </button>
       </div>
+
+      {/* Zoom */}
+    <div className="flex items-center flex-wrap gap-4 bg-gray-100 p-2 rounded-lg">
+      <span className="text-sm">Zoom</span>
+      {zoomLevels.map((z) => (
+        <button
+          key={z}
+          onClick={() => setZoom(z)}
+          className={`px-2 py-1 rounded text-sm cursor-pointer ${
+            zoom === z ? "bg-blue-500 text-white" : "bg-gray-200"
+          }`}
+        >
+          {z}%
+        </button>
+      ))}
+    </div>
+
     </div>
   )
 }

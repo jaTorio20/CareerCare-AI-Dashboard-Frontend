@@ -7,6 +7,7 @@ import { toast } from 'sonner'
 import NotFound from '@/components/NotFound'
 import ErrorPage from '@/components/ErrorPage'
 import {z} from 'zod'
+import { File, Trash, Pencil } from 'lucide-react'
 
 const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i)
 const coverLetterQueryOptions = (coverLetterId: string) => {
@@ -59,67 +60,88 @@ function CoverLetterDetailsPage() {
 
 
   return (
-<div className="max-w-4xl mx-auto px-6 py-12">
-  {/* Header */}
-  <h1 className="text-4xl font-extrabold text-gray-900 mb-10 text-center">
-    Cover Letter Details
-  </h1>
+    <div className="max-w-4xl mx-auto py-12">
+      {/* Header */}
+      <h1 className="text-4xl font-bold text-gray-900 mb-10 text-center">
+        Cover Letter Details
+      </h1>
 
-  {/* Card */}
-  <div className="bg-white border border-gray-200 rounded-2xl shadow-lg p-8 space-y-8">
-    {/* Job Info */}
-    <div className="space-y-2">
-      <p className="text-xl font-semibold text-gray-900">{letter.jobTitle}</p>
-      <p className="text-lg text-gray-700">{letter.companyName}</p>
+      {/* Card */}
+      <div className="bg-white border border-gray-200 rounded-lg shadow-lg">
+        {/* Job Info */}
+        <div className="space-y-2 p-6">
+          <p className="text-xl font-semibold text-gray-900">{letter.jobTitle}</p>
+          <p className="text-lg text-gray-700">{letter.companyName}</p>
+        </div>
+
+        {/* Cover Letter Content */}
+        <div
+          className="
+            max-w-none bg-gray-50 p-6 rounded-md border border-gray-200
+            overflow-y-auto max-h-[500px]
+            leading-relaxed
+            [&_p]:mb-4 [&_p:last-child]:mb-0
+            [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4
+            [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mb-3
+            [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mb-2
+            [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4
+            [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4
+            [&_li]:mb-1
+            [&_br]:block
+          "
+        >
+          <div dangerouslySetInnerHTML={{ __html: letter.editedLetter }} />
+        </div>
+
+
+        {/* Action Buttons */}
+        <div className="flex flex-col sm:flex-row gap-4 my-4">
+          <Link
+            to="/cover-letter/$coverLetterId/edit"
+            params={{ coverLetterId: letter._id.toString() }}
+            className="gap-2 flex-1 flex items-center justify-center px-5 py-2 text-sm
+             font-medium text-blue-600
+             hover:text-blue-800 cursor-pointer
+              transition-colors text-center"
+          >
+            <Pencil className='h-5 w-5'/>
+            <span>Edit</span>
+          </Link>
+
+          <button
+            onClick={() => exportDocx(letter.editedLetter)}
+            className="flex-1 flex items-center justify-center gap-2 px-5 py-2 
+            text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer
+             transition-colors"
+          >
+            <File className='h-5 w-5'/>
+            <span>Export as DOCX</span>
+          </button>
+
+          <button
+            disabled={isPending}
+            onClick={handleDelete}
+            className="flex-1 flex items-center justify-center gap-2 px-5 py-3 text-sm font-medium text-red-600
+             rounded-lg cursor-pointer hover:text-red-800
+             transition-colors disabled:opacity-50"
+          >
+            {isPending ? 
+            <span>
+              Deleting...
+            </span>
+            : 
+            <>
+              <Trash className='h-5 w-5'/>
+              <span>
+                Delete Letter
+              </span>
+            </>
+            }
+          </button>
+
+        </div>
+      </div>
     </div>
-
-    {/* Cover Letter Content */}
-<div
-  className="
-    max-w-none bg-gray-50 p-6 rounded-md border border-gray-200
-    overflow-y-auto max-h-[500px]
-    leading-relaxed
-    [&_p]:mb-4 [&_p:last-child]:mb-0
-    [&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-4
-    [&_h2]:text-xl [&_h2]:font-semibold [&_h2]:mb-3
-    [&_h3]:text-lg [&_h3]:font-semibold [&_h3]:mb-2
-    [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4
-    [&_ol]:list-decimal [&_ol]:pl-6 [&_ol]:mb-4
-    [&_li]:mb-1
-    [&_br]:block
-  "
->
-  <div dangerouslySetInnerHTML={{ __html: letter.editedLetter }} />
-</div>
-
-
-    {/* Action Buttons */}
-    <div className="flex flex-col sm:flex-row gap-4">
-      <button
-        disabled={isPending}
-        onClick={handleDelete}
-        className="flex-1 px-5 py-3 text-sm font-medium text-white bg-red-600 rounded-lg shadow hover:bg-red-700 transition-colors disabled:opacity-50"
-      >
-        {isPending ? "Deleting..." : "Delete Cover Letter"}
-      </button>
-
-      <button
-        onClick={() => exportDocx(letter.editedLetter)}
-        className="flex-1 px-5 py-3 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition-colors"
-      >
-        Export as DOCX
-      </button>
-
-      <Link
-        to="/cover-letter/$coverLetterId/edit"
-        params={{ coverLetterId: letter._id.toString() }}
-        className="flex-1 px-5 py-3 text-sm font-medium text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-colors text-center"
-      >
-        Edit
-      </Link>
-    </div>
-  </div>
-</div>
 
   )
 }
