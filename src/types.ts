@@ -32,6 +32,7 @@ export type CreateResumeInput = {
   jobId?: string;
   analysis?: ResumeAnalysis;
   resumeFile: string;
+  _id: string
 };
 
 // Saved resume entry (card)

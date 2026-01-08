@@ -37,7 +37,6 @@ export async function waitForAnalysis(
         return data;
       }
     } catch (err: any) {
-      // 404 = still processing → ignore
     }
 
     await new Promise(res => setTimeout(res, intervalMs));
@@ -68,6 +67,11 @@ export async function getResume(id: string): Promise<ResumeEntry> {
 export async function deleteResume(id: string): Promise<void> {
   await api.delete(`/resumes/${id}`)
 }
+
+// Delete temporary resume 
+export const deleteTempResume = async (id: string) => {
+  return api.delete(`/resumes/temp/${id}`);
+};
 
 export async function getDownloadFile(id: string): Promise<void> {
   const res = await api.get(`/resumes/${id}/download`, {

@@ -1,9 +1,8 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
-import { analyzeResume, createResume, waitForAnalysis } from '@/api/resumes';
+import { analyzeResume, createResume, waitForAnalysis, deleteTempResume } from '@/api/resumes';
 import type { CreateResumeInput } from '@/types';
-import api from '@/lib/axios';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { toast } from 'sonner';
 import { useQuota } from '@/context/QuotaContext';
@@ -26,9 +25,10 @@ function ResumeAnalyze() {
   const [file, setFile] = useState<File | null>(null);
   const [jobDescription, setJobDescription] = useState('');
   const [analysisResult, setAnalysisResult] = useState<CreateResumeInput | null>(null);
-
   const { quotaExceeded } = useQuota();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+    // ----- SAVE DATA ------
   const { mutateAsync: saveMutation, isPending: isSaving} = useMutation({
     mutationFn: createResume,
     onSuccess: (saved) => {
@@ -42,6 +42,22 @@ function ResumeAnalyze() {
     },
   });
 
+  // ----- DELETE MUTATION ------
+  const { mutateAsync: deleteMutation, isPending: isDeleting } = useMutation({
+    mutationFn: (resumeId: string) => deleteTempResume(resumeId),
+    onSuccess: () => {
+      setAnalysisResult(null);
+      setFile(null);
+      setJobDescription('');
+      toast.success("Temporary resume deleted");
+    },
+    onError: (err: any) => {
+      console.error("Failed to delete temp resume:", err);
+      toast.error("Failed to delete temporary resume");
+    },
+  });
+
+  // HANDLE SUBMIT 
   const [loading, setLoading] = useState(false);
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,31 +82,37 @@ function ResumeAnalyze() {
   };
 
 
+  // SAVE BUTTON
   const handleSave = async () => {
     if (!analysisResult) return;
-    
     const entry = {
+      _id: analysisResult._id,
       publicId: analysisResult.publicId,
       originalName: analysisResult.originalName,
       jobDescription: analysisResult.jobDescription,
       analysis: analysisResult.analysis,
-      jobId: analysisResult.jobId, // optional, include if exists
+      jobId: analysisResult.jobId,
       resumeFile: analysisResult.resumeFile,
     };
     await saveMutation(entry);
   };
 
+  // CANCEL button
   const handleCancel = async () => {
-    if (analysisResult?.publicId) {
-      try {
-        await api.delete(`/resumes/temp/${analysisResult.publicId}`);
-      } catch (err) {
-        console.error("Failed to delete temp file:", err);
-      }
-    }
-    setAnalysisResult(null);
+    if (!analysisResult?._id) return;
+
+    try {
+      await deleteMutation(analysisResult._id);
+    } catch (err: any) {
+      toast.error("Failed to cancel resume analysis");
+    } 
     setFile(null);
-    setJobDescription('');
+    setJobDescription("");
+    setAnalysisResult(null);
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   // Text limiting
@@ -114,6 +136,7 @@ function ResumeAnalyze() {
           <input
             required
             type="file"
+            ref={fileInputRef}
             accept=".pdf,.doc,.docx"
             onChange={(e) => setFile(e.target.files?.[0] || null)}
             className="block w-full text-sm text-gray-700 border border-gray-300 rounded-md cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -274,16 +297,22 @@ function ResumeAnalyze() {
           <button
             onClick={handleSave}
             disabled={isSaving}
-            className="flex-1 px-5 py-3 text-sm font-medium text-white bg-green-600 rounded-lg shadow hover:bg-green-700 transition-colors disabled:opacity-50"
+            className="flex-1 px-5 py-3 text-sm font-medium text-white
+             bg-green-600 rounded-lg shadow hover:bg-green-700 
+             transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isSaving ? "Saving..." : "Save Resume"}
           </button>
 
           <button
             onClick={handleCancel}
-            className="flex-1 px-5 py-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+            disabled={isDeleting}
+            className="flex-1 px-5 py-3 text-sm font-medium text-gray-600
+            bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors
+              disabled:opacity-50 disabled:cursor-not-allowed
+             "
           >
-            Cancel
+            {isDeleting ? "Cancelling..." : "Cancel"}
           </button>
         </div>
 
