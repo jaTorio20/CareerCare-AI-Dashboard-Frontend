@@ -3,10 +3,6 @@ import {
   Bold,
   Italic,
   Underline,
-  AlignLeft,
-  AlignCenter,
-  AlignRight,
-  AlignJustify,
 } from "lucide-react"
 
 type Props = {
@@ -158,52 +154,46 @@ export default function EditorMenuBar({ editor, zoom, setZoom}: Props) {
       </div>
 
       {/* Text alignment */}
-      <div className="flex items-center gap-1">
-        <button
-          onClick={() => editor.chain().setTextAlign("left").run()}
-          className="cursor-pointer p-2 rounded hover:bg-gray-200"
-          title="Align Left"
+      <div className="flex items-center gap-2 shadow-sm">
+        <select
+          onChange={(e) => {
+            const alignment = e.target.value;
+            if (alignment) {
+              editor.chain().setTextAlign(alignment as "left" | "center" | "right" | "justify").run();
+            }
+          }}
+          defaultValue=""
+          className="cursor-pointer rounded focus:outline-none border border-gray-300 text-sm px-2 py-1"
         >
-          <AlignLeft className="w-5 h-5 text-gray-700" />
-        </button>
-        <button
-          onClick={() => editor.chain().setTextAlign("center").run()}
-          className="cursor-pointer p-2 rounded hover:bg-gray-200"
-          title="Align Center"
-        >
-          <AlignCenter className="w-5 h-5 text-gray-700" />
-        </button>
-        <button
-          onClick={() => editor.chain().setTextAlign("right").run()}
-          className="cursor-pointer p-2 rounded hover:bg-gray-200"
-          title="Align Right"
-        >
-          <AlignRight className="w-5 h-5 text-gray-700" />
-        </button>
-        <button
-          onClick={() => editor.chain().setTextAlign("justify").run()}
-          className="cursor-pointer p-2 rounded hover:bg-gray-200"
-          title="Justify"
-        >
-          <AlignJustify className="w-5 h-5 text-gray-700" />
-        </button>
+          <option value="" disabled>
+            Text Alignment
+          </option>
+          <option value="left">Left</option>
+          <option value="center">Center</option>
+          <option value="right">Right</option>
+          <option value="justify">Justify</option>
+        </select>
       </div>
 
       {/* Zoom */}
-    <div className="flex items-center flex-wrap gap-4 bg-gray-100 p-2 rounded-lg">
-      <span className="text-sm">Zoom</span>
-      {zoomLevels.map((z) => (
-        <button
-          key={z}
-          onClick={() => setZoom(z)}
-          className={`px-2 py-1 rounded text-sm cursor-pointer ${
-            zoom === z ? "bg-blue-500 text-white" : "bg-gray-200"
-          }`}
+      <div className="flex items-center gap-2 shadow-sm">
+        <select
+          onChange={(e) => {
+            const zoomValue = parseInt(e.target.value);
+            if (!isNaN(zoomValue)) {
+              setZoom(zoomValue);
+            }
+          }}
+          value={zoom}
+          className="cursor-pointer rounded focus:outline-none border border-gray-300 text-sm px-2 py-1"
         >
-          {z}%
-        </button>
-      ))}
-    </div>
+          {zoomLevels.map((z) => (
+            <option key={z} value={z}>
+              {z}%
+            </option>
+          ))}
+        </select>
+      </div>
 
     </div>
   )
