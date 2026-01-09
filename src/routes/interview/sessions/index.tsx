@@ -11,6 +11,7 @@ import { deleteSessions } from '@/api/interview'
 import AITypingIndicator from '@/components/Interview/AITypingIndicator'
 import { v4 as uuidv4 } from "uuid";
 import { sessionsQueryOptions, messagesQueryOptions } from '@/features/interview/interview.queries'
+import { Loader2 } from 'lucide-react'
 
 export const Route = createFileRoute('/interview/sessions/')({
   component: () => (
@@ -85,41 +86,85 @@ function InterviewSessionsPage() {
   });
 
   // ---------------- SEND AUDIO -------------------
+  const [isWaitingForAIResponse, setIsWaitingForAIResponse] = useState(false);
+  const pendingAIMessageRef = useRef<InterviewMessage | null>(null);
+  const pendingSessionIdRef = useRef<string | null>(null);
+
   const sendAudioMutation = useMutation({
     mutationFn: async (formData: FormData) => sendAudioMessage(formData),
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ["messages", activeSessionId] });
-      const prevMessages = queryClient.getQueryData<InterviewMessage[]>(["messages", activeSessionId]);
+    onMutate: async (formData: FormData) => {
+      // Capture the sessionId from FormData to prevent issues when user switches sessions
+      const sessionId = formData.get("sessionId") as string;
+      if (!sessionId) return { prevMessages: [], tempAudioId: null, sessionId: null };
+
+      await queryClient.cancelQueries({ queryKey: ["messages", sessionId] });
+      const prevMessages = queryClient.getQueryData<InterviewMessage[]>(["messages", sessionId]);
 
       const tempAudioId = uuidv4();
-      queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], (old = []) => [
+      queryClient.setQueryData<InterviewMessage[]>(["messages", sessionId], (old = []) => [
         ...old,
         {
           _id: tempAudioId,
-          sessionId: activeSessionId!,
+          sessionId: sessionId,
           role: "user",
           text: "[sending audio…]",
           createdAt: new Date().toISOString(),
         },
       ]);
-      return { prevMessages, tempAudioId };
+      return { prevMessages, tempAudioId, sessionId };
     },
 
     onSuccess: (data, _variables, context) => {
-      if (!data?.userMessage || !data?.aiMessage || !context?.tempAudioId) return;
+      if (!data?.userMessage || !data?.aiMessage || !context?.tempAudioId || !context?.sessionId) return;
 
-      // Replace temporary message with actual audio message
-      queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], (old = []) =>
-        old
-          .map(m => (m._id === context.tempAudioId ? data.userMessage : m))
-          .concat(data.aiMessage)
+      const sessionId = context.sessionId;
+
+      // First, replace temporary message with actual audio message (user's message)
+      queryClient.setQueryData<InterviewMessage[]>(["messages", sessionId], (old = []) =>
+        old.map(m => (m._id === context.tempAudioId ? data.userMessage : m))
       );
+
+      // Store the AI message and show typing indicator only if this is the active session
+      pendingAIMessageRef.current = data.aiMessage;
+      pendingSessionIdRef.current = sessionId;
+      
+      // Only show typing indicator if this session is still active
+      if (activeSessionId === sessionId) {
+        setIsWaitingForAIResponse(true);
+      }
+
+      // After a brief delay, add the AI message (simulates AI thinking time)
+      setTimeout(() => {
+        if (pendingAIMessageRef.current && pendingSessionIdRef.current === sessionId) {
+          queryClient.setQueryData<InterviewMessage[]>(["messages", sessionId], (old = []) =>
+            [...old, pendingAIMessageRef.current!]
+          );
+          pendingAIMessageRef.current = null;
+          pendingSessionIdRef.current = null;
+          
+          // Only clear typing indicator if this session is still active
+          if (activeSessionId === sessionId) {
+            setIsWaitingForAIResponse(false);
+          }
+        }
+      }, 800); // 800ms delay to show typing indicator
     },
     onError: (_err, _variables, context) => {
+      if (!context?.tempAudioId || !context?.sessionId) return;
+      
+      const sessionId = context.sessionId;
+      
       // Remove temporary message if sending failed
-      queryClient.setQueryData<InterviewMessage[]>(["messages", activeSessionId], (old = []) =>
-        old?.filter(m => m._id !== context?.tempAudioId) ?? []
+      queryClient.setQueryData<InterviewMessage[]>(["messages", sessionId], (old = []) =>
+        old?.filter(m => m._id !== context.tempAudioId) ?? []
       );
+      
+      // Only clear typing indicator if this session is still active
+      if (activeSessionId === sessionId) {
+        setIsWaitingForAIResponse(false);
+      }
+      pendingAIMessageRef.current = null;
+      pendingSessionIdRef.current = null;
     },
   });
 
@@ -225,8 +270,16 @@ function InterviewSessionsPage() {
                         : "bg-white text-gray-800 rounded-bl-md border"
                       }`}
                   >
-                    {/* Only show text if this is a text message*/}
-                    {!m.audioUrl && m.text && (
+                    {/* Show Loader + "sending..." for audio upload in progress */}
+                    {!m.audioUrl && m.text === "[sending audio…]" && (
+                      <div className="flex items-center gap-2">
+                        <Loader2 className={`h-4 w-4 animate-spin ${isUser ? "text-white/70" : "text-gray-300"}`} />
+                        <span className={`text-sm italic ${isUser ? "text-white/70" : "text-gray-300"}`}>sending...</span>
+                      </div>
+                    )}
+
+                    {/* Only show text if this is a text message (and not the sending message) */}
+                    {!m.audioUrl && m.text && m.text !== "[sending audio…]" && (
                       <p className="whitespace-pre-wrap">{m.text}</p>
                     )}
 
@@ -245,8 +298,8 @@ function InterviewSessionsPage() {
             })
           )}
 
-          {/* AI Typing */}
-          {sendMessageMutation.isPending && sendAudioMutation.isPending && (
+          {/* AI Typing - Only show after audio is sent, or while text message is pending */}
+          {(sendMessageMutation.isPending || (isWaitingForAIResponse && pendingSessionIdRef.current === activeSessionId)) && (
             <div className="flex justify-start">
               <div className="rounded-2xl border bg-white px-4 py-2">
                 <AITypingIndicator />
