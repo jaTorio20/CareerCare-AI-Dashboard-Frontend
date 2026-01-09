@@ -42,8 +42,8 @@ const Header = () => {
     { label: "AI Interview", path: "/interview/sessions"},
   ];
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const base = 'text-gray-700 cursor-pointer hover:text-indigo-600 font-medium';
-  const active = 'text-indigo-600 font-medium cursor-pointer hover:text-indigo-700';
+  const base = 'text-gray-700 px-2 text-sm font-medium cursor-pointer rounded-lg hover:text-indigo-600 hover:bg-blue-100 font-sm';
+  const active = 'text-indigo-600 text-sm font-medium cursor-pointer hover:text-indigo-700';
   
   // ACTIVE NAV BUTTON FOR SMALLER SCREEN
   const navItemsMobile = [
@@ -53,7 +53,7 @@ const Header = () => {
     { icon: Bot, label: "AI Interview", path: "/interview/sessions"},
   ];
   const pathnameMobile = useRouterState({ select: (s) => s.location.pathname });
-  const baseMobile = 'text-gray-700 cursor-pointer hover:text-indigo-600 font-medium';
+  const baseMobile = 'text-gray-700rounded-lg cursor-pointer hover:text-indigo-600 font-medium';
   const activeMobile = 'text-indigo-600 font-medium cursor-pointer hover:text-indigo-700';
 
   // dropdownRef

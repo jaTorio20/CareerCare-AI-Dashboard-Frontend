@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { NewSessionButton } from "@/components/Interview/NewSessionButton";
 import type { InterviewSession } from "@/types";
-import { Brain, Trash } from "lucide-react";
+import { Brain, Trash, Loader } from "lucide-react";
 import { getSessionLabel } from '@/utils/interviews/interview'
 
 interface ResponsiveSidebarProps {
@@ -135,9 +135,16 @@ export default function ResponsiveSidebar({ sessions, activeSessionId, setActive
                 deleteMutate(s._id);
               }}
               disabled={isDeleting}
-              className="opacity-0 group-hover:opacity-100 text-red-500 hover:text-red-700 transition"
+              className="opacity-0 group-hover:opacity-100
+               text-red-500 
+                hover:text-red-700 transition"
             >
+              { isDeleting ?
+                <Loader className="disabled:cursor-not-allowed disabled:opacity-50
+                animate-spin w-5 h-5"/>
+              : 
               <Trash className="w-5 h-5"/>
+              }
             </button>
           </li>
         )

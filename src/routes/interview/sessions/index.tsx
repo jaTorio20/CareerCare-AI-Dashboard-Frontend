@@ -154,7 +154,8 @@ function InterviewSessionsPage() {
   // --------------- MESSAGE FORM SUBMIT -----------------
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const currentText = text; // snapshot before clearing
+    const currentText = text.trim();// snapshot before clearing
+    if (!currentText) return;   
 
     // Clear immediately
     setText("");
@@ -245,7 +246,7 @@ function InterviewSessionsPage() {
           )}
 
           {/* AI Typing */}
-          {sendMessageMutation.isPending && !sendAudioMutation.isPending && (
+          {sendMessageMutation.isPending && sendAudioMutation.isPending && (
             <div className="flex justify-start">
               <div className="rounded-2xl border bg-white px-4 py-2">
                 <AITypingIndicator />
@@ -272,6 +273,7 @@ function InterviewSessionsPage() {
               onInput={handleInput}
               onKeyDown={(e) => { 
                 if (e.key === "Enter" && !e.shiftKey) { 
+                  if (!text.trim()) return; 
                   e.preventDefault();
                   (e.target as HTMLTextAreaElement).form?.requestSubmit();
                   } 
@@ -280,7 +282,13 @@ function InterviewSessionsPage() {
                 overflow-y-auto max-h-40 focus:outline-none border-none"
             />
 
-            <div className='justify-end space-x-1.5 flex'>
+            <div className='justify-between space-x-1.5 flex'>
+                {/* Audio Recorder */}
+                <AudioRecorder
+                  sessionId={activeSessionId}
+                  onSend={sendAudioMutation.mutateAsync}
+                  disabled={sendAudioMutation.isPending}
+                />
               <button
                 type="submit"
                 disabled={isDisabled}
@@ -293,14 +301,8 @@ function InterviewSessionsPage() {
               >
                 Send
               </button>
-              
-              {/* Audio Recorder */}
-              <AudioRecorder
-                sessionId={activeSessionId}
-                onSend={sendAudioMutation.mutateAsync}
-                disabled={sendAudioMutation.isPending}
-              />
             </div>
+
           </form>
       </section>
     ) : (
