@@ -126,7 +126,7 @@ function ResumeAnalyze() {
   };
 
  return (
-    <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+    <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 mt-8">
       <Link
         to="/resumes"
         className="
@@ -141,7 +141,7 @@ function ResumeAnalyze() {
         <span className="text-sm font-medium">Back</span>
       </Link>
       
-      <h2 className="text-2xl font-semibold text-gray-800 my-4">Upload Resume for Analysis</h2>
+      <h2 className="text-2xl text-center font-semibold text-gray-800 my-4">Upload Resume for Analysis</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* File Upload */}

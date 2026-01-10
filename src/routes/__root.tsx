@@ -57,15 +57,15 @@ export const Route = createRootRouteWithContext<RouterContext>()({
 function RootLayout () {
   useHeaderHeight();
   return (
-    <div className='flex flex-col'>
+    <div className='min-h-screen flex flex-col'>
       <HeadContent/>
       <Header/>
-      <main className="flex justify-center ">
+      <main className="flex-1 flex justify-center ">
         <div className="w-full max-w-full rounded-2xl">
           <Outlet />
         </div>
       </main>
-
+      
       <TanStackDevtools
         config={{
           position: 'bottom-right',
