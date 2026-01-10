@@ -75,7 +75,7 @@ function ResumeDetailsPage() {
   return (
   <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <nav className="mb-4 text-sm text-gray-500">
-      <Link to="/resumes" className="hover:text-blue-600 transition-colors">
+      <Link to="/resumes" className="hover:text-indigo-600 transition-colors">
         Resumes
       </Link>
       <span className="mx-2">/</span>

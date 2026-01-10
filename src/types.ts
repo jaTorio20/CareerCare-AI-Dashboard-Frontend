@@ -67,6 +67,7 @@ export type JobApplicationEntry = {
   userId?: string;
   companyName: string;
   jobTitle: string;
+  jobDescription: string;
   jobLink: string;
   originalName: string
   status: "applied" | "interview" | "offer" | "rejected" | "accepted";

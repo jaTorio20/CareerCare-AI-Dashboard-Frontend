@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { generateCoverLetter, createCoverLetter } from '@/api/coverLetter';
@@ -9,6 +9,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { toast } from 'sonner';
 
 import { useQuota } from '@/context/QuotaContext';
+import { ArrowLeft } from 'lucide-react';
 
 export const Route = createFileRoute('/cover-letter/generate')({
   component: () => (
@@ -127,8 +128,6 @@ function CoverLetterGenerate() {
     }
   };
 
-
-
   const handleSave = async () => {
     if (!generatedLetter) return;
 
@@ -160,9 +159,23 @@ function CoverLetterGenerate() {
   }
 
   return (
-<div className="max-w-4xl mx-auto py-10">
+<div className="max-w-4xl mx-auto py-10 px-2">
+  <Link
+    to="/cover-letter"
+    className="
+    inline-flex items-center gap-2 text-indigo-600
+    hover:text-indigo-800 transition-colors"
+  >
+    <div className="flex items-center 
+    justify-center w-9 h-9 rounded-full border
+    border-indigo-300 hover:border-indigo-500 hover:bg-indigo-50 transition">
+      <ArrowLeft size={18} />
+    </div>
+    <span className="text-sm font-medium">Back</span>
+  </Link>
+
   {/* Header */}
-  <h1 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
+  <h1 className="text-3xl font-bold text-gray-900 mb-8 py-4 text-center">
     Generate Cover Letter
   </h1>
 
@@ -180,7 +193,9 @@ function CoverLetterGenerate() {
   {/* Form */}
   <form
     onSubmit={handleSubmit}
-    className="bg-white border border-gray-200 rounded-xl shadow-md p-8 space-y-6"
+    className="bg-white border text-sm
+     border-gray-200 rounded-xl 
+    shadow-md p-4 space-y-6"
   >
     {/* Job Description */}
     <div>
@@ -190,9 +205,12 @@ function CoverLetterGenerate() {
       <textarea
         value={jobDescription}
         onChange={(e) => setJobDescription(e.target.value)}
-        rows={8}
+        rows={3}
         required
-        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+        className="outline-none
+        w-full rounded-md border border-gray-300 bg-gray-50 p-2
+         text-gray-700 focus:border-indigo-500 focus:ring
+          focus:ring-indigo-200 transition"
       />
     </div>
 
@@ -206,7 +224,10 @@ function CoverLetterGenerate() {
         required
         value={jobTitle}
         onChange={(e) => setJobTitle(e.target.value)}
-        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+        className="outline-none
+        w-full rounded-md border border-gray-300
+         bg-gray-50 p-2 text-gray-700 focus:border-indigo-500
+          focus:ring focus:ring-indigo-200 transition"
       />
     </div>
 
@@ -220,7 +241,9 @@ function CoverLetterGenerate() {
         required
         value={companyName}
         onChange={(e) => setCompanyName(e.target.value)}
-        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+        className="outline-none
+        w-full rounded-md border border-gray-300 bg-gray-50 p-2
+         text-gray-700 focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition"
       />
     </div>
 
@@ -232,8 +255,11 @@ function CoverLetterGenerate() {
       <textarea
         value={userDetails}
         onChange={(e) => setUserDetails(e.target.value)}
-        rows={5}
-        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+        rows={4}
+        className="outline-none
+        w-full rounded-md border border-gray-300 bg-gray-50 p-2
+         text-gray-700 focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition"
+        placeholder='Contact Details, Skills, work experience etc..'
       />
     </div>
 
@@ -242,7 +268,7 @@ function CoverLetterGenerate() {
       <button
         type="submit"
         disabled={isPending || quotaExceeded}
-        className="w-full rounded-lg bg-linear-to-r from-blue-600 to-indigo-600 px-6 py-3 text-white font-semibold shadow-md hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full rounded-lg bg-linear-to-r from-indigo-600 to-indigo-600 px-6 py-3 text-white font-semibold shadow-md hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isPending ? "Generating..." : "Generate Cover Letter"}
       </button>

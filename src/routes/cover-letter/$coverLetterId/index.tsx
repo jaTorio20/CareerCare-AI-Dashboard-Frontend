@@ -7,7 +7,7 @@ import { toast } from 'sonner'
 import NotFound from '@/components/NotFound'
 import ErrorPage from '@/components/ErrorPage'
 import {z} from 'zod'
-import { File, Trash, Pencil } from 'lucide-react'
+import { File, Trash, Pencil, ArrowLeft } from 'lucide-react'
 
 const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i)
 const coverLetterQueryOptions = (coverLetterId: string) => {
@@ -60,14 +60,30 @@ function CoverLetterDetailsPage() {
 
 
   return (
-    <div className="max-w-4xl mx-auto py-12">
+    <div className="min-h-screen px-4 sm:px-6 lg:px-8 py-10">
+      <Link
+        to="/cover-letter"
+        className="mb-5
+        inline-flex items-center gap-2 text-indigo-600
+        hover:text-indigo-800 transition-colors"
+      >
+        <div className="flex items-center 
+        justify-center w-9 h-9 rounded-full border
+        border-indigo-300 hover:border-indigo-500 hover:bg-indigo-50 transition">
+          <ArrowLeft size={18} />
+        </div>
+        <span className="text-sm font-medium">Back</span>
+      </Link>
+
       {/* Header */}
       <h1 className="text-4xl font-bold text-gray-900 mb-10 text-center">
         Cover Letter Details
       </h1>
 
       {/* Card */}
-      <div className="bg-white border border-gray-200 rounded-lg shadow-lg">
+      <div className="bg-white
+        border border-gray-200 rounded-lg 
+        shadow-lg">
         {/* Job Info */}
         <div className="space-y-2 p-6">
           <p className="text-xl font-semibold text-gray-900">{letter.jobTitle}</p>
@@ -99,9 +115,10 @@ function CoverLetterDetailsPage() {
           <Link
             to="/cover-letter/$coverLetterId/edit"
             params={{ coverLetterId: letter._id.toString() }}
-            className="gap-2 flex-1 flex items-center justify-center px-5 py-2 text-sm
-             font-medium text-blue-600
-             hover:text-blue-800 cursor-pointer
+            className="gap-2 flex-1 flex items-center justify-center px-5 
+            py-2 text-sm
+             font-medium text-indigo-600
+             hover:text-indigo-800 cursor-pointer
               transition-colors text-center"
           >
             <Pencil className='h-5 w-5'/>
@@ -111,7 +128,7 @@ function CoverLetterDetailsPage() {
           <button
             onClick={() => exportDocx(letter.editedLetter)}
             className="flex-1 flex items-center justify-center gap-2 px-5 py-2 
-            text-sm font-medium text-blue-600 hover:text-blue-800 cursor-pointer
+            text-sm font-medium text-indigo-600 hover:text-indigo-800 cursor-pointer
              transition-colors"
           >
             <File className='h-5 w-5'/>

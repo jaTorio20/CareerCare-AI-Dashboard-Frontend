@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, Link } from '@tanstack/react-router';
 import { useState, useRef } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { analyzeResume, createResume, waitForAnalysis, deleteTempResume } from '@/api/resumes';
@@ -7,7 +7,7 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import { toast } from 'sonner';
 import { useQuota } from '@/context/QuotaContext';
 import NotFound from '@/components/NotFound';
-import { Loader } from 'lucide-react';
+import { ArrowLeft, Loader } from 'lucide-react';
 import { AnimatedStat } from '@/components/Resume/AnimatedStat';
 
 export const Route = createFileRoute('/resumes/analyze/')({
@@ -126,8 +126,22 @@ function ResumeAnalyze() {
   };
 
  return (
-    <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6 mt-5">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Upload Resume for Analysis</h2>
+    <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+      <Link
+        to="/resumes"
+        className="
+        inline-flex items-center gap-2 text-indigo-600
+        hover:text-indigo-800 transition-colors"
+      >
+        <div className="flex items-center 
+        justify-center w-9 h-9 rounded-full border
+        border-indigo-300 hover:border-indigo-500 hover:bg-indigo-50 transition">
+          <ArrowLeft size={18} />
+        </div>
+        <span className="text-sm font-medium">Back</span>
+      </Link>
+      
+      <h2 className="text-2xl font-semibold text-gray-800 my-4">Upload Resume for Analysis</h2>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* File Upload */}
@@ -151,7 +165,9 @@ function ResumeAnalyze() {
             onPaste={handleJobDescriptionPaste}
             onChange={(e) => setJobDescription(e.target.value.slice(0, MAX_LENGTH))}
             rows={15}
-            className="block w-full border border-gray-300 rounded-md p-2 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="block w-full border border-gray-300 rounded-md p-2 
+            text-sm text-gray-700 focus:outline-none focus:ring-1
+             focus:ring-indigo-500"
             placeholder="Paste the job description here..."
           />
           <p className="text-xs text-gray-500 mt-1 text-right">
@@ -163,16 +179,17 @@ function ResumeAnalyze() {
         <button
           type="submit"
           disabled={loading || quotaExceeded}
-           className={`w-full bg-blue-600 text-white py-2 px-4 
-            rounded-md hover:bg-blue-700 transition-colors
-            ${loading || quotaExceeded ? "opacity-50 cursor-not-allowed hover:bg-blue-600" : ""}
+           className={`w-full bg-indigo-600 text-white py-2 px-4 
+            rounded-md hover:bg-indigo-700 transition-colors
+            ${loading || quotaExceeded ? "disabled:opacity-50 cursor-not-allowed" : ""}
           `}
         >
           {quotaExceeded
             ? "Quota Exhausted"
             : loading
             ? (
-                <span className="flex items-center justify-center gap-2">
+                <span className="flex items-center cursor-not-allowed 
+                 justify-center gap-2">
                   <Loader className="animate-spin h-5 w-5" />
                   Analyzing...
                 </span>

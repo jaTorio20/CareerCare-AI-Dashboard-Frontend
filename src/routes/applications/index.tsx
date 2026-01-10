@@ -104,7 +104,10 @@ function JobApplicationPage() {
         <h1 className="text-3xl font-bold text-gray-900 tracking-tight">Job Applications</h1>
         <Link
           to="/applications/new"
-          className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition"
+          className="inline-flex items-center gap-2 px-5 py-2.5 text-sm
+          font-semibold text-white bg-indigo-600
+           rounded-md shadow-sm hover:bg-indigo-700 
+           focus:outline-nonetransition"
         >
           <Plus className="w-4 h-4" />
           <span className="hidden md:inline">New Application</span>
@@ -145,7 +148,10 @@ function JobApplicationPage() {
           {applications.map((jobApplication: JobApplicationEntry) => (
             <div
               key={jobApplication._id}
-              className="flex flex-col justify-between border border-gray-200 rounded-xl bg-white p-6 shadow-sm hover:shadow-lg transition transform hover:-translate-y-1"
+              className="flex flex-col justify-between border
+               border-gray-200 rounded-xl bg-white p-6 
+               shadow-sm hover:shadow-lg transition transform
+                hover:-translate-y-1"
             >
               <div>
                 <h2 className="text-lg font-semibold text-gray-800">
@@ -161,7 +167,8 @@ function JobApplicationPage() {
               <Link
                 to={`/applications/$applicationId`}
                 params={{ applicationId: jobApplication._id }}
-                className="mt-6 inline-block text-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
+                className="mt-6 inline-block text-center px-4 py-2 
+                text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 transition"
               >
                 View Details
               </Link>

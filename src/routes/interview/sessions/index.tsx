@@ -12,6 +12,7 @@ import AITypingIndicator from '@/components/Interview/AITypingIndicator'
 import { v4 as uuidv4 } from "uuid";
 import { sessionsQueryOptions, messagesQueryOptions } from '@/features/interview/interview.queries'
 import { Loader2 } from 'lucide-react'
+import { NewSessionButton } from '@/components/Interview/NewSessionButton'
 
 export const Route = createFileRoute('/interview/sessions/')({
   component: () => (
@@ -360,8 +361,9 @@ function InterviewSessionsPage() {
       </section>
     ) : (
       <section className='max-w-3xl justify-items-center flex flex-col'>
-        <div className="flex flex-1 items-center justify-center text-gray-500 text-sm">
-          Select or start a session to begin your AI interview
+        <div className="flex flex-1 flex-col items-center justify-center gap-4 text-gray-500 text-sm">
+          <p>Select or start a session to begin your AI interview</p>
+          <NewSessionButton onSessionCreated={setActiveSessionId} />
         </div>
       </section>
     )}

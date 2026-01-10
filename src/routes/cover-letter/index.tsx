@@ -46,7 +46,9 @@ function CoverLetterPage() {
     <h1 className="text-3xl font-bold text-gray-900">Cover Letters</h1>
     <Link
       to="/cover-letter/generate"
-      className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg shadow hover:bg-blue-700 transition-colors"
+      className="inline-flex items-center gap-2 px-4 py-2 text-sm 
+      font-medium text-white bg-indigo-600 rounded-lg shadow
+       hover:bg-indigo-700 transition-colors"
     >
       <Plus className="w-4 h-4" />
       <span className="hidden md:inline">Cover Letter</span>
@@ -56,22 +58,26 @@ function CoverLetterPage() {
 
   {/* Empty State */}
   {letters.length === 0 ? (
-    <div className="flex flex-col items-center justify-center py-16 border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
-      <p className="text-gray-500 text-lg">No cover letters yet.</p>
-      <Link
-        to="/cover-letter/generate"
-        className="mt-4 px-5 py-2 text-sm font-medium text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-600 hover:text-white transition-colors"
-      >
-        Generate Now
-      </Link>
-    </div>
+    <Link 
+      to="/cover-letter/generate"
+      className="flex flex-col items-center justify-center py-16
+      hover:border-indigo-400 
+       border-2 border-dashed border-gray-300 rounded-lg bg-gray-50">
+      <Plus className="w-12 h-12 hover:text-indigo-400 
+       text-gray-400" />
+      <p className="text-gray-500
+       text-lg">No cover letters yet.</p>
+
+    </Link>
   ) : (
     /* Responsive Grid of Cover Letter Cards */
     <ul className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       {letters.map((letter) => (
         <li
           key={letter._id}
-          className="group relative bg-white border border-gray-200 rounded-xl shadow-sm hover:shadow-lg transition-shadow p-6 flex flex-col"
+          className="group relative bg-white border border-gray-200 
+          rounded-xl shadow-sm hover:shadow-lg transition-shadow 
+          p-6 flex flex-col"
         >
           <Link to={letter._id} className="flex flex-col h-full">
             {/* Job Info */}
@@ -92,7 +98,8 @@ function CoverLetterPage() {
           </Link>
 
           {/* Decorative hover ring */}
-          <div className="absolute inset-0 rounded-xl ring-2 ring-transparent group-hover:ring-blue-200 transition pointer-events-none"></div>
+          <div className="absolute inset-0 rounded-xl ring-2 ring-transparent
+           group-hover:ring-indigo-200 transition pointer-events-none"></div>
         </li>
       ))}
     </ul>

@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate, notFound } from '@tanstack/react-router'
+import { createFileRoute, useNavigate, notFound, Link } from '@tanstack/react-router'
 import { useState } from 'react' 
 import { useMutation, useSuspenseQuery, queryOptions} from '@tanstack/react-query'
 import { getDetailLetter, updateCoverLetter} from '@/api/coverLetter'
@@ -86,9 +86,23 @@ function CoverLetterEditPage() {
 
   return (
 <div className="max-w-4xl mx-auto px-4 py-10">
-  <h1 className="text-3xl font-extrabold text-gray-900 mb-8 text-center">
-    Edit Cover Letter
-  </h1>
+  <nav className="mb-4 text-sm text-gray-500">
+    <Link to="/cover-letter/$coverLetterId" params={{coverLetterId}}
+      className="hover:text-indigo-600 transition-colors">
+      Details
+    </Link>
+    <span className="mx-2">/</span>
+    <span className="text-gray-900 font-medium">
+      Edit Cover Letter
+    </span>
+  </nav>
+
+  {/* Header */}
+  <div className="mb-12 text-center">
+    <h1 className="text-3xl lg:text-4xl font-bold text-gray-900 tracking-tight">
+      Edit Cover Letter
+    </h1>
+  </div>
 
   <form
     onSubmit={handleSubmit}
@@ -104,7 +118,10 @@ function CoverLetterEditPage() {
         onChange={(e) => setJobDescription(e.target.value)}
         rows={8}
         required
-        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+        className="outline-none
+        w-full rounded-md border border-gray-300 bg-gray-50 p-3
+         text-gray-700
+         focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition"
       />
     </div>
 
@@ -117,7 +134,10 @@ function CoverLetterEditPage() {
         type="text"
         value={jobTitle}
         onChange={(e) => setJobTitle(e.target.value)}
-        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+        className="outline-none
+        w-full rounded-md border border-gray-300 bg-gray-50 p-3
+         text-gray-700 focus:border-indigo-500 focus:ring
+          focus:ring-indigo-200 transition"
       />
     </div>
 
@@ -130,7 +150,10 @@ function CoverLetterEditPage() {
         type="text"
         value={companyName}
         onChange={(e) => setCompanyName(e.target.value)}
-        className="w-full rounded-md border border-gray-300 bg-gray-50 p-3 text-gray-700 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
+        className="outline-none
+        w-full rounded-md border
+         border-gray-300 bg-gray-50 p-3 text-gray-700
+          focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition"
       />
     </div>
 
@@ -152,7 +175,10 @@ function CoverLetterEditPage() {
       <button
         disabled={isPending}
         type="submit"
-        className="w-full rounded-lg bg-linear-to-r from-blue-600 to-indigo-600 px-6 py-3 text-white font-semibold shadow-md hover:from-blue-700 hover:to-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full rounded-lg bg-linear-to-r
+         from-indigo-600 to-indigo-600 px-6 py-3 text-white 
+         font-semibold shadow-md hover:from-indigo-700
+          hover:to-indigo-700 transition disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isPending ? "Updating..." : "Update Cover Letter"}
       </button>

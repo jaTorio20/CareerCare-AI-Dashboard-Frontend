@@ -8,6 +8,7 @@ export async function createJobApplication({
   companyName,
   jobTitle,
   jobLink,
+  jobDescription,
   status = "applied",
   location = "remote",
   notes,
@@ -18,6 +19,7 @@ export async function createJobApplication({
   companyName: string;
   jobTitle: string;
   jobLink?: string;
+  jobDescription?: string;
   status?: JobApplicationEntry["status"];
   location?: JobApplicationEntry["location"];
   notes?: string;
@@ -33,6 +35,7 @@ export async function createJobApplication({
   // Optional fields
   if(file) formData.append("resumeFile", file);
   if (jobLink) formData.append("jobLink", jobLink);
+  if (jobDescription) formData.append("jobDescription", jobDescription);
   if (status) formData.append("status", status);
   if (location) formData.append("location", location);
   if (notes) formData.append("notes", notes);
@@ -94,6 +97,7 @@ export const updateJobApplication = async (
     jobTitle: string;
     companyName: string;
     jobLink?: string;
+    jobDescription?: string;
     status?: JobApplicationEntry["status"];
     location?: JobApplicationEntry["location"];
     notes?: string;
@@ -107,6 +111,7 @@ export const updateJobApplication = async (
 
 
   if (updatedApplication.jobLink) formData.append("jobLink", updatedApplication.jobLink);
+  if (updatedApplication.jobDescription) formData.append("jobDescription", updatedApplication.jobDescription);
   if (updatedApplication.status) formData.append("status", updatedApplication.status);
   if (updatedApplication.location) formData.append("location", updatedApplication.location);
   if (updatedApplication.notes) formData.append("notes", updatedApplication.notes);
