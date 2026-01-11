@@ -1,303 +1,207 @@
-Welcome to your new TanStack app! 
+# CareerCare Frontend
 
-npx @tanstack/router-cli generate // to regenerate routing
+CareerCare Frontend is a React application that provides an intuitive interface for job seekers to analyze resumes, generate cover letters, track job applications, and practice interviews with AI assistance.
 
-# Getting Started
+## What This Application Does
 
-To run this application:
+CareerCare is an all-in-one career assistance platform that helps users:
 
+- **Resume Analysis**: Upload resumes and get AI-powered feedback including ATS scores, keyword matching, and improvement suggestions
+- **Cover Letter Generation**: Create personalized cover letters using AI, with a rich text editor for customization
+- **Job Application Tracking**: Organize and track job applications with status updates, notes, and resume attachments
+- **AI Interview Practice**: Practice interviews with real-time speech-to-text transcription and AI-generated questions and responses
+
+## How It Works
+
+### Architecture Overview
+
+The frontend is built with React 19 and TypeScript, using modern React patterns:
+
+- **TanStack Router** (`src/routes/`): File-based routing system for navigation
+- **TanStack Query** (`src/api/` and `src/features/`): Data fetching, caching, and state management
+- **Components** (`src/components/`): Reusable UI components organized by feature
+- **Context** (`src/context/`): Global state management (authentication, theme)
+- **Services** (`src/lib/`): Axios configuration, authentication helpers
+
+### Main Features Breakdown
+
+#### 1. Resume Analysis (`src/routes/resumes/`)
+- **Upload Page**: Users upload a PDF or Word resume file and provide a job description
+- **Analysis Process**: 
+  - File is uploaded to the backend
+  - Analysis job is created and queued
+  - Frontend polls for results using TanStack Query
+  - Results display includes ATS score, keyword analysis, and improvement suggestions
+- **Results View**: Visual feedback with color-coded scores and actionable recommendations
+- **Save Functionality**: Users can save analyzed resumes to their account
+
+#### 2. Cover Letter Generation (`src/routes/cover-letter/`)
+- **Generation Form**: Users input job details (title, company, description) and optional personal details
+- **AI Generation**: 
+  - Request is sent to backend with Google Gemini AI
+  - Generated letter appears in a rich text editor (TipTap)
+- **Editor Features** (`src/components/cover-letter/EditorMenubar.tsx`):
+  - Font family, size, and styling options
+  - Text alignment, line spacing, paragraph spacing
+  - Zoom controls for preview
+- **Export**: Letters can be exported as Word documents (.docx) or PDFs
+
+#### 3. Job Application Tracking (`src/routes/applications/`)
+- **Application Cards**: View all applications in a card-based layout
+- **Create/Edit Forms**: Add new applications with company info, job details, status, location, salary range, and notes
+- **File Attachments**: Upload and attach resume files (stored in Cloudinary)
+- **Status Management**: Track application status (applied, interviewing, offer, rejected, etc.)
+- **Search & Filter**: Find applications by company name or job title
+
+#### 4. Interview Practice (`src/routes/interview/`)
+- **Session Management**: 
+  - Create interview sessions with job title, company, topic, and difficulty
+  - Sidebar shows all sessions with labels
+- **Chat Interface**:
+  - Text-based conversation with AI interviewer
+  - Audio recording support with real-time transcription
+  - Audio files are recorded, converted to WAV format, and uploaded to Backblaze B2
+- **Audio Player** (`src/components/Interview/WaveformAudioPlayer.tsx`):
+  - Visual waveform display
+  - Playback controls with time tracking
+  - Shows current time, duration, and progress bar
+- **AI Responses**: Google Gemini AI provides context-aware interview questions and feedback based on conversation history
+
+#### 5. Authentication (`src/routes/auth/` and `src/context/`)
+- **Login/Register**: Traditional email and password authentication
+- **Google OAuth**: Social login with Google accounts
+- **Token Management**: 
+  - Access tokens stored in localStorage
+  - Automatic token refresh via Axios interceptors (`src/lib/axios.ts`)
+  - Protected routes redirect to login if unauthenticated
+- **User Context**: Global user state available throughout the app
+
+### Key Technologies
+
+- **React 19**: UI framework with hooks and modern patterns
+- **TypeScript**: Type-safe development
+- **TanStack Router**: File-based routing with type safety
+- **TanStack Query**: Server state management and caching
+- **Vite**: Fast build tool and dev server
+- **TailwindCSS**: Utility-first CSS framework
+- **TipTap**: Rich text editor for cover letters
+- **Axios**: HTTP client with interceptors for auth
+- **Lucide React**: Icon library
+- **Sonner**: Toast notifications
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or higher)
+- Backend API server running (see backend README)
+
+### Installation
+
+1. Install dependencies:
 ```bash
 npm install
-npm run start
 ```
 
-# Building For Production
+2. Create a `.env` file in the root directory:
 
-To build this application for production:
+```env
+VITE_API_URL=http://localhost:5000
+```
 
+This should match your backend server URL.
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+The application will start on `http://localhost:3000` (or the port specified by Vite).
+
+### Production Build
+
+1. Build for production:
 ```bash
 npm run build
 ```
 
-## Testing
-
-This project uses [Vitest](https://vitest.dev/) for testing. You can run the tests with:
-
+2. Preview the production build:
 ```bash
-npm run test
+npm run serve
 ```
+
+The built files will be in the `dist/` directory, ready for deployment.
+
+## Application Flow
+
+### User Journey
+
+1. **Landing/Home** (`src/routes/index.tsx`):
+   - Welcome page with feature overview
+   - Quick links to main features
+   - Call-to-action buttons
+
+2. **Authentication**:
+   - New users register or login with Google
+   - Session persists across page refreshes
+   - Protected routes require authentication
+
+3. **Resume Analysis**:
+   - Upload resume → Provide job description → View analysis results → Save if needed
+
+4. **Cover Letter**:
+   - Generate letter → Edit in rich text editor → Save → View/Edit later → Export
+
+5. **Job Applications**:
+   - Create application card → Fill details → Attach resume → Track status updates
+
+6. **Interview Practice**:
+   - Create session → Start conversation → Send text or record audio → Receive AI feedback → Review history
+
+### Data Flow
+
+- **API Calls**: All API requests go through Axios instance configured in `src/lib/axios.ts`
+- **State Management**: 
+  - Server state: TanStack Query handles fetching, caching, and mutations
+  - Client state: React hooks (useState, useRef) for local UI state
+  - Global state: Context API for user authentication
+- **Routing**: TanStack Router handles navigation with type-safe params and search params
+
+## Key Components
+
+- **Header** (`src/components/Header.tsx`): Main navigation with user menu and logout
+- **ProtectedRoute** (`src/components/ProtectedRoute.tsx`): Wrapper component that checks authentication
+- **AudioRecorder** (`src/components/Interview/AudioRecorder.tsx`): Records audio with pause/resume and progress tracking
+- **WaveformAudioPlayer** (`src/components/Interview/WaveformAudioPlayer.tsx`): Plays audio with visual waveform and time controls
+- **CoverLetterEditor** (`src/components/cover-letter/CoverLetterEditor.tsx`): Rich text editor with formatting toolbar
 
 ## Styling
 
-This project uses [Tailwind CSS](https://tailwindcss.com/) for styling.
-
-
-## Linting & Formatting
-
-
-This project uses [eslint](https://eslint.org/) and [prettier](https://prettier.io/) for linting and formatting. Eslint is configured using [tanstack/eslint-config](https://tanstack.com/config/latest/docs/eslint). The following scripts are available:
-
-```bash
-npm run lint
-npm run format
-npm run check
-```
-
-
-
-## Routing
-This project uses [TanStack Router](https://tanstack.com/router). The initial setup is a file based router. Which means that the routes are managed as files in `src/routes`.
-
-### Adding A Route
-
-To add a new route to your application just add another a new file in the `./src/routes` directory.
-
-TanStack will automatically generate the content of the route file for you.
-
-Now that you have two routes you can use a `Link` component to navigate between them.
-
-### Adding Links
-
-To use SPA (Single Page Application) navigation you will need to import the `Link` component from `@tanstack/react-router`.
-
-```tsx
-import { Link } from "@tanstack/react-router";
-```
-
-Then anywhere in your JSX you can use it like so:
-
-```tsx
-<Link to="/about">About</Link>
-```
-
-This will create a link that will navigate to the `/about` route.
-
-More information on the `Link` component can be found in the [Link documentation](https://tanstack.com/router/v1/docs/framework/react/api/router/linkComponent).
-
-### Using A Layout
-
-In the File Based Routing setup the layout is located in `src/routes/__root.tsx`. Anything you add to the root route will appear in all the routes. The route content will appear in the JSX where you use the `<Outlet />` component.
-
-Here is an example layout that includes a header:
-
-```tsx
-import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-
-import { Link } from "@tanstack/react-router";
-
-export const Route = createRootRoute({
-  component: () => (
-    <>
-      <header>
-        <nav>
-          <Link to="/">Home</Link>
-          <Link to="/about">About</Link>
-        </nav>
-      </header>
-      <Outlet />
-      <TanStackRouterDevtools />
-    </>
-  ),
-})
-```
-
-The `<TanStackRouterDevtools />` component is not required so you can remove it if you don't want it in your layout.
-
-More information on layouts can be found in the [Layouts documentation](https://tanstack.com/router/latest/docs/framework/react/guide/routing-concepts#layouts).
-
-
-## Data Fetching
-
-There are multiple ways to fetch data in your application. You can use TanStack Query to fetch data from a server. But you can also use the `loader` functionality built into TanStack Router to load the data for a route before it's rendered.
-
-For example:
-
-```tsx
-const peopleRoute = createRoute({
-  getParentRoute: () => rootRoute,
-  path: "/people",
-  loader: async () => {
-    const response = await fetch("https://swapi.dev/api/people");
-    return response.json() as Promise<{
-      results: {
-        name: string;
-      }[];
-    }>;
-  },
-  component: () => {
-    const data = peopleRoute.useLoaderData();
-    return (
-      <ul>
-        {data.results.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    );
-  },
-});
-```
-
-Loaders simplify your data fetching logic dramatically. Check out more information in the [Loader documentation](https://tanstack.com/router/latest/docs/framework/react/guide/data-loading#loader-parameters).
-
-### React-Query
-
-React-Query is an excellent addition or alternative to route loading and integrating it into you application is a breeze.
-
-First add your dependencies:
-
-```bash
-npm install @tanstack/react-query @tanstack/react-query-devtools
-```
-
-Next we'll need to create a query client and provider. We recommend putting those in `main.tsx`.
-
-```tsx
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-// ...
-
-const queryClient = new QueryClient();
-
-// ...
-
-if (!rootElement.innerHTML) {
-  const root = ReactDOM.createRoot(rootElement);
-
-  root.render(
-    <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
-    </QueryClientProvider>
-  );
-}
-```
-
-You can also add TanStack Query Devtools to the root route (optional).
-
-```tsx
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-
-const rootRoute = createRootRoute({
-  component: () => (
-    <>
-      <Outlet />
-      <ReactQueryDevtools buttonPosition="top-right" />
-      <TanStackRouterDevtools />
-    </>
-  ),
-});
-```
-
-Now you can use `useQuery` to fetch your data.
-
-```tsx
-import { useQuery } from "@tanstack/react-query";
-
-import "./App.css";
-
-function App() {
-  const { data } = useQuery({
-    queryKey: ["people"],
-    queryFn: () =>
-      fetch("https://swapi.dev/api/people")
-        .then((res) => res.json())
-        .then((data) => data.results as { name: string }[]),
-    initialData: [],
-  });
-
-  return (
-    <div>
-      <ul>
-        {data.map((person) => (
-          <li key={person.name}>{person.name}</li>
-        ))}
-      </ul>
-    </div>
-  );
-}
-
-export default App;
-```
-
-You can find out everything you need to know on how to use React-Query in the [React-Query documentation](https://tanstack.com/query/latest/docs/framework/react/overview).
-
-## State Management
-
-Another common requirement for React applications is state management. There are many options for state management in React. TanStack Store provides a great starting point for your project.
-
-First you need to add TanStack Store as a dependency:
-
-```bash
-npm install @tanstack/store
-```
-
-Now let's create a simple counter in the `src/App.tsx` file as a demonstration.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-function App() {
-  const count = useStore(countStore);
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-    </div>
-  );
-}
-
-export default App;
-```
-
-One of the many nice features of TanStack Store is the ability to derive state from other state. That derived state will update when the base state updates.
-
-Let's check this out by doubling the count using derived state.
-
-```tsx
-import { useStore } from "@tanstack/react-store";
-import { Store, Derived } from "@tanstack/store";
-import "./App.css";
-
-const countStore = new Store(0);
-
-const doubledStore = new Derived({
-  fn: () => countStore.state * 2,
-  deps: [countStore],
-});
-doubledStore.mount();
-
-function App() {
-  const count = useStore(countStore);
-  const doubledCount = useStore(doubledStore);
-
-  return (
-    <div>
-      <button onClick={() => countStore.setState((n) => n + 1)}>
-        Increment - {count}
-      </button>
-      <div>Doubled - {doubledCount}</div>
-    </div>
-  );
-}
-
-export default App;
-```
-
-We use the `Derived` class to create a new store that is derived from another store. The `Derived` class has a `mount` method that will start the derived store updating.
-
-Once we've created the derived store we can use it in the `App` component just like we would any other store using the `useStore` hook.
-
-You can find out everything you need to know on how to use TanStack Store in the [TanStack Store documentation](https://tanstack.com/store/latest).
-
-# Demo files
-
-Files prefixed with `demo` can be safely deleted. They are there to provide a starting point for you to play around with the features you've installed.
-
-# Learn More
-
-You can learn more about all of the offerings from TanStack in the [TanStack documentation](https://tanstack.com).
+The application uses TailwindCSS for styling:
+- Utility classes for layout, colors, spacing
+- Responsive design with mobile-first approach
+- Custom color palette (indigo primary, gray neutrals)
+- Consistent component styling patterns
+
+## Error Handling
+
+- API errors are caught by TanStack Query and displayed via toast notifications
+- Form validation errors show inline messages
+- Network errors are handled gracefully with retry mechanisms
+- 401 errors trigger automatic token refresh
+
+## Performance Optimizations
+
+- Code splitting via Vite's dynamic imports
+- Image optimization for uploaded files
+- Query caching reduces unnecessary API calls
+- Optimistic updates for better UX (interviews, applications)
+- Lazy loading for route components
+
+## Browser Support
+
+Modern browsers with support for:
+- ES6+ JavaScript features
+- CSS Grid and Flexbox
+- Audio recording API (for interview feature)
+- LocalStorage (for token storage)
