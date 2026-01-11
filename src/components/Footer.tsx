@@ -1,20 +1,20 @@
-import { SiGithub, SiLinkedin } from 'react-icons/si'
+import { SiGithub, SiLinkedin, SiGmail } from 'react-icons/si'
 
 
 export function Footer() {
   const socials = [
     { icon: SiGithub, href: 'https://github.com/jaTorio20/' },
     { icon: SiLinkedin, href: 'https://www.linkedin.com/in/johntorio/' },
+    {
+      icon: SiGmail,
+      href: 'mailto:johnashley132002@gmail.com'
+    }
   ];
 
   return (
     <footer className="relative mt-32 -mb-6">
       {/* Background */}
       <div className="absolute inset-0 bg-[#0b0f1a]" />
-
-      {/* Glow accents */}
-      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[600px] h-[200px]
-                      bg-indigo-500/20 blur-[120px]" />
 
       <div className="relative max-w-7xl mx-auto px-6 py-5">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center">

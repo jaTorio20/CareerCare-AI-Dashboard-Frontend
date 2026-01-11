@@ -25,8 +25,8 @@ function App() {
     className="min-h-screen flex flex-col"
   >
     <motion.section
-      initial={{ opacity: 0, x: 50 }}   // start slightly right
-      whileInView={{ opacity: 1, x: 0 }} // slide to place
+      initial={{ opacity: 0, y: 50 }}   // start slightly right
+      whileInView={{ opacity: 1, y: 0 }} // slide to place
       viewport={{ once: true, amount: 0.3 }} // trigger when 30% visible
       transition={{ duration: 0.6 }}
     >
@@ -64,10 +64,10 @@ function App() {
 
     {/* Features Section */}
     <motion.section
-      initial={{ opacity: 0, x: 50 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
+      transition={{ duration: 0.6, delay: 0.1 }}
     >
       <section className="max-w-7xl mx-auto 
       mt-20 bg-white rounded-2xl shadow-sm py-16">
@@ -77,19 +77,14 @@ function App() {
             { icon: FileSignature, title: 'Benefits', desc: 'Improve your chances of landing your dream job by leveraging AI insights.', bg: 'bg-rose-50', color: 'text-rose-600' },
             { icon: Briefcase, title: 'Who Can Use It', desc: 'Students, job seekers, and professionals wanting a smarter, faster way.', bg: 'bg-emerald-50', color: 'text-emerald-600' },
           ].map((card, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: 50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.6, delay: i * 0.2 }}
+            <div key={i}
               className={`${card.bg} rounded-xl p-6 flex flex-col items-center
                text-center hover:shadow-lg transition`}
             >
               <card.icon className={`w-12 h-12 ${card.color} mb-4`} />
               <h3 className="text-xl font-semibold mb-2">{card.title}</h3>
               <p className="text-gray-600">{card.desc}</p>
-            </motion.div>
+            </div>
           ))}
         </div>
       </section>
@@ -97,10 +92,10 @@ function App() {
 
     {/* How It Works Section */}
     <motion.section
-      initial={{ opacity: 0, x: 50 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
+      transition={{ duration: 0.6, delay: 0.1 }}
     >   
       <section className="max-w-7xl mx-auto 
       mt-20 bg-gray-50 py-16">
@@ -139,10 +134,10 @@ function App() {
     </motion.section> 
 
     <motion.main
-      initial={{ opacity: 0, x: 50 }}
-      whileInView={{ opacity: 1, x: 0 }}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.6, delay: 0.3 }}
+      transition={{ duration: 0.6, delay: 0.1 }}
     >   
       {/* Main Content */}
       <main className="grow">
