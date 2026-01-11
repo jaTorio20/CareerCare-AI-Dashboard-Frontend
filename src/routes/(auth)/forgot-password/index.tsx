@@ -36,8 +36,8 @@ function ForgotPasswordPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-5 p-2">
-      <h1 className="text-3xl font-bold mb-6">Forgot Password</h1>
+    <div className="max-w-md mx-auto mt-15 p-3 bg-white shadow-md rounded-lg">
+      <h1 className="text-3xl text-indigo-600 font-bold mb-6">Forgot Password</h1>
 
       {error && (
         <div className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4">
@@ -45,14 +45,14 @@ function ForgotPasswordPage() {
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 text-sm">
         <input
           type="email"
           value={email}
           required
           onChange={(e) => setEmail(e.target.value)}
           placeholder="Enter your email"
-          className="w-full border border-gray outline-none focus:border-blue-700 rounded-md p-2"
+          className="w-full border border-gray-300 outline-none focus:border-indigo-700 rounded-md p-2"
         />
 
         <button

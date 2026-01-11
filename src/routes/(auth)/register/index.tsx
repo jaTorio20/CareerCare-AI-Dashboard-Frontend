@@ -45,8 +45,8 @@ const handleSubmit = async (e: React.FormEvent) => {
 }
 
   return (
-    <div className='max-w-md mx-auto mt-5 p-2'>
-      <h1 className="text-3xl font-bold mb-6">
+    <div className='max-w-md mx-auto mt-15 p-4 rounded-lg bg-white shadow-sm'>
+      <h1 className="text-3xl text-indigo-600 font-bold mb-6">
         Register
       </h1>
       {/* {
@@ -66,7 +66,7 @@ const handleSubmit = async (e: React.FormEvent) => {
           required
           // autoComplete='off'          
           className="w-full border
-          border-gray outline-none focus:border-blue-700 rounded-md p-2" 
+          border-gray-300 outline-none focus:border-indigo-700 rounded-md p-2" 
 
         />
 

@@ -108,12 +108,13 @@ const Header = () => {
           <div ref={guestDropdownRef} className="relative">
             <button
               onClick={() => setGuestDropdownOpen(v => !v)}
-              className="cursor-pointer text-gray-700
+              className="hover:text-indigo-600
+              cursor-pointer text-gray-700 text-sm
               flex items-center gap-1 font-medium px-3 py-2"
             >
               Menu
             <ChevronDown
-              className={`w-4 h-4 text-gray-800 hover:text-gray-600 transition-transform duration-200
+              className={`w-4 h-4 text-gray-800 hover:text-indigo-600 transition-transform duration-200
                 group-hover:text-gray-700
                 ${guestDropdownOpen ? "rotate-180 text-indigo-600" : ""}
             `}/>
@@ -227,7 +228,8 @@ const Header = () => {
 
         {/* Mobile Hamburger */}
         <button
-          className="md:hidden text-gray-700 focus:outline-none"
+          className="cursor-pointer
+          md:hidden text-gray-700 hover:text-indigo-600 focus:outline-none"
           onClick={() => setIsOpen(!isOpen)}
         >
           <svg

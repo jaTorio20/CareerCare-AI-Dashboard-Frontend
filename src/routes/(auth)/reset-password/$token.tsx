@@ -49,17 +49,17 @@ function ResetPasswordPage() {
   if (isLoading) return <p>Verifying reset link...</p>;
   if (isError || !data?.valid) {
     return (
-      <div className="max-w-md mx-auto text-center mt-5">
-        <h1 className="text-2xl font-bold mb-4">Invalid or expired link</h1>
+      <div className="max-w-md mx-auto text-center mt-15">
+        <h1 className="text-2xl font-bold mb-4 text-indigo-600">Invalid or expired link</h1>
         <p className="text-gray-600">Please request a new password reset.</p>
-        <Link to="/forgot-password">Reset Password</Link>
+        <Link to="/forgot-password" className="text-indigo-600 underline hover:text-indigo-800">Reset Password</Link>
       </div>
     );
   }
 
   return (
-    <div className="max-w-md mx-auto mt-5">
-      <h1 className="text-3xl font-bold mb-6">Reset Password</h1>
+    <div className="max-w-md mx-auto mt-15 p-3 shadow-md bg-white">
+      <h1 className="text-3xl font-bold mb-6 text-indigo-600">Reset Password</h1>
 
       {error && (
         <div className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4">
@@ -75,7 +75,7 @@ function ResetPasswordPage() {
           minLength={8}
           onChange={(e) => setPassword(e.target.value)}
           placeholder="New Password"
-          className="w-full border border-gray outline-none focus:border-blue-700 rounded-md p-2"
+          className="w-full border border-gray-300 outline-none focus:border-blue-700 rounded-md p-2"
         />
 
         <button

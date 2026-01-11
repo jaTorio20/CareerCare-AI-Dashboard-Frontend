@@ -6,6 +6,8 @@ import { useAuth } from '@/context/AuthContext'
 import {z} from "zod";
 import { toast } from 'sonner'
 import { Loader } from 'lucide-react'
+import { SiGoogle } from 'react-icons/si'
+import { motion } from 'framer-motion'
 
 export const Route = createFileRoute('/(auth)/login/')({
   validateSearch: z.object({
@@ -64,85 +66,137 @@ function LoginPage() {
   }
 
   return (
-    <div className='max-w-md mx-auto mt-10 p-2'>
-      <h1 className="text-3xl font-bold mb-6">
-        Login
-      </h1>
-      {/* {
-        error && (
-          <div className="bg-red-100 text-red-700 px-4 py-2 rounded mb-4">
-            { error }
+  <motion.div
+    initial={{ opacity: 0, y: 50 }}   // start slightly right
+    whileInView={{ opacity: 1, y: 0 }} // slide to place
+    viewport={{ once: true, amount: 0.3 }} // trigger when 30% visible
+    transition={{ duration: 0.6 }}
+  >
+    <div className='max-w-4xl mx-auto px-2 mt-4  md:mt-10 rounded-xl'>
+      <div className='grid grid-cols-1 md:grid-cols-2'>
+        <div className="shadow-md
+        flex flex-col justify-center items-center bg-indigo-50 rounded-t-2xl md:rounded-l-2xl p-10">
+          <h1 className="text-4xl font-extrabold text-blue-500 mb-4 text-center">
+            Welcome!
+          </h1>
+          <p className="text-gray-700 text-center max-w-xs">
+            Access your dashboard, analyze resumes, generate cover letters, and track applications with AI-powered tools.
+          </p>
+
+          <div className="mt-8 w-full flex justify-center">
+            <div className="h-1 w-24 bg-indigo-400 rounded-full animate-pulse" />
           </div>
-        )
-      } */}
-      <form onSubmit={handleSubmit}
-      className="space-y-4">
+        </div>
 
-        <input 
-          type="email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder='Email'
-          required
-          // autoComplete='off'          
-          className="w-full border
-          border-gray outline-none focus:border-blue-700 rounded-md p-2" 
 
-        />
-        <input 
-          type="password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          placeholder='Password'
-          // autoComplete='off'
-          className="w-full border
-          border-gray outline-none focus:border-blue-700 rounded-md p-2" 
-        />
+        <div className='p-4 bg-white shadow-md rounded-b-2xl md:rounded-r-2xl'>
+          <h1 className="text-3xl font-bold text-indigo-600 tracking-tight">
+            Sign in
+          </h1>
+          <p className="mt-2 text-sm text-gray-500">
+          Enter your credentials to access your account
+          </p>
+          <form onSubmit={handleSubmit}
+            className="mt-8 space-y-5">
 
-        <button 
-          disabled={isPending}
-          className="bg-blue-600 hover:bg-blue-700 cursor-pointer text-white font-semibold px-4 py-2
-          rounded-md w-full disabled:opacity-50 flex items-center justify-center">
-          {isPending ? ( 
-            <span className="flex items-center  gap-2">
-              <Loader className="animate-spin h-5 w-5" /> 
-              Logging in... 
-            </span>
-          ) :  "Login" } 
-        </button>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Email
+              </label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2
+                  focus:outline-none focus:ring-2 focus:ring-blue-600
+                  focus:border-transparent"
+              />
+            </div>
 
-      </form>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Password
+              </label>
+              <input 
+                type="password" 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                className="mt-1 w-full rounded-lg border border-gray-300 px-3 py-2
+                  focus:outline-none focus:ring-2 focus:ring-blue-600
+                  focus:border-transparent" 
+              />
+            </div>
+            <button
+              disabled={isPending}
+              className="w-full rounded-lg bg-blue-600 py-2.5 text-white font-semibold
+                hover:bg-blue-700 transition
+                disabled:opacity-50 flex items-center justify-center"
+            >
+              {isPending ? (
+                <span className="flex items-center gap-2">
+                  <Loader className="h-5 w-5 animate-spin" />
+                  Signing in...
+                </span>
+              ) : (
+                "Sign in"
+              )}
+            </button>
+          </form>
 
-      <button
-        onClick={googleLogin}
-        disabled={isRedirecting}
-        className={` flex items-center justify-center
-          bg-red-600 hover:bg-red-700 cursor-pointer
-        text-white font-semibold px-4 py-2 rounded-md w-full mt-4
-        ${isRedirecting ? "opacity-50 cursor-not-allowed" : ""}`}
-      >
-        {isRedirecting ? (
-          <span className="flex items-center gap-2">
-            <Loader className="animate-spin h-5 w-5" /> 
-            Redirecting... 
-          </span>
-        ) : "Login with Google"}
-      </button>
+          <div className="relative my-6">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-gray-200" />
+            </div>
+            <div className="relative flex justify-center text-sm">
+              <span className="bg-white px-2 text-gray-500">
+                or continue with
+              </span>
+            </div>
+          </div>
 
-      <p className="text-sm text-center mt-4 space-x-0.5">
-        <span>Don't have an account?</span>
-        <Link to="/register" className="text-blue-600 hover:underline font-medium">
-          Register
-        </Link>
-      </p>
+          <button
+            onClick={googleLogin}
+            disabled={isRedirecting}
+            className="w-full flex items-center justify-center gap-2
+              border border-gray-300 rounded-lg py-2.5
+              hover:bg-gray-50 transition
+              disabled:opacity-50"
+          >
+            {isRedirecting ? (
+              <>
+                <Loader className="h-5 w-5 animate-spin" />
+                Redirecting...
+              </>
+            ) : (
+              <>
+                <SiGoogle className='h-5 w-5 text-indigo-600'/>
+                <span className='text-gray-600'>
+                  Continue with Google
+                </span>
+              </>
+            )}
+          </button>
 
-      <p className="text-sm text-center mt-2">
-        <Link to="/forgot-password" className="text-blue-600 hover:underline font-medium">
-          Forgot Password?
-        </Link>
-      </p>
 
+          <div className="mt-6 text-center text-sm text-gray-600">
+            <p>
+              Don't have an account?{" "}
+              <Link to="/register" className="text-blue-600 hover:underline font-medium">
+                Sign up
+              </Link>
+            </p>
+            <Link
+              to="/forgot-password"
+              className="block mt-2 text-blue-600 hover:underline"
+            >
+              Forgot your password?
+            </Link>
+          </div>
+        </div>
+      </div>
     </div>
+  </motion.div>
   )
 }
