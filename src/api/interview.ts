@@ -53,7 +53,7 @@ export const sendAudioMessage = async (
   const { data } = await api.post(`/interview/sessions/${sessionId}/chat`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
-  console.log("API response:", data);
+  // console.log("API response:", data);
   return data;
 };
 

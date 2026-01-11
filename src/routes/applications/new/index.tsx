@@ -57,9 +57,9 @@ function NewJobApplication() {
         salaryRange,
     // userId can be passed here for context/auth
       })
-    } catch (error) {
-      console.error(error);
-      alert('Something went wrong');
+    } catch (err: any) {
+      toast.error(err.mesage);
+      // alert('Something went wrong');
     }
   } 
   

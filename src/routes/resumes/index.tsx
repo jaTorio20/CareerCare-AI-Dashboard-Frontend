@@ -43,7 +43,7 @@ function ResumesPage() {
 
 
   return (
-  <div className="max-w-5xl mx-auto px-6 py-10">
+  <div className="max-w-5xl mx-auto px-2 py-10">
     {/* Header */}
     <div className="flex items-center justify-between mb-8">
       <h1 className="text-3xl font-bold text-gray-900 tracking-tight">

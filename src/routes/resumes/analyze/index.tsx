@@ -31,14 +31,16 @@ function ResumeAnalyze() {
     // ----- SAVE DATA ------
   const { mutateAsync: saveMutation, isPending: isSaving} = useMutation({
     mutationFn: createResume,
-    onSuccess: (saved) => {
-      console.log("Saved resume:", saved);
+    onSuccess: () => {
+      // console.log("Saved resume:", saved);
       setAnalysisResult(null);
       navigate({ to: "/resumes" }); // Back to resumes list after save
+      toast.success("Saved successfully")
     },
-    onError: (err) => {
-      console.error("Failed to save resume:", err);
-      alert("Failed to save resume");
+    onError: (err: any) => {
+      toast.error("Failed to save resume:", err.message);
+      // console.error("Failed to save resume:", err);
+      // alert("Failed to save resume");
     },
   });
 
@@ -52,8 +54,8 @@ function ResumeAnalyze() {
       toast.success("Temporary resume deleted");
     },
     onError: (err: any) => {
-      console.error("Failed to delete temp resume:", err);
-      toast.error("Failed to delete temporary resume");
+      // console.error("Failed to delete temp resume:", err);
+      toast.error("Failed to delete temporary resume: ", err.message);
     },
   });
 
@@ -74,7 +76,7 @@ function ResumeAnalyze() {
       const result = await waitForAnalysis(jobId);
       setAnalysisResult(result);
     } catch (err: any) {
-      console.error(err);
+      // console.error(err);
       toast.error(err.message || "Failed to analyze resume");
     } finally {
       setLoading(false);

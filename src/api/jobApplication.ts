@@ -48,7 +48,7 @@ export async function createJobApplication({
     });
     return data;
   } catch (err){
-    console.error("Failed to create job application:", err);
+    // console.error("Failed to create job application:", err);
     throw err;
   }
 
