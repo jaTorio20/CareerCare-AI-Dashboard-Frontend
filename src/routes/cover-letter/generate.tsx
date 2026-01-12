@@ -159,7 +159,7 @@ function CoverLetterGenerate() {
   }
 
       // Text limiting
-  const MAX_LENGTH = 2000; // maximum allowed characters
+  const MAX_LENGTH = 4000; // maximum allowed characters
   const handleJobDescriptionPaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
     e.preventDefault(); 
     const paste = e.clipboardData.getData('text');

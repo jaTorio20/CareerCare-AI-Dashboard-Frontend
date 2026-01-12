@@ -74,15 +74,16 @@ function CoverLetterEditPage() {
     e.preventDefault();
     await mutateAsync();
   }
-          {/* <div>
-          <label>Your Details (optional):</label><br />
-          <textarea
-            value={userDetails}
-            onChange={(e) => setUserDetails(e.target.value)}
-            rows={5}
-            cols={50}
-          />
-        </div> */}
+
+  // Text limiting
+  const MAX_LENGTH = 4000; // maximum allowed characters
+  const handleJobDescriptionPaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    e.preventDefault(); 
+    const paste = e.clipboardData.getData('text');
+
+    const newValue = (jobDescription + paste).slice(0, MAX_LENGTH);
+    setJobDescription(newValue);
+  };
 
   return (
 <div className="max-w-4xl mx-auto px-4 py-10">
@@ -115,7 +116,8 @@ function CoverLetterEditPage() {
       </label>
       <textarea
         value={jobDescription}
-        onChange={(e) => setJobDescription(e.target.value)}
+        onPaste={handleJobDescriptionPaste}
+        onChange={(e) => setJobDescription(e.target.value.slice(0, MAX_LENGTH))}
         rows={8}
         required
         className="outline-none
@@ -123,6 +125,9 @@ function CoverLetterEditPage() {
          text-gray-700
          focus:border-indigo-500 focus:ring focus:ring-indigo-200 transition"
       />
+        <p className="text-xs text-gray-500 mt-1 text-right">
+          {jobDescription.length} / {MAX_LENGTH} characters
+        </p>
     </div>
 
     {/* Job Title */}
