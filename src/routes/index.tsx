@@ -98,7 +98,7 @@ function App() {
       transition={{ duration: 0.6, delay: 0.1 }}
     >   
       <section className="max-w-7xl mx-auto 
-      mt-20 bg-gray-50 py-16">
+        mt-20 rounded-xl bg-white shadow-sm py-16">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
             How It Works
@@ -193,7 +193,7 @@ function App() {
               Manage and track your job applications in one place.
             </p>
           </ProtectedLink>
-                    {/* Interview Sessions */}
+          {/* Interview Sessions */}
           <ProtectedLink
             to='/interview/sessions'
             className="relative transform -rotate-1 hover:rotate-0 cursor-pointer
@@ -208,6 +208,35 @@ function App() {
         </div>
       </main>
     </motion.main>  
+
+    {/* About Section */}
+    <motion.section
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.6, delay: 0.1 }}
+    >
+      <section className="max-w-7xl mx-auto mt-20 bg-white rounded-2xl shadow-sm py-16 px-6">
+        <div className="text-center max-w-4xl mx-auto">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
+            About CareerCare
+          </h2>
+          <p className="text-lg text-gray-700 leading-relaxed mb-8">
+            CareerCare was created to make the job application process easier and more effective. 
+            Many people struggle with writing resumes, tailoring cover letters, and preparing for interviews. 
+            This project uses AI to provide practical tools that save time and reduce stress.
+          </p>
+          <p className="text-lg text-gray-700 leading-relaxed">
+            By offering resume analysis, instant cover letter generation, application tracking, 
+            and interview practice with real-time feedback, CareerCare helps job seekers 
+            present themselves more confidently and improve their chances of success.
+          </p>
+        </div>
+      </section>
+</motion.section>
+
+
+
         <Footer/>
     </div>
   )

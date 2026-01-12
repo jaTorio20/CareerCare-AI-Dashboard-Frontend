@@ -70,7 +70,7 @@ function ApplicationDetailsPage() {
     };
 
   return (
-  <div className="min-h-screen px-4 sm:px-6 lg:px-8 py-10">
+  <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
     <Link
       to="/applications"
       className="mb-5
@@ -85,7 +85,7 @@ function ApplicationDetailsPage() {
       <span className="text-sm font-medium">Back</span>
     </Link>
 
-    <div className="max-w-2xl mx-auto border border-indigo-600
+    <div className=" border border-indigo-600
      bg-white rounded-xl shadow-md p-6 sm:p-8">
       {/* Title + Company */}
       <h1 className="text-2xl font-bold text-gray-900 mb-2">

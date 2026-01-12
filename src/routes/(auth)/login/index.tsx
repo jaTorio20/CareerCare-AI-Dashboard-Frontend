@@ -72,7 +72,7 @@ function LoginPage() {
     viewport={{ once: true, amount: 0.3 }} // trigger when 30% visible
     transition={{ duration: 0.6 }}
   >
-    <div className='max-w-4xl mx-auto px-2 mt-4  md:mt-10 rounded-xl'>
+    <div className='max-w-4xl mx-auto px-2 mt-4 md:mt-15 rounded-xl'>
       <div className='grid grid-cols-1 md:grid-cols-2'>
         <div className="shadow-md
         flex flex-col justify-center items-center bg-indigo-50 rounded-t-2xl md:rounded-l-2xl p-10">
