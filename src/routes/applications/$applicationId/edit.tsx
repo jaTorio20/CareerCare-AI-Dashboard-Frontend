@@ -7,6 +7,7 @@ import ProtectedRoute from '@/components/ProtectedRoute'
 import { toast } from 'sonner'
 import NotFound from '@/components/NotFound'
 import {z} from 'zod'
+import ResumeFileInput from '@/components/Job-Application/ResumeFileInput'
 
 const objectIdSchema = z.string().regex(/^[a-f\d]{24}$/i)
 const jobApplicationQueryOptions = (id: string) => {
@@ -167,7 +168,7 @@ function ApplicationEditPage() {
           w-full rounded-md border border-gray-300 px-3 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200 transition"
         />
         <p className="text-xs text-gray-500 mt-1 text-right">
-          {jobDescription.length} / {MAX_LENGTH} characters
+          {jobDescription?.length ?? 0} / {MAX_LENGTH} characters
         </p>
       </div>
 
@@ -234,15 +235,11 @@ function ApplicationEditPage() {
         </label>
 
 
-      {resumeFileUrl && <ResumeViewer
-      resumeFileUrl={resumeFileUrl} 
-      applicationId={applicationId}/>}
+        {resumeFileUrl && <ResumeViewer
+        resumeFileUrl={resumeFileUrl} 
+        applicationId={applicationId}/>}
 
-        <input
-          type="file"
-          onChange={(e) => setResumeFile(e.target.files?.[0] ?? null)}
-          className="w-full text-gray-700"
-        />
+      <ResumeFileInput file={resumeFile} setFile={setResumeFile}/>    
       </div>
 
       {/* Submit Button */}

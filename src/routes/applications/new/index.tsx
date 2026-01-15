@@ -4,6 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { createJobApplication } from '@/api/jobApplication'
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { toast } from 'sonner';
+import ResumeFileInput from '@/components/Job-Application/ResumeFileInput';
 
 export const Route = createFileRoute('/applications/new/')({
     component: () => (
@@ -79,6 +80,8 @@ function NewJobApplication() {
     const newValue = (notes + paste).slice(0, MAX_LENGTH);
     setNotes(newValue);
   };
+
+  
   return (
   <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-2 mt-5">
     <nav className="mb-4 text-sm text-gray-500">
@@ -220,19 +223,13 @@ function NewJobApplication() {
 
       {/* Resume File */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Resume File (optional)</label>
-        <input
-          type="file"
-          accept=".pdf,.docx"
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          className="w-full text-gray-700"
-        />
+        <ResumeFileInput file={file} setFile={setFile} />
       </div>
 
       {/* Submit Button */}
       <button
         type="submit"
-        disabled={isPending}
+        disabled={isPending }
         className="w-full bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 transition disabled:opacity-50"
       >
         {isPending ? 'Submitting...' : 'Submit'}

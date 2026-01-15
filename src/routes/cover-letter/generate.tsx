@@ -279,7 +279,6 @@ function CoverLetterGenerate() {
           onPaste={handleUserDetails}
           onChange={(e) => setUserDetails(e.target.value.slice(0, MAX_LENGTH))}
           rows={3}
-          required
           className="outline-none
           w-full rounded-md border border-gray-300 bg-gray-50 p-2
           text-gray-700 focus:border-indigo-500 focus:ring

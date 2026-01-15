@@ -148,7 +148,7 @@ function ResumeAnalyze() {
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* File Upload */}
         <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Resume File</label>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Resume File - 'pdf, doc, docx'</label>
           <input
             required
             type="file"
