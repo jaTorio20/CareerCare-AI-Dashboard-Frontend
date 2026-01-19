@@ -1,3 +1,12 @@
+This frontend project was migrated from **TanStack Router** to **TanStack Start**.  
+The continuation of the codebase is available here: [careercare-frontend-start](https://github.com/jaTorio20/careercare-frontend-start).
+
+### Why the migration?
+- **SEO improvements**: TanStack Start provides server-side rendering (SSR) and meta handling, which helps search engines index content more effectively.  
+- **SSR capability**: By rendering pages on the server, the app delivers faster initial load times and better performance for users, especially important for recruiter-facing projects.  
+- **Modern DX**: TanStack Start integrates loaders, file-based routing, and enhanced developer experience compared to TanStack Router.  
+
+
 # CareerCare Frontend
 
 CareerCare Frontend is a React application that provides an intuitive interface for job seekers to analyze resumes, generate cover letters, track job applications, and practice interviews with AI assistance.
